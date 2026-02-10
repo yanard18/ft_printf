@@ -1,0 +1,24 @@
+### VA_LIST Struct
+$1 = {{gp_offset = 2, fp_offset = 0, overflow_arg_area = 0xbfebfbff,
+	    reg_save_area = 0x7fffffffe6b9}}
+
+- It's not struct on some systems
+
+
+gp_offset = offset pointer that points the current list
+reg_save_area = the area that each value from variadiac variable will be stored
+
+### VA_LIST Helper Methods
+va_start: initialize the linked list
+va_arg: get value of the current node then step onto next node
+va_end: free the linked list
+
+### printf Description
+Each conversion specification is introduced by the charac‐
+       ter %, and ends with a conversion specifier.
+
+### printf buffer implementation
+original printf do not print immediately, instead it save data on buffer then display on screen on one call via `fflush(stdout)`
+
+### Format String Attacks
+- liveoverflow has video
