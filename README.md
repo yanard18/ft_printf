@@ -2,8 +2,7 @@
 $1 = {{gp_offset = 2, fp_offset = 0, overflow_arg_area = 0xbfebfbff,
 	    reg_save_area = 0x7fffffffe6b9}}
 
-- It's not struct on some systems
-
+- It may not be struct on some systems
 
 gp_offset = offset pointer that points the current list
 reg_save_area = the area that each value from variadiac variable will be stored
@@ -22,3 +21,11 @@ original printf do not print immediately, instead it save data on buffer then di
 
 ### Format String Attacks
 - liveoverflow has video
+
+## Notes
+
+- Do not implement printf buffer
+- libft associated files should be located in `libft/` folder
+
+## Tester
+- https://gcc.gnu.org/onlinedocs/cpp/Macros.html
