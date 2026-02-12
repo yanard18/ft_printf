@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <stdarg.h>
-#include <string.h>
-
 #include "libft/libft.h"
 
 int	ft_printf(const char *format, ...)
@@ -14,6 +10,10 @@ int	ft_printf(const char *format, ...)
 	printf("\n");
 	va_end(args); // free
 	*/
-	ft_putstr_fd("BC", 1);
-	return (0);
+	while (*format)
+	{
+		ft_putchar_fd(*format, 1);
+		format++;
+	}
+	return (1);
 } 

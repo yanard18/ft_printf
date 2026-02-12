@@ -27,13 +27,23 @@
 	memset(buf, 0, 1024);\
 	read(fd[0], buf, sizeof(buf) - 1);\
 	if (strcmp(exp, buf) == 0)\
-		dprintf(saved_stdout, "[+] Succeed: %s\n", #print);\
+		dprintf(saved_stdout, "[+] Succeed: %s, expected: \"%s\"\n", #print, exp);\
 	else\
-		dprintf(saved_stdout, "[-] Fail: %s, expected: %s, was: %s\n", #print, exp, buf);\
+		dprintf(saved_stdout, "[-] Fail: %s, expected: \"%s\", was: \"%s\"\n", #print, exp, buf);\
+}
+
+# define TEST_RETURN(exp, print) {\
+	ret = print;\
+	fflush(stdout);\
+	if (ret == exp)\
+		dprintf(saved_stdout, "[+] Succeed: RETURN: %s, expected: %d\n", #print, exp);\
+	else\
+		dprintf(saved_stdout, "[-] Fail: RETURN: %s, expected: %d, was: %d\n", #print, exp, ret);\
 }
 
 char	buf[BUFFER_SIZE];
 int		fd[2];
 int		saved_stdout;
+int		ret = 0;
 
 #endif

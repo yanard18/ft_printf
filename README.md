@@ -29,3 +29,6 @@ original printf do not print immediately, instead it save data on buffer then di
 
 ## Tester
 - https://gcc.gnu.org/onlinedocs/cpp/Macros.html
+
+## References
+- https://www.lix.polytechnique.fr/~liberti/public/computing/prog/c/C/FUNCTIONS/format.html
