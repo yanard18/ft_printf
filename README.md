@@ -22,6 +22,8 @@ original printf do not print immediately, instead it save data on buffer then di
 ### Format String Attacks
 - liveoverflow has video
 
+## Recursive Makefile
+
 ## Notes
 
 - Do not implement printf buffer
@@ -32,3 +34,8 @@ original printf do not print immediately, instead it save data on buffer then di
 
 ## References
 - https://www.lix.polytechnique.fr/~liberti/public/computing/prog/c/C/FUNCTIONS/format.html
+- Makefile
+	- [make file recursion](https://www.gnu.org/software/make/manual/html_node/Recursion.html)
+	- [ar script](https://sourceware.org/binutils/docs-2.29/binutils/ar-scripts.html)
+	- [.ONESHELL](https://www.gnu.org/software/make/manual/make.html#One-Shell)
+	- [makefile for tester](https://github.com/Tripouille/libftTester/blob/master/Makefile)

@@ -1,26 +1,24 @@
 CC = cc
-ARGS = -Wall -Werror -Wextra
-NAME = ft_printf_test
-PRINTF_LIB = ftprintf.a
+CFLAGS = -Wextras -Wall -Werror
+MAKE = make
+NAME = ft_printft_test
+FTPRINTF_DIR = ../
+LIBFTPRINTF = $(FTPRINTF_DIR)/libftprintf.a
+FILES = ft_printf_test
+SRCS = $(addsuffix .c, $(FILES))
+HEADERS = $(addsuffix .h, $(FILES))
 
 all: $(NAME)
-	@./$(NAME)
+	./$(NAME)
 
-$(NAME): ft_printf_test.c printf_tester.h $(PRINTF_LIB)
-		 @$(CC) ft_printf_test.c $(ARGS) $(PRINTF_LIB) ../libft/libft.a -o $(NAME)
+$(NAME): $(SRCS) $(HEADERS) $(LIBFTPRINTF)
+	cc $(SRCS) $(LIBFTPRINTF) -o $(NAME)
+	./$(NAME)
 
-$(PRINTF_LIB): ft_printf.o
-	ar rcs ftprintf.a ft_printf.o
+$(LIBFTPRINTF): FORCE
+	$(MAKE) -C $(FTPRINTF_DIR)
 
-ft_printf.o: ../ft_printf.c
-	$(CC) ../libft/libft.a ../ft_printf.c -o ft_printf.o -c
+FORCE:
 
-clean:
-	rm $(NAME)
-	rm ftprintf.a
-
-fclean: clean
-
-.PHONY: all clean fclean
 
 

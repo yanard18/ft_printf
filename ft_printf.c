@@ -10,9 +10,10 @@ int	ft_printf(const char *format, ...)
 	printf("\n");
 	va_end(args); // free
 	*/
+
 	while (*format)
 	{
-		ft_putchar_fd(*format, 1);
+		//ft_putchar_fd(*format, 1);
 		format++;
 	}
 	return (1);
