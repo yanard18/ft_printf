@@ -7,6 +7,7 @@ LIBFT		= libft/libft.a
 LIBFT_DIR	= libft/
 SRCS		= $(addsuffix .c, $(FILES))
 OBJS		= $(addsuffix .o, $(FILES))
+USE_GDB		= 0
 
 all: $(NAME) 
 
@@ -24,7 +25,11 @@ $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 	
 $(OBJS): %.o: %.c
+ifeq ($(USE_GDB),1)
+	$(CC) $(CFLAGS) -g $^ -c -o $@
+else
 	$(CC) $(CFLAGS) $^ -c -o $@
+endif
 
 clean:
 	rm -f $(OBJS)

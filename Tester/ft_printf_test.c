@@ -18,6 +18,8 @@ int	main(void)
 	TEST("", ft_printf(""))
 	dprintf(saved_stdout, "\ntest %%d:\n");
 	TEST("42", ft_printf("%d", 42));
+	dprintf(saved_stdout, "\ntest + flag:\n");
+	TEST("42", ft_printf("%+d", 42));
 	TEARDOWN
 	return (0);
 }

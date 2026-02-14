@@ -36,7 +36,8 @@ int	main(void)
     printf ("<%d>\n", x); // minimum 5 digits (first 0x not counted)
     printf ("<%+-7.5d>\n", 42);
     printf ("<%x>\n", 42);
-    printf ("<%#x>\n", 42);
+    printf ("<%#1x>\n", 9);
+    printf ("<%#1.5x>\n", 9);
 
     return 0;
 }
