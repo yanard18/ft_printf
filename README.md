@@ -19,6 +19,15 @@ Each conversion specification is introduced by the charac‐
 ### printf buffer implementation
 original printf do not print immediately, instead it save data on buffer then display on screen on one call via `fflush(stdout)`
 
+### printf flag format
+
+% (flags) (field_width) (precision) (length) (conversion specifier)
+
+
+% \[zero or more flag\] \[optional field width\] \[optional precision\] \[length\] \[conversion specifier\]
+
+
+
 ### Format String Attacks
 - liveoverflow has video
 

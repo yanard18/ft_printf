@@ -18,7 +18,11 @@ $(NAME): $(SRCS) $(HEADERS) $(LIBFTPRINTF)
 $(LIBFTPRINTF): FORCE
 	$(MAKE) -C $(FTPRINTF_DIR)
 
+clean:
+	rm $(NAME)
+
 FORCE:
 
+.PHONY: all FORCE
 
 

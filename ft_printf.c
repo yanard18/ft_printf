@@ -1,20 +1,25 @@
 #include "libft/libft.h"
+#include "ft_printf.h"
+
+#include <stdarg.h>
 
 int	ft_printf(const char *format, ...)
 {
-	/*
-	va_list args;
-	va_start(args, n); // init
-	for (int i = 0; i < n; i++) 
-		printf("%d ", va_arg(args, int)); // pop
-	printf("\n");
-	va_end(args); // free
-	*/
+	va_list	args;
 
+	va_start(args, format); // init
 	while (*format)
 	{
-		//ft_putchar_fd(*format, 1);
+		if (*format == '%')
+		{
+			format++;
+			if (*format == 'd')
+				ft_putnbr_fd(va_arg(args, int), 1);
+		}
+		else
+			ft_putchar_fd(*format, 1);
 		format++;
 	}
+	va_end(args); // free
 	return (1);
 } 

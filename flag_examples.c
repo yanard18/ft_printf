@@ -3,9 +3,11 @@
 int	main(void)
 {
 	int x = 345;
+	float z = 123.45;
     const char * y = "monkeys";
 
-	/*test*/
+	/* syntax: */
+	/* % (flags) (width) (precision) (length) (conversion specifier) */
     /* Demonstrate with numbers. */
     printf ("<%d> is not justified.\n", x);
     printf ("<%5d> is right-justified.\n", x);
@@ -18,10 +20,10 @@ int	main(void)
     printf ("<%#o> #o.\n", x);
     printf ("<%#x> #x.\n", x);
     printf ("<%#X> #X (capitalize latters).\n", x);
-    printf ("<%#e> #e.\n", x);
-    printf ("<%#f> #f.\n", x);
-    printf ("<%#g> #g.\n", x);
-    printf ("<%#G> #G.\n", x);
+    printf ("<%#e> #e.\n", z); // expect double
+    printf ("<%#f> #f.\n", z); // expect double
+    printf ("<%#g> #g.\n", z); // expect double
+    printf ("<%#G> #G.\n", z); // expect double
     printf ("<%d> is not justified.\n", x);
     printf ("<%d> is not justified.\n", x);
     printf ("<%d> is not justified.\n", x);
@@ -29,6 +31,12 @@ int	main(void)
     printf ("'%s' is not justified.\n", y);
     printf ("'%10s' is right-justified.\n", y);
     printf ("'%-10s' is left-justified using a minus sign.\n", y);
+	/* Complex Structures */
+    printf ("<%-#10.5X>\n", x); // minimum 5 digits (first 0x not counted)
+    printf ("<%d>\n", x); // minimum 5 digits (first 0x not counted)
+    printf ("<%+-7.5d>\n", 42);
+    printf ("<%x>\n", 42);
+    printf ("<%#x>\n", 42);
 
     return 0;
 }

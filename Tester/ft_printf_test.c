@@ -7,17 +7,17 @@ int	main(void)
 	//TEST("ABC", GET_STDOUT(ft_printf("ABC"))
 	//TEST(printf(...), ft_printf(...))
 	INIT
-	dprintf(saved_stdout, "\nprint_as_it_is_when_no_special_char:\n");
+	dprintf(saved_stdout, "\ntest wihtout %%:\n");
 	TEST("ABC", ft_printf("ABC"))
-	TEST("ABC 5", ft_printf("ABC %d", 5))
+	TEST("ABC 5", ft_printf("ABC 5"))
 	TEST("AB", ft_printf("AB"))
 	TEST("A", ft_printf("A"))
 	TEST("AB\0", ft_printf("AB\0C"))
 	TEST("AB\nC", ft_printf("AB\nC"))
 	TEST("   AB C   ", ft_printf("   AB C   "))
 	TEST("", ft_printf(""))
-	dprintf(saved_stdout, "\nprint_as_it_is_when_no_special_char:\n");
-	TEST_RETURN(1, ft_printf("ABC"));
+	dprintf(saved_stdout, "\ntest %%d:\n");
+	TEST("42", ft_printf("%d", 42));
 	TEARDOWN
 	return (0);
 }
