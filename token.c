@@ -1,5 +1,33 @@
 #include "ft_printf.h"
 
+char	*itoa(void *content)
+{
+	int		*np;
+
+	np = (int *)content;
+	return (ft_itoa(*np));
+}
+
+char	*apply_plus_flag(void *content)
+{
+	char	*s;
+	int		len;
+
+	s = (char *)content;
+	return (ft_strdup("+"));
+
+}
+t_token flags[3] = {
+	(t_token){'f', "#", itoa},
+	(t_token){'f', "-", itoa},
+	(t_token){'f', "+", apply_plus_flag}
+};
+
+t_token specifiers[2] = {
+	(t_token){'%', NULL, NULL},
+	(t_token){'d', NULL, itoa}
+};
+
 static	t_token *new_token(char type, void *value)
 {
 	t_token	*token;
@@ -27,9 +55,11 @@ static void	free_token(void *content)
 	token = (t_token *)content;
 	if (!token)
 		return ;
-	if (token->value)
-		free(token->value);
-	free(token);
+	if (token->type == 'n')
+	{
+		if (token->value)
+			free(token->value);
+	}
 }
 
 static char	*strdup_firstchr(const char *s)
@@ -48,30 +78,29 @@ static t_list	*tokenize(const char **format)
 {
 	t_list	*lst;
 
-	lst = ft_lstnew(new_token('%', NULL));
+	lst = ft_lstnew(&specifiers[0]);
 	while (**format)
 	{
 		(*format)++;
-		if (**format == '#' || **format == '-' || **format == '+')
-		{
-			push_token(&lst, 'f', strdup_firstchr(*format));
-		}
+		if (**format == '#')
+			ft_lstadd_back(&lst, ft_lstnew(&flags[0]));
+		else if (**format == '-')
+			ft_lstadd_back(&lst, ft_lstnew(&flags[1]));
+		else if (**format == '+')
+			ft_lstadd_back(&lst, ft_lstnew(&flags[2]));
 		else if (ft_isdigit(**format))
 		{
-			int n = ft_atoi(*format);
-			char *s = ft_itoa(n);
-			push_token(&lst, '9', s);
+			push_token(&lst, 'n', ft_itoa(ft_atoi(*format)));
 			while (ft_isdigit(**format))
 				(*format)++;
 			(*format)--;
 		}
 		else if (**format == '.')
 		{
-			push_token(&lst, 'p', strdup_firstchr(*format));
 		}
 		else if (**format == 'd')
 		{
-			push_token(&lst, 'c', ft_strdup("d"));
+			ft_lstadd_back(&lst, ft_lstnew(&specifiers[1]));
 			(*format)++;
 			break ;
 		}
@@ -106,6 +135,8 @@ void	read_token(const char **format, va_list args)
 	t_list	*tokens;
 	t_list	*llist;
 	t_token *ltoken;
+	t_token *token;
+	char	*s;
 
 	tokens = tokenize(format);
 	llist = tokens;
@@ -113,13 +144,21 @@ void	read_token(const char **format, va_list args)
 		llist = llist->next;
 	ltoken = (t_token *)llist->content;
 
-	if (ltoken->type == 'c')
+	if (ltoken->type == 'd') // read specifier token
 	{
-		char *s = ft_itoa(va_arg(args, int));
-		ft_putstr_fd(s, 1);
-		free(s);
+		int x = 4;
+		s = ltoken->f(&x);
 	}
-	//debug_tokenlst(tokens);
+	tokens = tokens->next; // skip % token
+	while (tokens->next) // read flags
+	{
+		token = (t_token *)tokens->content;
+		s = token->f(s);
+		tokens = tokens->next;
+	}
+
+	ft_putstr_fd(s, 1);
+	debug_tokenlst(tokens);
 	ft_lstclear(&tokens, free_token);
 }
 

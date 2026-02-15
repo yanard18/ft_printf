@@ -19,13 +19,11 @@ int	ft_printf(const char *format, ...)
 	return (1);
 } 
 
-/*
 int	main(void)
 {
 	char *s;
 
-	s = "X:%d Y:%d";
+	s = "X:%d Y:%+d";
 	ft_printf(s, -1, 42);
 	return (0);
 }
-*/
