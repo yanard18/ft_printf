@@ -196,38 +196,40 @@ static void	debug_tokenlst(t_list *tokens)
 	ft_putchar_fd('\n', 1);
 }
 
-t_token	*last_token(t_list *lst)
+char	*read_last_token(t_list *lst, va_list args)
 {
+	t_token *token;
+
 	while (lst->next)
 		lst = lst->next;
-	return (t_token *)lst->content;
+	int x = va_arg(args, int);
+	token = (t_token *)lst->content;
+	return (token->f(&x));
 }
 
-void	read_token(const char **format, va_list args)
+char	*apply_flags(t_list *token_lst, char *s)
 {
-	t_list	*token_lst;
-	t_list	*start_lst;
 	t_token *token;
-	char	*s;
 
-	token_lst = tokenize(format);
-	start_lst = token_lst;
-	debug_tokenlst(token_lst);
-	if (last_token(token_lst)->type == 's') // read specifier token
-	{
-		int x = va_arg(args, int);
-		s = last_token(token_lst)->f(&x);
-	}
-	token_lst = token_lst->next; // skip % token
 	while (token_lst->next) // read flags
 	{
 		token = (t_token *)token_lst->content;
 		s = token->f(s);
 		token_lst = token_lst->next;
 	}
+	return (s);
+}
 
+void	read_token(const char **format, va_list args)
+{
+	t_list	*token_lst;
+	char	*s;
+
+	token_lst = tokenize(format);
+	debug_tokenlst(token_lst);
+	s = read_last_token(token_lst, args);
+	s = apply_flags(token_lst->next, s); // take next to skip initial '%'
 	ft_putstr_fd(s, 1);
 	free(s);
-
-	ft_lstclear(&start_lst, free_token);
+	ft_lstclear(&token_lst, free_token);
 }
