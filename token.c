@@ -65,6 +65,10 @@ static t_list	*tokenize(const char **format)
 				(*format)++;
 			(*format)--;
 		}
+		else if (**format == '.')
+		{
+			push_token(&lst, 'p', strdup_firstchr(*format));
+		}
 		else if (**format == 'd')
 		{
 			push_token(&lst, 'c', ft_strdup("d"));
