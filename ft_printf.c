@@ -1,29 +1,20 @@
-#include "libft/libft.h"
 #include "ft_printf.h"
 
-static void debug_lst(void *content)
+static void lstpush_token(t_list **lst, char type, void *value)
 {
-	return ;
-	t_token	*token;
-	int	fd;
+	t_list	*newlst;
+	t_token *token;
 
-	fd = 2;
-	token = (t_token *)content;
-	ft_putchar_fd(token->type, fd);
-	ft_putstr_fd("->", 1);
-	if (token->value == NULL)
-		ft_putstr_fd("NULL", fd);
-	else if (token->type == '9')
-		ft_putstr_fd(ft_itoa(*((int *)token->value)), fd);
-	else
-		ft_putstr_fd((char *)token->value, fd);
-	ft_putchar_fd('\n', fd);
+	token = (t_token *)malloc(sizeof(t_token));
+	token->type = type;
+	token->value = value;
+	newlst = ft_lstnew(token);
+	ft_lstadd_back(lst, newlst);
 }
+
 static t_list	*tokenize(const char *format)
 {
 	t_list	*lst; 
-	t_list	*newlst;
-	int		nbr;
 
 	if (*format != '%')
 	{
@@ -33,21 +24,18 @@ static t_list	*tokenize(const char *format)
 
 	lst	= ft_lstnew(&(t_token){'%', NULL});
 
+	format++;
 	while (*format)
 	{
 		if (ft_isdigit(*format))
 		{
-			// tokenize
-			nbr = ft_atoi(format);
-			newlst = ft_lstnew(&(t_token){'9', &nbr});
-			ft_lstadd_back(&lst, newlst);
+			lstpush_token(&lst, '9', &(int){ft_atoi(format)});
 			while (ft_isdigit(*format))
 				format++;
 		}
 		else if (*format == 'd')
 		{
-			newlst = ft_lstnew(&(t_token){'C', "d"});
-			ft_lstadd_back(&lst, newlst);
+			lstpush_token(&lst, 'C', "d");
 			format++;
 		}
 		else
@@ -57,14 +45,11 @@ static t_list	*tokenize(const char *format)
 	return (lst);
 }
 
-
-
 int	ft_printf(const char *format, ...)
 {
 	va_list	args;
 
-
-	va_start(args, format); // init
+	va_start(args, format);
 	while (*format)
 	{
 		ft_putchar_fd(*format, 1);
@@ -72,16 +57,12 @@ int	ft_printf(const char *format, ...)
 			tokenize(format);
 		format++;
 	}
-
-	
-	va_end(args); // free
+	va_end(args);
 	return (1);
 } 
 
-/*
 int	main(void)
 {
 	ft_printf("ABC %d", 1);
 	return (0);
 }
-*/

@@ -1,7 +1,7 @@
 CC			= cc
 CFLAGS		= -Wextra -Wall -Werror
 NAME		= libftprintf.a
-FILES		= ft_printf
+FILES		= ft_printf ft_printf_helper
 MAKE		= make
 LIBFT		= libft/libft.a
 LIBFT_DIR	= libft/
@@ -23,6 +23,7 @@ $(NAME): $(LIBFT) $(OBJS)
 
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
+	echo $(FILES)
 	
 $(OBJS): %.o: %.c
 ifeq ($(USE_GDB),1)
