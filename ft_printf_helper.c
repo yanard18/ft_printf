@@ -5,9 +5,9 @@ void debug_lst(void *content)
 	t_token	*token;
 	int	fd;
 
-	fd = 2;
+	fd = 1;
 	token = (t_token *)content;
-	ft_putchar_fd('\n', fd);
+	//ft_putchar_fd(',', fd);
 	ft_putchar_fd(token->type, fd);
 	ft_putstr_fd("->", 1);
 	if (token->value == NULL)

@@ -1,48 +1,51 @@
 #include "ft_printf.h"
 
-static void lstpush_token(t_list **lst, char type, void *value)
+void	free_token(void *content)
 {
-	t_list	*newlst;
-	t_token *token;
+	t_token	*token;
 
-	token = (t_token *)malloc(sizeof(t_token));
-	token->type = type;
-	token->value = value;
-	newlst = ft_lstnew(token);
-	ft_lstadd_back(lst, newlst);
+	token = (t_token *)content;
+	if (!token)
+	{
+		ft_putstr_fd("free_token: token is null", 2);
+		return ;
+	}
+
+	if (token->value)
+		free(token->value);
+	free(token);
 }
 
-static t_list	*tokenize(const char *format)
+t_list	*tokenize(const char **format)
 {
-	t_list	*lst; 
+	t_list	*lst;
+	t_token	*token;
 
-	if (*format != '%')
+	if (**format != '%')
 	{
-		ft_putstr_fd("invalid 'format' given to tokenize()", 2);
+		ft_putstr_fd("tokenize invoked with invalid format", 2);
 		return (NULL);
 	}
 
-	lst	= ft_lstnew(&(t_token){'%', NULL});
-
-	format++;
-	while (*format)
+	token = (t_token *)malloc(sizeof(t_token));
+	if (!token)
 	{
-		if (ft_isdigit(*format))
-		{
-			lstpush_token(&lst, '9', &(int){ft_atoi(format)});
-			while (ft_isdigit(*format))
-				format++;
-		}
-		else if (*format == 'd')
-		{
-			lstpush_token(&lst, 'C', "d");
-			format++;
-		}
-		else
-			format++;
+		ft_putstr_fd("error while malloc token", 2);
+		return (NULL);
 	}
-	ft_lstiter(lst, debug_lst);
+	token->type = '%';
+	token->value = NULL;
+	lst = ft_lstnew(token);
 	return (lst);
+}
+
+void	read_token(const char **format)
+{
+	t_list	*tokens;
+
+	tokens = tokenize(format);
+	(*format)++;
+	ft_lstclear(&tokens, free_token);
 }
 
 int	ft_printf(const char *format, ...)
@@ -52,9 +55,11 @@ int	ft_printf(const char *format, ...)
 	va_start(args, format);
 	while (*format)
 	{
-		ft_putchar_fd(*format, 1);
 		if (*format == '%')
-			tokenize(format);
+		{
+			read_token(&format);
+		}
+		ft_putchar_fd(*format, 1);
 		format++;
 	}
 	va_end(args);
