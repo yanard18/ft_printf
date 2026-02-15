@@ -9,7 +9,7 @@ int	ft_printf(const char *format, ...)
 	{
 		if (*format == '%')
 		{
-			read_token(&format);
+			read_token(&format, args);
 			continue ;
 		}
 		ft_putchar_fd(*format, 1);
@@ -19,14 +19,13 @@ int	ft_printf(const char *format, ...)
 	return (1);
 } 
 
+/*
 int	main(void)
 {
 	char *s;
 
-	s = "ABC %#+123.52d";
-	ft_putstr_fd("format: ", 1);
-	ft_putstr_fd(s, 1);
-	ft_putstr_fd("\n", 1);
-	ft_printf(s, 1);
+	s = "X:%d Y:%d";
+	ft_printf(s, -1, 42);
 	return (0);
 }
+*/

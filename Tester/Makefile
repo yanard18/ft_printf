@@ -16,7 +16,7 @@ $(NAME): $(SRCS) $(HEADERS) $(LIBFTPRINTF)
 	./$(NAME)
 
 $(LIBFTPRINTF): FORCE
-	$(MAKE) -C $(FTPRINTF_DIR) USE_GDB=1
+	$(MAKE) -C $(FTPRINTF_DIR) USE_GDB=1 CFLAGS=-Wextras -Wall
 
 clean:
 	rm $(NAME)

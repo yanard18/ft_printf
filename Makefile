@@ -1,7 +1,7 @@
 CC			= cc
 CFLAGS		= -Wextra -Wall -Werror
 NAME		= libftprintf.a
-FILES		= ft_printf ft_printf_helper
+FILES		= ft_printf token
 MAKE		= make
 LIBFT		= libft/libft.a
 LIBFT_DIR	= libft/

@@ -6,7 +6,7 @@
 	/*   By: dyanar <dyanar@student.42istanbul.com.tr>  +#+  +:+       +#+        */
 	/*                                                +#+#+#+#+#+   +#+           */
 	/*   Created: 2026/02/12 04:45:32 by dyanar            #+#    #+#             */
-/*   Updated: 2026/02/15 12:31:17 by dyanar           ###   ########.fr       */
+/*   Updated: 2026/02/15 13:35:15 by dyanar           ###   ########.fr       */
 	/*                                                                            */
 	/* ************************************************************************** */
 
@@ -22,6 +22,6 @@ typedef	struct	s_token {
 }				t_token;
 
 int		ft_printf(const char *format, ...);
-void	read_token(const char **format);
+void	read_token(const char **format, va_list args);
 
 #endif

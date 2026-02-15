@@ -72,6 +72,8 @@ static t_list	*tokenize(const char **format)
 		else if (**format == 'd')
 		{
 			push_token(&lst, 'c', ft_strdup("d"));
+			(*format)++;
+			break ;
 		}
 	}
 	return (lst);
@@ -99,12 +101,25 @@ static void	debug_tokenlst(t_list *tokens)
 	ft_putchar_fd('\n', 1);
 }
 
-void	read_token(const char **format)
+void	read_token(const char **format, va_list args)
 {
 	t_list	*tokens;
+	t_list	*llist;
+	t_token *ltoken;
 
 	tokens = tokenize(format);
-	debug_tokenlst(tokens);
+	llist = tokens;
+	while (llist->next)
+		llist = llist->next;
+	ltoken = (t_token *)llist->content;
+
+	if (ltoken->type == 'c')
+	{
+		char *s = ft_itoa(va_arg(args, int));
+		ft_putstr_fd(s, 1);
+		free(s);
+	}
+	//debug_tokenlst(tokens);
 	ft_lstclear(&tokens, free_token);
 }
 
