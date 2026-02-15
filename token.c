@@ -9,28 +9,77 @@ char	*itoa(void *content)
 	return (ft_itoa(*np));
 }
 
+char	*hex_small(void *content)
+{
+	long	n;      // Using long to safely handle INT_MIN
+	long	temp;
+	int		len;
+	int		is_neg;
+	char	*str;
+	char	*base = "0123456789abcdef";
+
+	n = *(int *)content; 
+	is_neg = 0;
+	if (n < 0)
+	{
+		is_neg = 1;
+		n = -n;
+	}
+	temp = n;
+	len = (n == 0) ? 1 : 0;
+	while (temp != 0)
+	{
+		temp /= 16;
+		len++;
+	}
+	len += is_neg;
+	str = (char *)malloc(sizeof(char) * (len + 1));
+	if (!str)
+		return (NULL);
+	str[len] = '\0';
+	if (n == 0)
+		str[0] = '0';
+	while (n != 0)
+	{
+		str[--len] = base[n % 16];
+		n /= 16;
+	}
+	if (is_neg)
+		str[0] = '-';
+	return (str);
+
+}
+
 char	*apply_plus_flag(void *content)
 {
 	char	*s;
 	char	*ret;
 	int		len;
 
-
 	s = (char *)content;
+	if (*s == '-')
+		return (s);
 	ret = ft_strjoin("+", s);
 	free(s);
 	return (ret);
 
 }
+
 t_token flags[3] = {
 	(t_token){'f', "#", itoa},
 	(t_token){'f', "-", itoa},
 	(t_token){'f', "+", apply_plus_flag}
 };
 
-t_token specifiers[2] = {
-	(t_token){'%', NULL, NULL},
-	(t_token){'d', NULL, itoa}
+t_token specifiers[8] = {
+	(t_token){'s', "%", NULL},
+	(t_token){'s', "d", itoa},
+	(t_token){'s', "s", itoa},
+	(t_token){'s', "p", itoa},
+	(t_token){'s', "i", itoa},
+	(t_token){'s', "u", itoa},
+	(t_token){'s', "x", hex_small},
+	(t_token){'s', "X", itoa}
 };
 
 static	t_token *new_token(char type, void *value)
@@ -109,6 +158,12 @@ static t_list	*tokenize(const char **format)
 			(*format)++;
 			break ;
 		}
+		else if (**format == 'x')
+		{
+			ft_lstadd_back(&lst, ft_lstnew(&specifiers[6]));
+			(*format)++;
+			break ;
+		}
 	}
 	return (lst);
 }
@@ -135,41 +190,38 @@ static void	debug_tokenlst(t_list *tokens)
 	ft_putchar_fd('\n', 1);
 }
 
+t_token	*last_token(t_list *lst)
+{
+	while (lst->next)
+		lst = lst->next;
+	return (t_token *)lst->content;
+}
+
 void	read_token(const char **format, va_list args)
 {
-	t_list	*tokens;
-	t_list	*llist;
+	t_list	*token_lst;
 	t_list	*start_lst;
-	t_token *ltoken;
 	t_token *token;
 	char	*s;
 
-
-	tokens = tokenize(format);
-	start_lst = tokens;
-	llist = tokens;
-	while (llist->next)
-		llist = llist->next;
-	ltoken = (t_token *)llist->content;
-
-	if (ltoken->type == 'd') // read specifier token
+	token_lst = tokenize(format);
+	start_lst = token_lst;
+	//debug_tokenlst(token_lst);
+	if (last_token(token_lst)->type == 's') // read specifier token
 	{
-		int x = 4;
-		s = ltoken->f(&x);
+		int x = va_arg(args, int);
+		s = last_token(token_lst)->f(&x);
 	}
-	tokens = tokens->next; // skip % token
-	while (tokens->next) // read flags
+	token_lst = token_lst->next; // skip % token
+	while (token_lst->next) // read flags
 	{
-		token = (t_token *)tokens->content;
+		token = (t_token *)token_lst->content;
 		s = token->f(s);
-		tokens = tokens->next;
+		token_lst = token_lst->next;
 	}
 
 	ft_putstr_fd(s, 1);
 	free(s);
 
-	debug_tokenlst(tokens);
 	ft_lstclear(&start_lst, free_token);
 }
-
-

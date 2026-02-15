@@ -23,7 +23,7 @@ int	main(void)
 {
 	char *s;
 
-	s = "X:%d Y:%+d";
+	s = "X:%+d Y:%+x";
 	ft_printf(s, -1, 42);
 	return (0);
 }
