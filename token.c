@@ -18,10 +18,7 @@ void	free_token(void *content)
 
 	token = (t_token *)content;
 	if (!token)
-	{
-		ft_putstr_fd("free_token: token is null", 2);
 		return ;
-	}
 	if (token->value)
 		free(token->value);
 	free(token);
