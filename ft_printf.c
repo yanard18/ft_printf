@@ -10,6 +10,7 @@ int	ft_printf(const char *format, ...)
 		if (*format == '%')
 		{
 			read_token(&format);
+			continue ;
 		}
 		ft_putchar_fd(*format, 1);
 		format++;
@@ -20,6 +21,12 @@ int	ft_printf(const char *format, ...)
 
 int	main(void)
 {
-	ft_printf("ABC %d", 1);
+	char *s;
+
+	s = "ABC %#+d";
+	ft_putstr_fd("format: ", 1);
+	ft_putstr_fd(s, 1);
+	ft_putstr_fd("\n", 1);
+	ft_printf(s, 1);
 	return (0);
 }
