@@ -5,7 +5,6 @@ char	*itoa(void *content)
 	int		*np;
 
 	np = (int *)content;
-
 	return (ft_itoa(*np));
 }
 
@@ -71,15 +70,16 @@ t_token flags[3] = {
 	(t_token){'f', "+", apply_plus_flag}
 };
 
-t_token specifiers[8] = {
-	(t_token){'s', "%", NULL},
-	(t_token){'s', "d", itoa},
+t_token specifiers[9] = {
+	(t_token){'s', "c", itoa},
 	(t_token){'s', "s", itoa},
 	(t_token){'s', "p", itoa},
+	(t_token){'s', "d", itoa},
 	(t_token){'s', "i", itoa},
 	(t_token){'s', "u", itoa},
 	(t_token){'s', "x", hex_small},
-	(t_token){'s', "X", itoa}
+	(t_token){'s', "X", itoa},
+	(t_token){'s', "%", NULL}
 };
 
 static	t_token *new_token(char type, void *value)
@@ -128,6 +128,20 @@ static char	*strdup_firstchr(const char *s)
 	return (ret);
 }
 
+int	has_pattern(const char c, char* pattern)
+{
+	unsigned int	i;
+
+	i = 0;
+	while(pattern[i])
+	{
+		if (pattern[i] == c)
+			return (i);
+		i++;
+	}
+	return (0);
+}
+
 static t_list	*tokenize(const char **format)
 {
 	t_list	*lst;
@@ -136,12 +150,10 @@ static t_list	*tokenize(const char **format)
 	while (**format)
 	{
 		(*format)++;
-		if (**format == '#')
-			ft_lstadd_back(&lst, ft_lstnew(&flags[0]));
-		else if (**format == '-')
-			ft_lstadd_back(&lst, ft_lstnew(&flags[1]));
-		else if (**format == '+')
-			ft_lstadd_back(&lst, ft_lstnew(&flags[2]));
+		if (has_pattern(**format, "#-+"))
+		{
+			ft_lstadd_back(&lst, ft_lstnew(&flags[has_pattern(**format, "#-+")]));
+		}
 		else if (ft_isdigit(**format))
 		{
 			push_token(&lst, 'n', ft_itoa(ft_atoi(*format)));
@@ -152,15 +164,9 @@ static t_list	*tokenize(const char **format)
 		else if (**format == '.')
 		{
 		}
-		else if (**format == 'd')
+		else if (has_pattern(**format, "cspdiuxX%"))
 		{
-			ft_lstadd_back(&lst, ft_lstnew(&specifiers[1]));
-			(*format)++;
-			break ;
-		}
-		else if (**format == 'x')
-		{
-			ft_lstadd_back(&lst, ft_lstnew(&specifiers[6]));
+			ft_lstadd_back(&lst, ft_lstnew(&specifiers[has_pattern(**format, "cspdiuxX%")]));
 			(*format)++;
 			break ;
 		}
@@ -206,7 +212,7 @@ void	read_token(const char **format, va_list args)
 
 	token_lst = tokenize(format);
 	start_lst = token_lst;
-	//debug_tokenlst(token_lst);
+	debug_tokenlst(token_lst);
 	if (last_token(token_lst)->type == 's') // read specifier token
 	{
 		int x = va_arg(args, int);
