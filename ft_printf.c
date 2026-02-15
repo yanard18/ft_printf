@@ -1,54 +1,75 @@
 #include "libft/libft.h"
 #include "ft_printf.h"
 
-char	*apply_plus_flag(char *s)
+static void debug_lst(void *content)
 {
-	char	*res;
-	size_t	len;
+	return ;
+	t_token	*token;
+	int	fd;
 
-	len = ft_strlen(s);
-	res = malloc(sizeof(char) * (len + 2));
-	if (!res)
-		return (NULL);
-	free(s);
-	return (res);
+	fd = 2;
+	token = (t_token *)content;
+	ft_putchar_fd(token->type, fd);
+	ft_putstr_fd("->", 1);
+	if (token->value == NULL)
+		ft_putstr_fd("NULL", fd);
+	else if (token->type == '9')
+		ft_putstr_fd(ft_itoa(*((int *)token->value)), fd);
+	else
+		ft_putstr_fd((char *)token->value, fd);
+	ft_putchar_fd('\n', fd);
 }
+static t_list	*tokenize(const char *format)
+{
+	t_list	*lst; 
+	t_list	*newlst;
+	int		nbr;
+
+	if (*format != '%')
+	{
+		ft_putstr_fd("invalid 'format' given to tokenize()", 2);
+		return (NULL);
+	}
+
+	lst	= ft_lstnew(&(t_token){'%', NULL});
+
+	while (*format)
+	{
+		if (ft_isdigit(*format))
+		{
+			// tokenize
+			nbr = ft_atoi(format);
+			newlst = ft_lstnew(&(t_token){'9', &nbr});
+			ft_lstadd_back(&lst, newlst);
+			while (ft_isdigit(*format))
+				format++;
+		}
+		else if (*format == 'd')
+		{
+			newlst = ft_lstnew(&(t_token){'C', "d"});
+			ft_lstadd_back(&lst, newlst);
+			format++;
+		}
+		else
+			format++;
+	}
+	ft_lstiter(lst, debug_lst);
+	return (lst);
+}
+
+
 
 int	ft_printf(const char *format, ...)
 {
 	va_list	args;
-	char	*res;
-	int		has_plus_flag = 0;
+
 
 	va_start(args, format); // init
 	while (*format)
 	{
+		ft_putchar_fd(*format, 1);
 		if (*format == '%')
-		{
-			format++;
-			// read flags
-			if (*format == '+')
-			{
-				has_plus_flag = 1;
-				format++;
-			}
-			// add functions for each flag into linked list
-			// apply field width
-			// check precision
-			// apply precision minimum digits
-
-			if (*format == 'd')
-				res = ft_itoa(va_arg(args, int));
-
-			if (has_plus_flag)
-				res = apply_plus_flag(res);
-			ft_putstr_fd(res, 1);
-
-		}
-		else
-		{
-			ft_putchar_fd(*format, 1);
-		}
+			tokenize(format);
 		format++;
 	}
 
@@ -60,7 +81,7 @@ int	ft_printf(const char *format, ...)
 /*
 int	main(void)
 {
-	ft_printf("ABC");
+	ft_printf("ABC %d", 1);
 	return (0);
 }
 */
