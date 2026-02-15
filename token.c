@@ -56,6 +56,15 @@ static t_list	*tokenize(const char **format)
 		{
 			push_token(&lst, 'f', strdup_firstchr(*format));
 		}
+		else if (ft_isdigit(**format))
+		{
+			int n = ft_atoi(*format);
+			char *s = ft_itoa(n);
+			push_token(&lst, '9', s);
+			while (ft_isdigit(**format))
+				(*format)++;
+			(*format)--;
+		}
 		else if (**format == 'd')
 		{
 			push_token(&lst, 'c', ft_strdup("d"));
@@ -76,8 +85,6 @@ static void	debug_token(void *content)
 	ft_putstr_fd("->", 1);
 	if (token->value == NULL)
 		ft_putstr_fd("NULL", fd);
-	else if (token->type == '9')
-		ft_putstr_fd(ft_itoa(*((int *)token->value)), fd);
 	else
 		ft_putstr_fd((char *)token->value, fd);
 }

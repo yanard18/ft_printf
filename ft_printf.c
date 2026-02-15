@@ -23,7 +23,7 @@ int	main(void)
 {
 	char *s;
 
-	s = "ABC %#+d";
+	s = "ABC %#+123d";
 	ft_putstr_fd("format: ", 1);
 	ft_putstr_fd(s, 1);
 	ft_putstr_fd("\n", 1);
