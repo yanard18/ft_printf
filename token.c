@@ -20,7 +20,7 @@ static void	push_token(t_list **lst, char type, void *value)
 	ft_lstadd_back(lst, newlst);
 }
 
-void	free_token(void *content)
+static void	free_token(void *content)
 {
 	t_token	*token;
 
@@ -32,7 +32,19 @@ void	free_token(void *content)
 	free(token);
 }
 
-t_list	*tokenize(const char **format)
+static char	*strdup_firstchr(const char *s)
+{
+	char	*ret;
+
+	ret = (char *)malloc(2);
+	if (!ret)
+		return (NULL);
+	*ret = *s;
+	*(ret + 1) = '\0';
+	return (ret);
+}
+
+static t_list	*tokenize(const char **format)
 {
 	t_list	*lst;
 
@@ -40,17 +52,9 @@ t_list	*tokenize(const char **format)
 	while (**format)
 	{
 		(*format)++;
-		if (**format == '#')
+		if (**format == '#' || **format == '-' || **format == '+')
 		{
-			push_token(&lst, 'f', ft_strdup("#"));
-		}
-		else if (**format == '-')
-		{
-			push_token(&lst, 'f', ft_strdup("-"));
-		}
-		else if (**format == '+')
-		{
-			push_token(&lst, 'f', ft_strdup("+"));
+			push_token(&lst, 'f', strdup_firstchr(*format));
 		}
 		else if (**format == 'd')
 		{
