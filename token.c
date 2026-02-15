@@ -5,16 +5,21 @@ char	*itoa(void *content)
 	int		*np;
 
 	np = (int *)content;
+
 	return (ft_itoa(*np));
 }
 
 char	*apply_plus_flag(void *content)
 {
 	char	*s;
+	char	*ret;
 	int		len;
 
+
 	s = (char *)content;
-	return (ft_strdup("+"));
+	ret = ft_strjoin("+", s);
+	free(s);
+	return (ret);
 
 }
 t_token flags[3] = {
@@ -134,11 +139,14 @@ void	read_token(const char **format, va_list args)
 {
 	t_list	*tokens;
 	t_list	*llist;
+	t_list	*start_lst;
 	t_token *ltoken;
 	t_token *token;
 	char	*s;
 
+
 	tokens = tokenize(format);
+	start_lst = tokens;
 	llist = tokens;
 	while (llist->next)
 		llist = llist->next;
@@ -158,8 +166,10 @@ void	read_token(const char **format, va_list args)
 	}
 
 	ft_putstr_fd(s, 1);
+	free(s);
+
 	debug_tokenlst(tokens);
-	ft_lstclear(&tokens, free_token);
+	ft_lstclear(&start_lst, free_token);
 }
 
 
