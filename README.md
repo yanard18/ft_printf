@@ -48,3 +48,5 @@ original printf do not print immediately, instead it save data on buffer then di
 	- [ar script](https://sourceware.org/binutils/docs-2.29/binutils/ar-scripts.html)
 	- [.ONESHELL](https://www.gnu.org/software/make/manual/make.html#One-Shell)
 	- [makefile for tester](https://github.com/Tripouille/libftTester/blob/master/Makefile)
+- Tokenization
+	- programming principles and practice with c++, chapter 5

@@ -38,6 +38,7 @@ int	main(void)
     printf ("<%x>\n", 42);
     printf ("<%#1x>\n", 9);
     printf ("<%#1.5x>\n", 9);
-
+    printf("%%d\n");
+	
     return 0;
 }
