@@ -214,7 +214,8 @@ char	*apply_flags(t_list *token_lst, char *s)
 	while (token_lst->next) // read flags
 	{
 		token = (t_token *)token_lst->content;
-		s = token->f(s);
+		if (token->type == 'f')
+			s = token->f(s);
 		token_lst = token_lst->next;
 	}
 	return (s);
@@ -228,7 +229,7 @@ void	read_token(const char **format, va_list args)
 	token_lst = tokenize(format);
 	debug_tokenlst(token_lst);
 	s = read_last_token(token_lst, args);
-	s = apply_flags(token_lst->next, s); // take next to skip initial '%'
+	s = apply_flags(token_lst, s); // take next to skip initial '%'
 	ft_putstr_fd(s, 1);
 	free(s);
 	ft_lstclear(&token_lst, free_token);
