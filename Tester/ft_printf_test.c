@@ -16,6 +16,7 @@ int	main(void)
 	TEST("AB\nC", ft_printf("AB\nC"))
 	TEST("   AB C   ", ft_printf("   AB C   "))
 	TEST("", ft_printf(""))
+
 	dprintf(saved_stdout, "\ntest %%d:\n");
 	TEST("42", ft_printf("%d", 42));
 	TEST("0", ft_printf("%d", 0));
@@ -31,6 +32,12 @@ int	main(void)
 	TEST("AB", ft_printf("%s", "AB\0C"));
 	dprintf(saved_stdout, "\ntest %%x:\n");
 	TEST("2a", ft_printf("%x", 42));
+
+	dprintf(saved_stdout, "\ntest %%%%:\n");
+	TEST("%", ft_printf("%%"));
+	TEST("%42", ft_printf("%%%d", 42));
+	TEST("%42%abc", ft_printf("%%%d%%%s", 42, "abc"));
+
 	dprintf(saved_stdout, "\ntest '+' flag:\n");
 	TEST("+42", ft_printf("%+d", 42));
 	TEST("+0", ft_printf("%+d", 0));
@@ -38,6 +45,7 @@ int	main(void)
 	TEST("+ABC", ft_printf("%+s", "ABC")); // undefined behaviour
 	TEST("+2a", ft_printf("%+x", 42));
 	TEST("-2a", ft_printf("%+x", -42));
+
 	dprintf(saved_stdout, "\ntest combinational:\n");
 	TEST("NUM 42", ft_printf("%s %d", "NUM", 42));
 	TEARDOWN

@@ -24,12 +24,9 @@ int	main(void)
 {
 	char *s;
 
-	s = "X:%+d Y:%+x";
-	ft_putstr_fd(s, 1);
+	//s = "%%";
 	ft_putstr_fd("\n", 1);
-	ft_printf(s, -1, 42);
-#include <stdio.h>
-	printf("%+s", "ABC");
+	ft_printf("%%");
 	return (0);
 }
 */
