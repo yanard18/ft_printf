@@ -1,0 +1,67 @@
+#include "ft_printf.h"
+
+char	*itoa(void *content)
+{
+	int		*np;
+
+	np = (int *)content;
+	return (ft_itoa(*np));
+}
+
+char	*get_str(void *content)
+{
+	return (ft_strdup((char *)content));
+}
+
+char	*hex_small(void *content)
+{
+	long	n;      // Using long to safely handle INT_MIN
+	long	temp;
+	int		len;
+	int		is_neg;
+	char	*str;
+	char	*base = "0123456789abcdef";
+
+	n = *(int *)content; 
+	is_neg = 0;
+	if (n < 0)
+	{
+		is_neg = 1;
+		n = -n;
+	}
+	temp = n;
+	len = (n == 0) ? 1 : 0;
+	while (temp != 0)
+	{
+		temp /= 16;
+		len++;
+	}
+	len += is_neg;
+	str = (char *)malloc(sizeof(char) * (len + 1));
+	if (!str)
+		return (NULL);
+	str[len] = '\0';
+	if (n == 0)
+		str[0] = '0';
+	while (n != 0)
+	{
+		str[--len] = base[n % 16];
+		n /= 16;
+	}
+	if (is_neg)
+		str[0] = '-';
+	return (str);
+}
+
+char	*apply_plus_flag(void *content)
+{
+	char	*s;
+	char	*ret;
+
+	s = (char *)content;
+	if (*s == '-')
+		return (s);
+	ret = ft_strjoin("+", s);
+	free(s);
+	return (ret);
+}

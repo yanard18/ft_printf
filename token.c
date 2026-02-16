@@ -1,66 +1,6 @@
 #include "ft_printf.h"
 
-char	*itoa(void *content)
-{
-	int		*np;
 
-	np = (int *)content;
-	return (ft_itoa(*np));
-}
-
-char	*hex_small(void *content)
-{
-	long	n;      // Using long to safely handle INT_MIN
-	long	temp;
-	int		len;
-	int		is_neg;
-	char	*str;
-	char	*base = "0123456789abcdef";
-
-	n = *(int *)content; 
-	is_neg = 0;
-	if (n < 0)
-	{
-		is_neg = 1;
-		n = -n;
-	}
-	temp = n;
-	len = (n == 0) ? 1 : 0;
-	while (temp != 0)
-	{
-		temp /= 16;
-		len++;
-	}
-	len += is_neg;
-	str = (char *)malloc(sizeof(char) * (len + 1));
-	if (!str)
-		return (NULL);
-	str[len] = '\0';
-	if (n == 0)
-		str[0] = '0';
-	while (n != 0)
-	{
-		str[--len] = base[n % 16];
-		n /= 16;
-	}
-	if (is_neg)
-		str[0] = '-';
-	return (str);
-
-}
-
-char	*apply_plus_flag(void *content)
-{
-	char	*s;
-	char	*ret;
-
-	s = (char *)content;
-	if (*s == '-')
-		return (s);
-	ret = ft_strjoin("+", s);
-	free(s);
-	return (ret);
-}
 
 t_token flags[4] = {
 	(t_token){'f', "#", itoa},
@@ -71,7 +11,7 @@ t_token flags[4] = {
 
 t_token specifiers[10] = {
 	(t_token){'s', "c", itoa},
-	(t_token){'s', "s", itoa},
+	(t_token){'s', "s", get_str},
 	(t_token){'s', "p", itoa},
 	(t_token){'s', "d", itoa},
 	(t_token){'s', "i", itoa},
@@ -173,9 +113,13 @@ char	*apply_specifier(t_list *lst, va_list args)
 
 	while (lst->next)
 		lst = lst->next;
-	int x = va_arg(args, int);
 	token = (t_token *)lst->content;
-	return (token->f(&x));
+	if (ft_strncmp((char *)token->value, "d", 1) == 0)
+		return (token->f(&(int){va_arg(args, int)}));
+	else if (ft_strncmp((char *)token->value, "s", 1) == 0)
+		return (token->f((char *){va_arg(args, char *)}));
+
+	return (ft_strdup(""));
 }
 
 char	*apply_flags(t_list *token_lst, char *s)

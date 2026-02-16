@@ -28,6 +28,8 @@ int	main(void)
 	ft_putstr_fd(s, 1);
 	ft_putstr_fd("\n", 1);
 	ft_printf(s, -1, 42);
+#include <stdio.h>
+	printf("%+s", "ABC");
 	return (0);
 }
 */
