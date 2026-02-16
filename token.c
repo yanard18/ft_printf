@@ -53,7 +53,6 @@ char	*apply_plus_flag(void *content)
 {
 	char	*s;
 	char	*ret;
-	int		len;
 
 	s = (char *)content;
 	if (*s == '-')
@@ -61,7 +60,6 @@ char	*apply_plus_flag(void *content)
 	ret = ft_strjoin("+", s);
 	free(s);
 	return (ret);
-
 }
 
 t_token flags[4] = {
@@ -116,18 +114,6 @@ static void	free_token(void *content)
 		if (token->value)
 			free(token->value);
 	}
-}
-
-static char	*strdup_firstchr(const char *s)
-{
-	char	*ret;
-
-	ret = (char *)malloc(2);
-	if (!ret)
-		return (NULL);
-	*ret = *s;
-	*(ret + 1) = '\0';
-	return (ret);
 }
 
 int	has_token(const char c, t_token *tokens, t_token **out)
@@ -212,7 +198,7 @@ void	read_token(const char **format, va_list args)
 	char	*s;
 
 	token_lst = tokenize(format);
-	debug_tokenlst(token_lst);
+	//debug_tokenlst(token_lst);
 	s = apply_specifier(token_lst, args);
 	s = apply_flags(token_lst, s); // take next to skip initial '%'
 	ft_putstr_fd(s, 1);
