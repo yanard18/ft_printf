@@ -25,11 +25,21 @@ int	main(void)
 
 	dprintf(saved_stdout, "\ntest %%s:\n");
 	TEST("ABC", ft_printf("%s", "ABC"));
+	TEST("Hello ABC", ft_printf("Hello %s", "ABC"));
+	TEST("ABCabc", ft_printf("%s%s", "ABC", "abc"));
+	TEST("", ft_printf("%s", ""));
+	TEST("AB", ft_printf("%s", "AB\0C"));
+	dprintf(saved_stdout, "\ntest %%x:\n");
+	TEST("2a", ft_printf("%x", 42));
 	dprintf(saved_stdout, "\ntest '+' flag:\n");
 	TEST("+42", ft_printf("%+d", 42));
 	TEST("+0", ft_printf("%+d", 0));
 	TEST("-42", ft_printf("%+d", -42));
-	TEST("+ABC", ft_printf("%+s", "ABC"));
+	TEST("+ABC", ft_printf("%+s", "ABC")); // undefined behaviour
+	TEST("+2a", ft_printf("%+x", 42));
+	TEST("-2a", ft_printf("%+x", -42));
+	dprintf(saved_stdout, "\ntest combinational:\n");
+	TEST("NUM 42", ft_printf("%s %d", "NUM", 42));
 	TEARDOWN
 	return (0);
 }

@@ -1,7 +1,5 @@
 #include "ft_printf.h"
 
-
-
 t_token flags[4] = {
 	(t_token){'f', "#", itoa},
 	(t_token){'f', "-", itoa},
@@ -115,6 +113,8 @@ char	*apply_specifier(t_list *lst, va_list args)
 		lst = lst->next;
 	token = (t_token *)lst->content;
 	if (ft_strncmp((char *)token->value, "d", 1) == 0)
+		return (token->f(&(int){va_arg(args, int)}));
+	if (ft_strncmp((char *)token->value, "x", 1) == 0)
 		return (token->f(&(int){va_arg(args, int)}));
 	else if (ft_strncmp((char *)token->value, "s", 1) == 0)
 		return (token->f((char *){va_arg(args, char *)}));
