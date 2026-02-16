@@ -23,6 +23,8 @@ int	main(void)
 	char *s;
 
 	s = "X:%+d Y:%+x";
+	ft_putstr_fd(s, 1);
+	ft_putstr_fd("\n", 1);
 	ft_printf(s, -1, 42);
 	return (0);
 }

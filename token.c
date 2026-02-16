@@ -152,7 +152,8 @@ static t_list	*tokenize(const char **format)
 	t_list	*lst;
 	t_token	*out_token;
 
-	lst = ft_lstnew(&specifiers[0]);
+	has_token('%', specifiers, &out_token);
+	lst = ft_lstnew(out_token);
 	while (**format)
 	{
 		(*format)++;
