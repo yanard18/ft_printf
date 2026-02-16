@@ -130,7 +130,7 @@ static char	*strdup_firstchr(const char *s)
 	return (ret);
 }
 
-int	has_pattern(const char c, t_token *tokens, t_token **out)
+int	has_token(const char c, t_token *tokens, t_token **out)
 {
 	unsigned int	i;
 
@@ -156,7 +156,7 @@ static t_list	*tokenize(const char **format)
 	while (**format)
 	{
 		(*format)++;
-		if (has_pattern(**format, flags, &out_token))
+		if (has_token(**format, flags, &out_token))
 		{
 			ft_lstadd_back(&lst, ft_lstnew(out_token));
 		}
@@ -170,7 +170,7 @@ static t_list	*tokenize(const char **format)
 		else if (**format == '.')
 		{
 		}
-		else if (has_pattern(**format, specifiers, &out_token))
+		else if (has_token(**format, specifiers, &out_token))
 		{
 			ft_lstadd_back(&lst, ft_lstnew(out_token));
 			(*format)++;
