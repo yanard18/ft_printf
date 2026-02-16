@@ -22,9 +22,14 @@ int	main(void)
 	TEST("-1", ft_printf("%d", -1));
 	TEST("ABC: -1", ft_printf("ABC: %d", -1));
 	TEST("X:-1 Y:42", ft_printf("X:%d Y:%d", -1, 42));
+
+	dprintf(saved_stdout, "\ntest %%s:\n");
+	TEST("ABC", ft_printf("%s", "ABC"));
 	dprintf(saved_stdout, "\ntest '+' flag:\n");
-	TEST("42", ft_printf("%+d", 42));
 	TEST("+42", ft_printf("%+d", 42));
+	TEST("+0", ft_printf("%+d", 0));
+	TEST("-42", ft_printf("%+d", -42));
+	TEST("+ABC", ft_printf("%+s", "ABC"));
 	TEARDOWN
 	return (0);
 }

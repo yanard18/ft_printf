@@ -7,6 +7,7 @@
 #include <stdlib.h>
 
 # define BUFFER_SIZE	1024
+# define RED			'\033[33m'
 
 # define INIT {\
 	saved_stdout = dup(1);\
@@ -29,7 +30,7 @@
 	if (strcmp(exp, buf) == 0)\
 		dprintf(saved_stdout, "[+] Succeed: %s, expected: \"%s\"\n", #print, exp);\
 	else\
-		dprintf(saved_stdout, "[-] Fail: %s, expected: \"%s\", was: \"%s\"\n", #print, exp, buf);\
+		dprintf(saved_stdout, "\033[33m[-] Fail: %s, expected: \"%s\", was: \"%s\"\n\033[0m", #print, exp, buf);\
 }
 
 # define TEST_RETURN(exp, print) {\
