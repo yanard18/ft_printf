@@ -130,7 +130,7 @@ static char	*strdup_firstchr(const char *s)
 	return (ret);
 }
 
-int	has_pattern(const char c, t_token *tokens)
+int	has_pattern(const char c, t_token *tokens, t_token **out)
 {
 	unsigned int	i;
 
@@ -138,7 +138,10 @@ int	has_pattern(const char c, t_token *tokens)
 	while(tokens[i].type != '0')
 	{
 		if (((char *)tokens[i].value)[0] == c)
+		{
+			*out = (tokens + i);
 			return (i);
+		}
 		i++;
 	}
 	return (0);
@@ -147,14 +150,15 @@ int	has_pattern(const char c, t_token *tokens)
 static t_list	*tokenize(const char **format)
 {
 	t_list	*lst;
+	t_token	*out_token;
 
 	lst = ft_lstnew(&specifiers[0]);
 	while (**format)
 	{
 		(*format)++;
-		if (has_pattern(**format, flags))
+		if (has_pattern(**format, flags, &out_token))
 		{
-			ft_lstadd_back(&lst, ft_lstnew(&flags[has_pattern(**format, flags)]));
+			ft_lstadd_back(&lst, ft_lstnew(out_token));
 		}
 		else if (ft_isdigit(**format))
 		{
@@ -166,9 +170,9 @@ static t_list	*tokenize(const char **format)
 		else if (**format == '.')
 		{
 		}
-		else if (has_pattern(**format, specifiers))
+		else if (has_pattern(**format, specifiers, &out_token))
 		{
-			ft_lstadd_back(&lst, ft_lstnew(&specifiers[has_pattern(**format, specifiers)]));
+			ft_lstadd_back(&lst, ft_lstnew(out_token));
 			(*format)++;
 			break ;
 		}
