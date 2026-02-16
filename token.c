@@ -1,8 +1,17 @@
 #include "ft_printf.h"
 
+static int g_justified_direction = 1;
+
+char	*change_just_direction(void *content)
+{
+	g_justified_direction = -1;
+	return ((char *)content);
+}
+
+
 t_token flags[4] = {
 	(t_token){'f', "#", itoa},
-	(t_token){'f', "-", itoa},
+	(t_token){'f', "-", change_just_direction},
 	(t_token){'f', "+", apply_plus_flag},
 	(t_token){'0', NULL, NULL}
 };
@@ -165,7 +174,10 @@ char	*apply_width(t_list *token_lst, char *s)
 		
 			space = (char *)malloc(sizeof(char) * val);
 			ft_memset(space, 32, val);
-			s = ft_strjoin(space, s);
+			if (g_justified_direction == 1)
+				s = ft_strjoin(space, s);
+			else
+				s = ft_strjoin(s, space);
 		}
 		token_lst = token_lst->next;
 	}
@@ -184,5 +196,8 @@ void	read_token(const char **format, va_list args)
 	s = apply_width(token_lst, s);
 	ft_putstr_fd(s, 1);
 	free(s);
+	g_justified_direction = 1;
 	ft_lstclear(&token_lst, free_token);
 }
+
+

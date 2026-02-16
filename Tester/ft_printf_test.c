@@ -50,6 +50,7 @@ int	main(void)
 	TEST("<1>", ft_printf("<%0d>", 1));
 	TEST("< 1>", ft_printf("<%1d>", 1));
 	TEST("<  1>", ft_printf("<%3d>", 1));
+	TEST("<1  >", ft_printf("<%-3d>", 1));
 
 	dprintf(saved_stdout, "\ntest combinational:\n");
 	TEST("NUM 42", ft_printf("%s %d", "NUM", 42));
