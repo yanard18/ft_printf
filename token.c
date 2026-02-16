@@ -64,13 +64,14 @@ char	*apply_plus_flag(void *content)
 
 }
 
-t_token flags[3] = {
+t_token flags[4] = {
 	(t_token){'f', "#", itoa},
 	(t_token){'f', "-", itoa},
-	(t_token){'f', "+", apply_plus_flag}
+	(t_token){'f', "+", apply_plus_flag},
+	(t_token){'0', NULL, NULL}
 };
 
-t_token specifiers[9] = {
+t_token specifiers[10] = {
 	(t_token){'s', "c", itoa},
 	(t_token){'s', "s", itoa},
 	(t_token){'s', "p", itoa},
@@ -79,7 +80,8 @@ t_token specifiers[9] = {
 	(t_token){'s', "u", itoa},
 	(t_token){'s', "x", hex_small},
 	(t_token){'s', "X", itoa},
-	(t_token){'s', "%", NULL}
+	(t_token){'s', "%", NULL},
+	(t_token){'0', NULL, NULL}
 };
 
 static	t_token *new_token(char type, void *value)
@@ -128,14 +130,14 @@ static char	*strdup_firstchr(const char *s)
 	return (ret);
 }
 
-int	has_pattern(const char c, char* pattern)
+int	has_pattern(const char c, t_token *tokens)
 {
 	unsigned int	i;
 
 	i = 0;
-	while(pattern[i])
+	while(tokens[i].type != '0')
 	{
-		if (pattern[i] == c)
+		if (((char *)tokens[i].value)[0] == c)
 			return (i);
 		i++;
 	}
@@ -150,9 +152,9 @@ static t_list	*tokenize(const char **format)
 	while (**format)
 	{
 		(*format)++;
-		if (has_pattern(**format, "#-+"))
+		if (has_pattern(**format, flags))
 		{
-			ft_lstadd_back(&lst, ft_lstnew(&flags[has_pattern(**format, "#-+")]));
+			ft_lstadd_back(&lst, ft_lstnew(&flags[has_pattern(**format, flags)]));
 		}
 		else if (ft_isdigit(**format))
 		{
@@ -164,9 +166,9 @@ static t_list	*tokenize(const char **format)
 		else if (**format == '.')
 		{
 		}
-		else if (has_pattern(**format, "cspdiuxX%"))
+		else if (has_pattern(**format, specifiers))
 		{
-			ft_lstadd_back(&lst, ft_lstnew(&specifiers[has_pattern(**format, "cspdiuxX%")]));
+			ft_lstadd_back(&lst, ft_lstnew(&specifiers[has_pattern(**format, specifiers)]));
 			(*format)++;
 			break ;
 		}
