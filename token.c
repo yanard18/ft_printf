@@ -174,29 +174,7 @@ static t_list	*tokenize(const char **format)
 	return (lst);
 }
 
-static void	debug_token(void *content)
-{
-	t_token	*token;
-	int	fd;
-
-	fd = 1;
-	token = (t_token *)content;
-	ft_putchar_fd('\n', fd);
-	ft_putchar_fd(token->type, fd);
-	ft_putstr_fd("->", 1);
-	if (token->value == NULL)
-		ft_putstr_fd("NULL", fd);
-	else
-		ft_putstr_fd((char *)token->value, fd);
-}
-
-static void	debug_tokenlst(t_list *tokens)
-{
-	ft_lstiter(tokens, debug_token);
-	ft_putchar_fd('\n', 1);
-}
-
-char	*read_last_token(t_list *lst, va_list args)
+char	*apply_specifier(t_list *lst, va_list args)
 {
 	t_token *token;
 
@@ -228,7 +206,7 @@ void	read_token(const char **format, va_list args)
 
 	token_lst = tokenize(format);
 	debug_tokenlst(token_lst);
-	s = read_last_token(token_lst, args);
+	s = apply_specifier(token_lst, args);
 	s = apply_flags(token_lst, s); // take next to skip initial '%'
 	ft_putstr_fd(s, 1);
 	free(s);

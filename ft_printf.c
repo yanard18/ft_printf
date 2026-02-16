@@ -18,7 +18,6 @@ int	ft_printf(const char *format, ...)
 	va_end(args);
 	return (1);
 } 
-
 int	main(void)
 {
 	char *s;
