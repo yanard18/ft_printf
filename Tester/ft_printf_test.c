@@ -46,8 +46,14 @@ int	main(void)
 	TEST("+2a", ft_printf("%+x", 42));
 	TEST("-2a", ft_printf("%+x", -42));
 
+	dprintf(saved_stdout, "\ntest field width:\n");
+	TEST("<1>", ft_printf("<%0d>", 1));
+	TEST("< 1>", ft_printf("<%1d>", 1));
+	TEST("<  1>", ft_printf("<%3d>", 1));
+
 	dprintf(saved_stdout, "\ntest combinational:\n");
 	TEST("NUM 42", ft_printf("%s %d", "NUM", 42));
+	TEST("<  abc>", ft_printf("<%5s>", "abc"));
 	TEARDOWN
 	return (0);
 }

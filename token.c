@@ -87,6 +87,7 @@ static t_list	*tokenize(const char **format)
 		}
 		else if (ft_isdigit(**format))
 		{
+			//push_token(&lst, 'n', ft_itoa(ft_atoi(*format))); // maybe we should store value as
 			push_token(&lst, 'n', ft_itoa(ft_atoi(*format)));
 			while (ft_isdigit(**format))
 				(*format)++;
@@ -138,6 +139,39 @@ char	*apply_flags(t_list *token_lst, char *s)
 	return (s);
 }
 
+char	*apply_width(t_list *token_lst, char *s)
+{
+	int		i;
+	char	*space;
+	int		val;
+	int		s_len;
+	t_token	*token;
+
+
+	i = 0;
+	s_len = ft_strlen(s);
+	while (token_lst->next) // read flags
+	{
+		token = (t_token *)token_lst->content;
+		if (token->type == 'n')
+		{
+			val = ft_atoi((char *)token->value);
+			if (val == 0)
+				return (s);
+			if (val > s_len)
+				val -= s_len;
+			else
+				val = s_len;
+		
+			space = (char *)malloc(sizeof(char) * val);
+			ft_memset(space, 32, val);
+			s = ft_strjoin(space, s);
+		}
+		token_lst = token_lst->next;
+	}
+	return (s);
+}
+
 void	read_token(const char **format, va_list args)
 {
 	t_list	*token_lst;
@@ -147,6 +181,7 @@ void	read_token(const char **format, va_list args)
 	//debug_tokenlst(token_lst);
 	s = apply_specifier(token_lst, args);
 	s = apply_flags(token_lst, s); // take next to skip initial '%'
+	s = apply_width(token_lst, s);
 	ft_putstr_fd(s, 1);
 	free(s);
 	ft_lstclear(&token_lst, free_token);

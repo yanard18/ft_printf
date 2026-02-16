@@ -24,9 +24,11 @@ int	main(void)
 {
 	char *s;
 
-	//s = "%%";
 	ft_putstr_fd("\n", 1);
-	ft_printf("%%");
+	ft_printf("%3d", 1);
+#include <stdio.h>
+	printf("<%3d>", 1);
+
 	return (0);
 }
 */
