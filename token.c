@@ -19,7 +19,7 @@ t_token widths[2] = {
 };
 
 t_token precision[2] = {
-	(t_token){'f', ".", apply_precision},
+	(t_token){'p', ".", apply_precision},
 	(t_token){'0', NULL, NULL}
 };
 
@@ -169,6 +169,22 @@ char	*apply_flags(t_list *token_lst, char *s)
 	return (s);
 }
 
+char	*read_precision(t_list *token_lst, char *s)
+{
+	t_token *token;
+	t_list	*s_lst;
+
+	s_lst = token_lst;
+	while (token_lst->next) // read flags
+	{
+		token = (t_token *)token_lst->content;
+		if (token->type == 'p')
+			s = token->f(s, s_lst);
+		token_lst = token_lst->next;
+	}
+	return (s);
+}
+
 char	*apply_width(t_list *token_lst, char *s)
 {
 	char	*space;
@@ -204,6 +220,7 @@ void	read_token(const char **format, va_list args)
 	token_lst = tokenize(format);
 	//debug_tokenlst(token_lst);
 	s = apply_specifier(token_lst, args);
+	s = read_precision(token_lst, s);
 	s = apply_flags(token_lst, s); // take next to skip initial '%'
 	s = apply_width(token_lst, s);
 	ft_putstr_fd(s, 1);

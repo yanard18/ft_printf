@@ -52,9 +52,6 @@ int	main(void)
 	TEST("< 1>", ft_printf("<%2d>", 1));
 	TEST("<  1>", ft_printf("<%3d>", 1));
 	TEST("<1  >", ft_printf("<%-3d>", 1));
-
-	dprintf(saved_stdout, "\ntest combinational:\n");
-	TEST("NUM 42", ft_printf("%s %d", "NUM", 42));
 	TEST("<  abc>", ft_printf("<%5s>", "abc"));
 
 	dprintf(saved_stdout, "\ntest # flag:\n");
@@ -65,6 +62,11 @@ int	main(void)
 	TEST("42", ft_printf("%.1d", 42));
 	TEST("42", ft_printf("%.2d", 42));
 	TEST("042", ft_printf("%.3d", 42));
+
+	dprintf(saved_stdout, "\ntest combinational:\n");
+	TEST("NUM 42", ft_printf("%s %d", "NUM", 42));
+	TEST("<+0x00002a >", ft_printf("<%#-+10.6x>", 42));
+	TEST("<+000042 >", printf("<%-+8.6d>", 42));
 	TEARDOWN
 	return (0);
 }

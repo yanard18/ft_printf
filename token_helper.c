@@ -99,7 +99,7 @@ char	*apply_precision(void *content, t_list *tokens)
 	if (prec_len <= ft_strlen((char *)content))
 		return ((char *)content);
 	prec_len -= ft_strlen((char *)content);
-	if (ft_strncmp(specifier_token->value, "d", 1) == 0)
+	if (ft_strncmp(specifier_token->value, "d", 1) == 0 || ft_strncmp(specifier_token->value, "x", 1) == 0)
 	{
 		zero_str = (char *)malloc(sizeof(char) * prec_len + 1);
 		ft_memset(zero_str, 48, prec_len);
