@@ -131,21 +131,11 @@ static t_list	*tokenize(const char **format)
 char	*apply_specifier(t_list *lst, va_list args)
 {
 	t_token *token;
-	t_list	*s_lst;
 
-	s_lst = lst;
-	while (lst->next)
-		lst = lst->next;
-	token = (t_token *)lst->content;
-	if (ft_strncmp((char *)token->value, "d", 1) == 0)
-		return (token->f(&(void *){va_arg(args, void *)}, s_lst));
-	else if (ft_strncmp((char *)token->value, "x", 1) == 0)
-		return (token->f(&(void *){va_arg(args, void *)}, s_lst));
-	else if (ft_strncmp((char *)token->value, "s", 1) == 0)
-		return (token->f(&(void *){va_arg(args, void *)}, s_lst));
-	else if (ft_strncmp((char *)token->value, "%", 1) == 0)
+	token = (t_token *)ft_lstlast(lst)->content;
+	if (ft_strncmp((char *)token->value, "%", 1) == 0)
 		return (ft_strdup("%"));
-	return (ft_strdup(""));
+	return (token->f(&(void *){va_arg(args, void *)}, lst));
 }
 
 char	*apply_flags(t_list *token_lst, char *s)
