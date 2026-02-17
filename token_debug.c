@@ -16,8 +16,18 @@ void	debug_token(void *content)
 		ft_putstr_fd((char *)token->value, fd);
 }
 
+void	print_addr(void *content)
+{
+	t_token	*token;
+
+#include <stdio.h>
+	token = (t_token *)content;
+	printf("addr: %p, token_val: %s\n", content, token->value);
+}
+
 void	debug_tokenlst(t_list *tokens)
 {
 	ft_lstiter(tokens, debug_token);
+	ft_lstiter(tokens, print_addr);
 	ft_putchar_fd('\n', 1);
 }

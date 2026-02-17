@@ -2,6 +2,6 @@
 
 int	main(void)
 {
-	ft_printf("<%5d>", 42);
+	ft_printf("<%1d>", 42);
 	return (0);
 }

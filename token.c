@@ -13,6 +13,7 @@ t_token flags[4] = {
 	(t_token){'0', NULL, NULL}
 };
 
+
 t_token specifiers[10] = {
 	(t_token){'s', "c", itoa},
 	(t_token){'s', "s", get_str},
@@ -49,8 +50,10 @@ static void	free_token(void *content)
 	{
 		if (token->value)
 			free(token->value);
+		free(token);
 	}
 }
+
 
 t_token	*get_token(t_list *lst, const char type)
 {
@@ -223,10 +226,10 @@ void	read_token(const char **format, va_list args)
 	char	*s;
 
 	token_lst = tokenize(format);
-	debug_tokenlst(token_lst);
+	//debug_tokenlst(token_lst);
 	s = apply_specifier(token_lst, args);
-	s = apply_flags(token_lst, s); // take next to skip initial '%'
-	s = apply_width(token_lst, s);
+	//s = apply_flags(token_lst, s); // take next to skip initial '%'
+	//s = apply_width(token_lst, s);
 	ft_putstr_fd(s, 1);
 	free(s);
 	ft_lstclear(&token_lst, free_token);
