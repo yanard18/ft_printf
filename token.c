@@ -165,12 +165,10 @@ char	*apply_width(t_list *token_lst, char *s)
 		if (token->type == 'n')
 		{
 			val = ft_atoi((char *)token->value);
-			if (val == 0)
+			if (val < s_len)
 				return (s);
-			if (val > s_len)
-				val -= s_len;
 			else
-				val = s_len;
+				val -= s_len;
 		
 			space = (char *)malloc(sizeof(char) * val);
 			ft_memset(space, 32, val);

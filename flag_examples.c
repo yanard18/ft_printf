@@ -38,7 +38,10 @@ int	main(void)
     printf ("<%x>\n", 42);
     printf ("<%#1x>\n", 9);
     printf ("<%#1.5x>\n", 9);
-    printf("%%d\n");
+    printf ("0d: <%0d>\n", 1);
+    printf ("1d: <%1d>\n", 1);
+    printf ("2d: <%2d>\n", 1);
+
 	
     return 0;
 }

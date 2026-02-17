@@ -48,7 +48,8 @@ int	main(void)
 
 	dprintf(saved_stdout, "\ntest field width:\n");
 	TEST("<1>", ft_printf("<%0d>", 1));
-	TEST("< 1>", ft_printf("<%1d>", 1));
+	TEST("<1>", ft_printf("<%1d>", 1));
+	TEST("< 1>", ft_printf("<%2d>", 1));
 	TEST("<  1>", ft_printf("<%3d>", 1));
 	TEST("<1  >", ft_printf("<%-3d>", 1));
 
