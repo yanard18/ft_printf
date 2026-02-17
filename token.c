@@ -209,6 +209,7 @@ char	*apply_width(t_list *token_lst, char *s)
 		}
 		token_lst = token_lst->next;
 	}
+	free(space);
 	return (s);
 }
 
