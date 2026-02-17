@@ -69,3 +69,20 @@ char	*apply_plus_flag(void *content, t_list *tokens)
 	free(s);
 	return (ret);
 }
+
+char	*apply_hash_token(void *content, t_list *tokens)
+{
+	char	*s;
+	char	*token_val;
+	t_token *token;
+
+	s = (char *)content;
+	token = get_token(tokens->next, 's');
+	token_val = (char *)token->value;
+	if (ft_strncmp(token_val, "x", 1) == 0)
+		s = ft_strjoin("0x", s);
+	if (ft_strncmp(token_val, "X", 1) == 0)
+		s = ft_strjoin("0X", s);
+	return (s);
+
+}

@@ -11,7 +11,7 @@ char	*change_just_direction(void *content, t_list *tokens)
 
 
 t_token flags[4] = {
-	(t_token){'f', "#", itoa},
+	(t_token){'f', "#", apply_hash_token},
 	(t_token){'f', "-", change_just_direction},
 	(t_token){'f', "+", apply_plus_flag},
 	(t_token){'0', NULL, NULL}
@@ -64,6 +64,19 @@ static void	free_token(void *content)
 	}
 }
 
+t_token	*get_token(t_list* lst, const char type)
+{
+	while (lst->next)
+	{
+		if (((t_token *)lst->content)->type == type)
+			return ((t_token *)lst->content);
+		lst = lst->next;
+	}
+	if (((t_token *)lst->content)->type == type)
+		return ((t_token *)lst->content);
+	return (NULL);
+}
+
 int	has_token(const char c, t_token *tokens, t_token **out)
 {
 	unsigned int	i;
@@ -78,7 +91,7 @@ int	has_token(const char c, t_token *tokens, t_token **out)
 		}
 		i++;
 	}
-	return (0);
+	return (-1);
 }
 
 static t_list	*tokenize(const char **format)
@@ -91,7 +104,7 @@ static t_list	*tokenize(const char **format)
 	while (**format)
 	{
 		(*format)++;
-		if (has_token(**format, flags, &out_token))
+		if (has_token(**format, flags, &out_token) != -1)
 		{
 			ft_lstadd_back(&lst, ft_lstnew(out_token));
 		}
@@ -106,7 +119,7 @@ static t_list	*tokenize(const char **format)
 		else if (**format == '.')
 		{
 		}
-		else if (has_token(**format, specifiers, &out_token))
+		else if (has_token(**format, specifiers, &out_token) != -1)
 		{
 			ft_lstadd_back(&lst, ft_lstnew(out_token));
 			(*format)++;
@@ -119,36 +132,34 @@ static t_list	*tokenize(const char **format)
 char	*apply_specifier(t_list *lst, va_list args)
 {
 	t_token *token;
-	t_list	*token_lst_start;
+	t_list	*s_lst;
 
-
-	token_lst_start = lst;
+	s_lst = lst;
 	while (lst->next)
 		lst = lst->next;
 	token = (t_token *)lst->content;
 	if (ft_strncmp((char *)token->value, "d", 1) == 0)
-		return (token->f(&(int){va_arg(args, int)}, token_lst_start));
+		return (token->f(&(int){va_arg(args, int)}, s_lst));
 	else if (ft_strncmp((char *)token->value, "x", 1) == 0)
-		return (token->f(&(int){va_arg(args, int)}, token_lst_start));
+		return (token->f(&(int){va_arg(args, int)}, s_lst));
 	else if (ft_strncmp((char *)token->value, "s", 1) == 0)
-		return (token->f((char *){va_arg(args, char *)}, token_lst_start));
+		return (token->f((char *){va_arg(args, char *)}, s_lst));
 	else if (ft_strncmp((char *)token->value, "%", 1) == 0)
 		return (ft_strdup("%"));
-
 	return (ft_strdup(""));
 }
 
 char	*apply_flags(t_list *token_lst, char *s)
 {
 	t_token *token;
-	t_list	*token_lst_start;
+	t_list	*s_lst;
 
-	token_lst_start = token_lst;
+	s_lst = token_lst;
 	while (token_lst->next) // read flags
 	{
 		token = (t_token *)token_lst->content;
 		if (token->type == 'f')
-			s = token->f(s, token_lst_start);
+			s = token->f(s, s_lst);
 		token_lst = token_lst->next;
 	}
 	return (s);
@@ -162,7 +173,6 @@ char	*apply_width(t_list *token_lst, char *s)
 	int		s_len;
 	t_token	*token;
 
-
 	i = 0;
 	s_len = ft_strlen(s);
 	while (token_lst->next) // read flags
@@ -175,7 +185,6 @@ char	*apply_width(t_list *token_lst, char *s)
 				return (s);
 			else
 				val -= s_len;
-		
 			space = (char *)malloc(sizeof(char) * val);
 			ft_memset(space, 32, val);
 			if (g_justified_direction == 1)

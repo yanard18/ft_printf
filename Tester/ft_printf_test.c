@@ -56,6 +56,9 @@ int	main(void)
 	dprintf(saved_stdout, "\ntest combinational:\n");
 	TEST("NUM 42", ft_printf("%s %d", "NUM", 42));
 	TEST("<  abc>", ft_printf("<%5s>", "abc"));
+
+	dprintf(saved_stdout, "\ntest # flag:\n");
+	TEST("0x2a", ft_printf("%#x", 42));
 	TEARDOWN
 	return (0);
 }
