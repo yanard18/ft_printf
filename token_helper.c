@@ -1,19 +1,21 @@
 #include "ft_printf.h"
 
-char	*itoa(void *content)
+char	*itoa(void *content, t_list *tokens)
 {
 	int		*np;
 
+	(void)tokens;
 	np = (int *)content;
 	return (ft_itoa(*np));
 }
 
-char	*get_str(void *content)
+char	*get_str(void *content, t_list *tokens)
 {
+	(void)tokens;
 	return (ft_strdup((char *)content));
 }
 
-char	*hex_small(void *content)
+char	*hex_small(void *content, t_list *tokens)
 {
 	long	n;      // Using long to safely handle INT_MIN
 	long	temp;
@@ -22,6 +24,7 @@ char	*hex_small(void *content)
 	char	*str;
 	char	*base = "0123456789abcdef";
 
+	(void)tokens;
 	n = *(int *)content; 
 	is_neg = 0;
 	if (n < 0)
@@ -53,11 +56,12 @@ char	*hex_small(void *content)
 	return (str);
 }
 
-char	*apply_plus_flag(void *content)
+char	*apply_plus_flag(void *content, t_list *tokens)
 {
 	char	*s;
 	char	*ret;
 
+	(void)tokens;
 	s = (char *)content;
 	if (*s == '-')
 		return (s);
