@@ -1,18 +1,17 @@
 #include "ft_printf.h"
 
-static int g_justified_direction = 1;
-
-char	*change_just_direction(void *content, t_list *tokens)
+char	*do_nothing(void *content, t_list *tokens)
 {
-	(void)tokens;
-	g_justified_direction = -1;
-	return ((char *)content);
-}
+	char	*s;
 
+	s = (char *)content;
+	(void)tokens;
+	return (s);
+}
 
 t_token flags[4] = {
 	(t_token){'f', "#", apply_hash_token},
-	(t_token){'f', "-", change_just_direction},
+	(t_token){'f', "-", do_nothing},
 	(t_token){'f', "+", apply_plus_flag},
 	(t_token){'0', NULL, NULL}
 };
@@ -64,7 +63,7 @@ static void	free_token(void *content)
 	}
 }
 
-t_token	*get_token(t_list* lst, const char type)
+t_token	*get_token(t_list *lst, const char type)
 {
 	while (lst->next)
 	{
@@ -75,6 +74,24 @@ t_token	*get_token(t_list* lst, const char type)
 	if (((t_token *)lst->content)->type == type)
 		return ((t_token *)lst->content);
 	return (NULL);
+}
+
+t_token *get_token_by_val(t_list *lst, const char *s)
+{
+	t_token *token;
+
+	while (lst->next)
+	{
+		token = (t_token *)lst->content;
+		if (ft_strncmp((char *)token->value, s, ft_strlen(s)) == 0)
+			return ((t_token *)lst->content);
+		lst = lst->next;
+	}
+	token = (t_token *)lst->content;
+	if (ft_strncmp((char *)token->value, s, ft_strlen(s)) == 0)
+		return ((t_token *)lst->content);
+	return (NULL);
+
 }
 
 int	has_token(const char c, t_token *tokens, t_token **out)
@@ -172,9 +189,11 @@ char	*apply_width(t_list *token_lst, char *s)
 	int		val;
 	int		s_len;
 	t_token	*token;
+	t_token *s_lst;
 
 	i = 0;
 	s_len = ft_strlen(s);
+	s_lst = token_lst;
 	while (token_lst->next) // read flags
 	{
 		token = (t_token *)token_lst->content;
@@ -187,10 +206,10 @@ char	*apply_width(t_list *token_lst, char *s)
 				val -= s_len;
 			space = (char *)malloc(sizeof(char) * val);
 			ft_memset(space, 32, val);
-			if (g_justified_direction == 1)
-				s = ft_strjoin(space, s);
-			else
+			if (get_token_by_val(s_lst, "-"))
 				s = ft_strjoin(s, space);
+			else
+				s = ft_strjoin(space, s);
 		}
 		token_lst = token_lst->next;
 	}
@@ -209,8 +228,6 @@ void	read_token(const char **format, va_list args)
 	s = apply_width(token_lst, s);
 	ft_putstr_fd(s, 1);
 	free(s);
-	g_justified_direction = 1;
 	ft_lstclear(&token_lst, free_token);
 }
-
 
