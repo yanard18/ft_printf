@@ -7,38 +7,38 @@ char	*do_nothing(void *content, t_list *tokens)
 }
 
 t_token flags[4] = {
-	(t_token){'f', "#", apply_hash_token},
-	(t_token){'f', "-", do_nothing},
-	(t_token){'f', "+", apply_plus_flag},
-	(t_token){'0', NULL, NULL}
+	(t_token){'f', "#", 10, apply_hash_token},
+	(t_token){'f', "-", 11, do_nothing},
+	(t_token){'f', "+", 12, apply_plus_flag},
+	(t_token){'0', NULL, 0, NULL}
 };
 
 t_token widths[2] = {
-	(t_token){'n', NULL, NULL},
-	(t_token){'0', NULL, NULL}
+	(t_token){'n', NULL, 20, NULL},
+	(t_token){'0', NULL, 0, NULL}
 };
 
 t_token precision[2] = {
-	(t_token){'p', ".", apply_precision},
-	(t_token){'0', NULL, NULL}
+	(t_token){'p', ".", 5, apply_precision},
+	(t_token){'0', NULL, 0, NULL}
 };
 
 t_token plength[2] = {
-	(t_token){'l', NULL, NULL},
-	(t_token){'0', NULL, NULL}
+	(t_token){'l', NULL, 6, NULL},
+	(t_token){'0', NULL, 0, NULL}
 };
 
 t_token specifiers[10] = {
-	(t_token){'s', "c", itoa},
-	(t_token){'s', "s", get_str},
-	(t_token){'s', "p", itoa},
-	(t_token){'s', "d", itoa},
-	(t_token){'s', "i", itoa},
-	(t_token){'s', "u", itoa},
-	(t_token){'s', "x", hex_small},
-	(t_token){'s', "X", itoa},
-	(t_token){'s', "%", NULL},
-	(t_token){'0', NULL, NULL}
+	(t_token){'s', "c", 99, itoa},
+	(t_token){'s', "s", 99, get_str},
+	(t_token){'s', "p", 99, itoa},
+	(t_token){'s', "d", 99, itoa},
+	(t_token){'s', "i", 99, itoa},
+	(t_token){'s', "u", 99, itoa},
+	(t_token){'s', "x", 99, hex_small},
+	(t_token){'s', "X", 99, itoa},
+	(t_token){'s', "%", 1, NULL},
+	(t_token){'0', NULL, 0, NULL}
 };
 
 static void	free_token(void *content)
@@ -212,19 +212,63 @@ char	*apply_width(t_list *token_lst, char *s)
 	return (s);
 }
 
+/*
+int		get_buf_index(t_token *buf, t_token *token)
+{
+	int	i;
+
+	i = 0;
+	while (buf[i].type != 0)
+	{
+		if(buf[i].type == token->type)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+*/
+
+void	sort_tokens(t_list ** tokens)
+{
+	t_token	*cur_token;
+	t_token	*next_token;
+	t_token *temp_token;
+	t_list	*lst_start;
+
+	lst_start = *tokens;
+	while (1)
+	{
+		while ((*tokens)->next)
+		{
+			cur_token = (t_token *)(*tokens)->content;
+			next_token = (t_token *)((t_list *)((*tokens)->next)->content);
+			if (cur_token->priority > next_token->priority)
+			{
+				temp_token = cur_token;
+				(*tokens)->content = next_token;
+				(*tokens)->next->content = temp_token;
+			}
+			*tokens = (*tokens)->next;
+		}
+		*tokens = lst_start;
+		break ;
+	}
+}
+
 void	read_token(const char **format, va_list args)
 {
-	t_list	*token_lst;
+	t_list	*tokens;
 	char	*s;
 
-	token_lst = tokenize(format);
-	//debug_tokenlst(token_lst);
-	s = apply_specifier(token_lst, args);
-	s = read_precision(token_lst, s);
-	s = apply_flags(token_lst, s); // take next to skip initial '%'
-	s = apply_width(token_lst, s);
+	tokens = tokenize(format);
+	sort_tokens(&tokens);
+	//debug_tokenlst(tokens);
+	s = apply_specifier(tokens, args);
+	s = read_precision(tokens, s);
+	s = apply_flags(tokens, s); // take next to skip initial '%'
+	s = apply_width(tokens, s);
 	ft_putstr_fd(s, 1);
 	free(s);
-	ft_lstclear(&token_lst, free_token);
+	ft_lstclear(&tokens, free_token);
 }
 

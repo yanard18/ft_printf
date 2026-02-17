@@ -28,6 +28,6 @@ void	print_addr(void *content)
 void	debug_tokenlst(t_list *tokens)
 {
 	ft_lstiter(tokens, debug_token);
-	ft_lstiter(tokens, print_addr);
+	//ft_lstiter(tokens, print_addr);
 	ft_putchar_fd('\n', 1);
 }

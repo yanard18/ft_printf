@@ -66,7 +66,8 @@ int	main(void)
 	dprintf(saved_stdout, "\ntest combinational:\n");
 	TEST("NUM 42", ft_printf("%s %d", "NUM", 42));
 	TEST("<+0x00002a >", ft_printf("<%#-+10.6x>", 42));
-	TEST("<+000042 >", printf("<%-+8.6d>", 42));
+	TEST("<+0x00002a >", ft_printf("<%-+#10.6x>", 42));
+	TEST("<+000042 >", ft_printf("<%-+8.6d>", 42));
 	TEARDOWN
 	return (0);
 }

@@ -72,6 +72,7 @@ char	*apply_plus_flag(void *content, t_list *tokens)
 	return (ret);
 }
 
+
 char	*apply_hash_token(void *content, t_list *tokens)
 {
 	char	*s;
