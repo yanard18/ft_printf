@@ -83,12 +83,12 @@ t_token *get_token_by_val(t_list *lst, const char *s)
 	while (lst->next)
 	{
 		token = (t_token *)lst->content;
-		if (ft_strncmp((char *)token->value, s, ft_strlen(s)) == 0)
+		if (ft_strncmp(token->value, s, ft_strlen(s)) == 0)
 			return ((t_token *)lst->content);
 		lst = lst->next;
 	}
 	token = (t_token *)lst->content;
-	if (ft_strncmp((char *)token->value, s, ft_strlen(s)) == 0)
+	if (ft_strncmp(token->value, s, ft_strlen(s)) == 0)
 		return ((t_token *)lst->content);
 	return (NULL);
 
@@ -101,7 +101,7 @@ int	has_token(const char c, t_token *tokens, t_token **out)
 	i = 0;
 	while(tokens[i].type != '0')
 	{
-		if (((char *)tokens[i].value)[0] == c)
+		if (tokens[i].value[0] == c)
 		{
 			*out = (tokens + i);
 			return (i);
@@ -127,7 +127,6 @@ static t_list	*tokenize(const char **format)
 		}
 		else if (ft_isdigit(**format))
 		{
-			//push_token(&lst, 'n', ft_itoa(ft_atoi(*format))); // maybe we should store value as
 			push_token(&lst, 'n', ft_itoa(ft_atoi(*format)));
 			while (ft_isdigit(**format))
 				(*format)++;
@@ -189,7 +188,7 @@ char	*apply_width(t_list *token_lst, char *s)
 	int		val;
 	int		s_len;
 	t_token	*token;
-	t_token *s_lst;
+	t_list *s_lst;
 
 	i = 0;
 	s_len = ft_strlen(s);
