@@ -12,7 +12,9 @@ char	*itoa(void *content, t_list *tokens)
 char	*get_str(void *content, t_list *tokens)
 {
 	(void)tokens;
-	return (ft_strdup((char *)content));
+	char **str = content;
+
+	return (ft_strdup(*str));
 }
 
 char	*hex_small(void *content, t_list *tokens)

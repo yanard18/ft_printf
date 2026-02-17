@@ -2,11 +2,8 @@
 
 char	*do_nothing(void *content, t_list *tokens)
 {
-	char	*s;
-
-	s = (char *)content;
 	(void)tokens;
-	return (s);
+	return (content);
 }
 
 t_token flags[4] = {
@@ -155,11 +152,11 @@ char	*apply_specifier(t_list *lst, va_list args)
 		lst = lst->next;
 	token = (t_token *)lst->content;
 	if (ft_strncmp((char *)token->value, "d", 1) == 0)
-		return (token->f(&(int){va_arg(args, int)}, s_lst));
+		return (token->f(&(void *){va_arg(args, void *)}, s_lst));
 	else if (ft_strncmp((char *)token->value, "x", 1) == 0)
-		return (token->f(&(int){va_arg(args, int)}, s_lst));
+		return (token->f(&(void *){va_arg(args, void *)}, s_lst));
 	else if (ft_strncmp((char *)token->value, "s", 1) == 0)
-		return (token->f((char *){va_arg(args, char *)}, s_lst));
+		return (token->f(&(void *){va_arg(args, void *)}, s_lst));
 	else if (ft_strncmp((char *)token->value, "%", 1) == 0)
 		return (ft_strdup("%"));
 	return (ft_strdup(""));
