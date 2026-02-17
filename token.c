@@ -18,6 +18,16 @@ t_token widths[2] = {
 	(t_token){'0', NULL, NULL}
 };
 
+t_token precision[2] = {
+	(t_token){'f', ".", apply_precision},
+	(t_token){'0', NULL, NULL}
+};
+
+t_token plength[2] = {
+	(t_token){'l', NULL, NULL},
+	(t_token){'0', NULL, NULL}
+};
+
 t_token specifiers[10] = {
 	(t_token){'s', "c", itoa},
 	(t_token){'s', "s", get_str},
@@ -38,7 +48,7 @@ static void	free_token(void *content)
 	token = (t_token *)content;
 	if (!token)
 		return ;
-	if (token->type == 'n')
+	if (token->type == 'n' || token->type == 'l')
 	{
 		if (token->value)
 			free(token->value);
@@ -100,30 +110,35 @@ static t_list	*tokenize(const char **format)
 
 	has_token('%', specifiers, &out_token);
 	lst = ft_lstnew(out_token);
-	while (**format)
-	{
+	(*format)++;
+	while (**format && has_token(**format, flags, &out_token) != -1)
+	{	
+		ft_lstadd_back(&lst, ft_lstnew(out_token));
 		(*format)++;
-		if (has_token(**format, flags, &out_token) != -1)
-		{
-			ft_lstadd_back(&lst, ft_lstnew(out_token));
-		}
-		else if (ft_isdigit(**format))
-		{
-			widths[0].value = ft_itoa(ft_atoi(*format));
-			ft_lstadd_back(&lst, ft_lstnew(&widths[0]));
-			while (ft_isdigit(**format))
-				(*format)++;
-			(*format)--;
-		}
-		else if (**format == '.')
-		{
-		}
-		else if (has_token(**format, specifiers, &out_token) != -1)
-		{
-			ft_lstadd_back(&lst, ft_lstnew(out_token));
-			(*format)++;
-			break ;
-		}
+	}
+	if (ft_isdigit(**format))
+	{
+		widths[0].value = ft_itoa(ft_atoi(*format));
+		ft_lstadd_back(&lst, ft_lstnew(&widths[0]));
+	}
+	while (ft_isdigit(**format))
+		(*format)++;
+	if (has_token(**format, precision, &out_token) != -1)
+	{
+		ft_lstadd_back(&lst, ft_lstnew(&precision[0]));
+		(*format)++;
+	}
+	if (ft_isdigit(**format))
+	{
+		plength[0].value = ft_itoa(ft_atoi(*format));
+		ft_lstadd_back(&lst, ft_lstnew(&plength[0]));
+	}
+	while (ft_isdigit(**format))
+		(*format)++;
+	if (has_token(**format, specifiers, &out_token) != -1)
+	{
+		ft_lstadd_back(&lst, ft_lstnew(out_token));
+		(*format)++;
 	}
 	return (lst);
 }
@@ -157,7 +172,7 @@ char	*apply_flags(t_list *token_lst, char *s)
 char	*apply_width(t_list *token_lst, char *s)
 {
 	char	*space;
-	int		val;
+	size_t		val;
 	char	*temp_s;
 	t_token	*token;
 

@@ -6,7 +6,7 @@
 	/*   By: dyanar <dyanar@student.42istanbul.com.tr>  +#+  +:+       +#+        */
 	/*                                                +#+#+#+#+#+   +#+           */
 	/*   Created: 2026/02/12 04:45:32 by dyanar            #+#    #+#             */
-/*   Updated: 2026/02/17 17:53:18 by dyanar           ###   ########.fr       */
+/*   Updated: 2026/02/18 00:49:15 by dyanar           ###   ########.fr       */
 	/*                                                                            */
 	/* ************************************************************************** */
 
@@ -34,5 +34,6 @@ char	*get_str(void *content, t_list *tokens);
 char	*hex_small(void *content, t_list *tokens);
 char	*apply_plus_flag(void *content, t_list *tokens);
 char	*apply_hash_token(void *content, t_list *tokens);
+char	*apply_precision(void *content, t_list *tokens);
 
 #endif

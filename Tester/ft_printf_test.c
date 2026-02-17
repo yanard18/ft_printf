@@ -59,6 +59,12 @@ int	main(void)
 
 	dprintf(saved_stdout, "\ntest # flag:\n");
 	TEST("0x2a", ft_printf("%#x", 42));
+
+	dprintf(saved_stdout, "\ntest . precision:\n");
+	TEST("42", ft_printf("%.0d", 42));
+	TEST("42", ft_printf("%.1d", 42));
+	TEST("42", ft_printf("%.2d", 42));
+	TEST("042", ft_printf("%.3d", 42));
 	TEARDOWN
 	return (0);
 }

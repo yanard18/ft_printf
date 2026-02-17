@@ -86,3 +86,28 @@ char	*apply_hash_token(void *content, t_list *tokens)
 	free(s);
 	return ((char *)content);
 }
+
+char	*apply_precision(void *content, t_list *tokens)
+{
+	t_token *specifier_token;
+	char	*ret;
+	char	*zero_str;
+	size_t	prec_len;
+
+	specifier_token = get_token(tokens->next, 's');
+	prec_len = ft_atoi(get_token(tokens, 'l')->value);
+	if (prec_len <= ft_strlen((char *)content))
+		return ((char *)content);
+	prec_len -= ft_strlen((char *)content);
+	if (ft_strncmp(specifier_token->value, "d", 1) == 0)
+	{
+		zero_str = (char *)malloc(sizeof(char) * prec_len + 1);
+		ft_memset(zero_str, 48, prec_len);
+		zero_str[prec_len] = 0;
+		ret = ft_strjoin(zero_str, (char *)content);
+		free(content);
+		free(zero_str);
+		return (ret);
+	}
+	return ((char *)content);
+}
