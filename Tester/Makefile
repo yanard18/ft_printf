@@ -10,6 +10,7 @@ HEADERS = $(addsuffix .h, $(FILES))
 
 all: $(NAME)
 	./$(NAME)
+	valgrind --leak-check=full ./$(NAME)
 
 $(NAME): $(SRCS) $(HEADERS) $(LIBFTPRINTF)
 	cc $(SRCS) $(LIBFTPRINTF) -o $(NAME)

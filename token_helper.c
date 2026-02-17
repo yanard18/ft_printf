@@ -75,16 +75,14 @@ char	*apply_plus_flag(void *content, t_list *tokens)
 char	*apply_hash_token(void *content, t_list *tokens)
 {
 	char	*s;
-	char	*token_val;
 	t_token *token;
 
 	s = (char *)content;
 	token = get_token(tokens->next, 's');
-	token_val = (char *)token->value;
-	if (ft_strncmp(token_val, "x", 1) == 0)
-		s = ft_strjoin("0x", s);
-	if (ft_strncmp(token_val, "X", 1) == 0)
-		s = ft_strjoin("0X", s);
-	return (s);
-
+	if (ft_strncmp(token->value, "x", 1) == 0)
+		content = ft_strjoin("0x", (char *)content);
+	else if (ft_strncmp(token->value, "X", 1) == 0)
+		content = ft_strjoin("0X", (char *)content);
+	free(s);
+	return ((char *)content);
 }

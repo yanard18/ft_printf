@@ -156,47 +156,28 @@ char	*apply_flags(t_list *token_lst, char *s)
 
 char	*apply_width(t_list *token_lst, char *s)
 {
-	int		i;
 	char	*space;
 	int		val;
-	int		s_len;
-	char	*res;
+	char	*temp_s;
 	t_token	*token;
-	t_list *s_lst;
 
-	i = 0;
-	s_len = ft_strlen(s);
-	s_lst = token_lst;
-	while (token_lst->next)
-	{
-		token = (t_token *)token_lst->content;
-		if (token->type == 'n')
-		{
-			val = ft_atoi((char *)token->value);
-			if (val < s_len)
-				return (s);
-			else
-				val -= s_len;
-			space = (char *)malloc(sizeof(char) * val);
-			ft_memset(space, 32, val);
-			if (get_token_by_val(s_lst, "-"))
-			{
-				res = ft_strjoin(s, space);
-				free(s);
-				free(space);
-				return (res);
-			}
-			else
-			{
-				res = ft_strjoin(space, s);
-				free(s);
-				free(space);
-				return (res);
-			}
-
-		}
-		token_lst = token_lst->next;
-	}
+	temp_s = s;
+	token = get_token(token_lst, 'n');
+	if (!token)
+		return (s);
+	val = ft_atoi((char *)token->value);
+	if (val <= ft_strlen(s))
+		return (s);
+	val -= ft_strlen(s);
+	space = (char *)malloc(sizeof(char) * val + 1);
+	ft_memset(space, 32, val);
+	space[val] = 0;
+	if (get_token_by_val(token_lst, "-"))
+		s = ft_strjoin(s, space);
+	else
+		s = ft_strjoin(space, s);
+	free(space);
+	free(temp_s);
 	return (s);
 }
 
