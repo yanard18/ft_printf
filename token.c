@@ -26,7 +26,7 @@ t_token specifiers[10] = {
 	(t_token){'0', NULL, NULL}
 };
 
-static	t_token *new_token(char type, void *value)
+static	t_token *new_token(char type, char *value)
 {
 	t_token	*token;
 
@@ -36,14 +36,6 @@ static	t_token *new_token(char type, void *value)
 	token->type = type;
 	token->value = value;
 	return (token);
-}
-
-static void	push_token(t_list **lst, char type, void *value)
-{
-	t_list	*newlst;
-
-	newlst = ft_lstnew(new_token(type, value));
-	ft_lstadd_back(lst, newlst);
 }
 
 static void	free_token(void *content)
@@ -124,7 +116,8 @@ static t_list	*tokenize(const char **format)
 		}
 		else if (ft_isdigit(**format))
 		{
-			push_token(&lst, 'n', ft_itoa(ft_atoi(*format)));
+			out_token = new_token('n', ft_itoa(ft_atoi(*format)));
+			ft_lstadd_back(&lst, ft_lstnew(out_token));
 			while (ft_isdigit(**format))
 				(*format)++;
 			(*format)--;
@@ -184,13 +177,14 @@ char	*apply_width(t_list *token_lst, char *s)
 	char	*space;
 	int		val;
 	int		s_len;
+	char	*res;
 	t_token	*token;
 	t_list *s_lst;
 
 	i = 0;
 	s_len = ft_strlen(s);
 	s_lst = token_lst;
-	while (token_lst->next) // read flags
+	while (token_lst->next)
 	{
 		token = (t_token *)token_lst->content;
 		if (token->type == 'n')
@@ -203,13 +197,23 @@ char	*apply_width(t_list *token_lst, char *s)
 			space = (char *)malloc(sizeof(char) * val);
 			ft_memset(space, 32, val);
 			if (get_token_by_val(s_lst, "-"))
-				s = ft_strjoin(s, space);
+			{
+				res = ft_strjoin(s, space);
+				free(s);
+				free(space);
+				return (res);
+			}
 			else
-				s = ft_strjoin(space, s);
+			{
+				res = ft_strjoin(space, s);
+				free(s);
+				free(space);
+				return (res);
+			}
+
 		}
 		token_lst = token_lst->next;
 	}
-	free(space);
 	return (s);
 }
 
@@ -219,7 +223,7 @@ void	read_token(const char **format, va_list args)
 	char	*s;
 
 	token_lst = tokenize(format);
-	//debug_tokenlst(token_lst);
+	debug_tokenlst(token_lst);
 	s = apply_specifier(token_lst, args);
 	s = apply_flags(token_lst, s); // take next to skip initial '%'
 	s = apply_width(token_lst, s);
