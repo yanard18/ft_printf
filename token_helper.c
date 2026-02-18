@@ -78,13 +78,19 @@ char	*apply_hash_token(void *content, t_list *tokens)
 	char	*s;
 	t_token *token;
 
-	s = (char *)content;
 	token = get_token(tokens->next, 's');
-	if (ft_strncmp(token->value, "x", 1) == 0)
-		content = ft_strjoin("0x", (char *)content);
-	else if (ft_strncmp(token->value, "X", 1) == 0)
-		content = ft_strjoin("0X", (char *)content);
-	free(s);
+	if (token->value[0] == 'x')
+	{
+		s = (char *)content;
+		content = ft_strjoin("0x", s);
+		if (*s == '-')
+		{
+			((char *)content)[0] = '-';
+			((char *)content)[1] = '0';
+			((char *)content)[2] = 'x';
+		}
+		free(s);
+	}
 	return ((char *)content);
 }
 

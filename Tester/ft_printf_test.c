@@ -56,6 +56,7 @@ int	main(void)
 
 	dprintf(saved_stdout, "\ntest # flag:\n");
 	TEST("0x2a", ft_printf("%#x", 42));
+	TEST("-0x2a", ft_printf("%#x", -42));
 
 	dprintf(saved_stdout, "\ntest . precision:\n");
 	TEST("42", ft_printf("%.0d", 42));
@@ -68,6 +69,7 @@ int	main(void)
 	TEST("<+0x00002a >", ft_printf("<%#-+10.6x>", 42));
 	TEST("<+0x00002a >", ft_printf("<%-+#10.6x>", 42));
 	TEST("<+000042 >", ft_printf("<%-+8.6d>", 42));
+	TEST("<+0x002a >%ABC", ft_printf("<%+#-8.4x>%%%s", 42, "ABC"));
 	TEARDOWN
 	return (0);
 }

@@ -212,22 +212,6 @@ char	*apply_width(t_list *token_lst, char *s)
 	return (s);
 }
 
-/*
-int		get_buf_index(t_token *buf, t_token *token)
-{
-	int	i;
-
-	i = 0;
-	while (buf[i].type != 0)
-	{
-		if(buf[i].type == token->type)
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-*/
-
 void	sort_tokens(t_list ** tokens)
 {
 	t_token	*cur_token;
@@ -253,6 +237,22 @@ void	sort_tokens(t_list ** tokens)
 		*tokens = lst_start;
 		break ;
 	}
+}
+
+char	*eval_token(t_list *token_lst, char *s)
+{
+	t_token *token;
+	t_list	*s_lst;
+
+	s_lst = token_lst;
+	while (token_lst->next) // read flags
+	{
+		token = (t_token *)token_lst->content;
+		if (token->type == 'p')
+			s = token->f(s, s_lst);
+		token_lst = token_lst->next;
+	}
+	return (s);
 }
 
 void	read_token(const char **format, va_list args)
