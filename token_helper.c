@@ -9,6 +9,43 @@ char	*itoa(void *content, t_list *tokens)
 	return (ft_itoa(*np));
 }
 
+char    *convert_u(void *content, t_list *tokens)
+{
+    unsigned int    n;      // Changed to unsigned int
+    unsigned int    temp;
+    int             len;
+    char            *str;
+    char            *base = "0123456789"; // Base 10
+
+    (void)tokens;
+    // Cast the void pointer to an unsigned int pointer
+    n = *(unsigned int *)content; 
+    
+    temp = n;
+    len = (n == 0) ? 1 : 0;
+    while (temp != 0)
+    {
+        temp /= 10;
+        len++;
+    }
+    
+    str = (char *)malloc(sizeof(char) * (len + 1));
+    if (!str)
+        return (NULL);
+    
+    str[len] = '\0';
+    if (n == 0)
+        str[0] = '0';
+        
+    while (n != 0)
+    {
+        str[--len] = base[n % 10];
+        n /= 10;
+    }
+    
+    return (str);
+}
+
 char	*get_str(void *content, t_list *tokens)
 {
 	(void)tokens;

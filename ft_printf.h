@@ -6,7 +6,7 @@
 	/*   By: dyanar <dyanar@student.42istanbul.com.tr>  +#+  +:+       +#+        */
 	/*                                                +#+#+#+#+#+   +#+           */
 	/*   Created: 2026/02/12 04:45:32 by dyanar            #+#    #+#             */
-/*   Updated: 2026/02/18 03:37:18 by dyanar           ###   ########.fr       */
+/*   Updated: 2026/02/18 04:17:54 by dyanar           ###   ########.fr       */
 	/*                                                                            */
 	/* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	debug_token(void *content);
 void	debug_tokenlst(t_list *tokens);
 
 char	*itoa(void *content, t_list *tokens);
+char    *convert_u(void *content, t_list *tokens);
 char	*get_str(void *content, t_list *tokens);
 char	*hex_small(void *content, t_list *tokens);
 char	*apply_plus_flag(void *content, t_list *tokens);

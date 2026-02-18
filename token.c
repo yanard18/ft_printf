@@ -34,7 +34,7 @@ t_token specifiers[10] = {
 	(t_token){'s', "p", 99, itoa},
 	(t_token){'s', "d", 99, itoa},
 	(t_token){'s', "i", 99, itoa},
-	(t_token){'s', "u", 99, itoa},
+	(t_token){'s', "u", 99, convert_u},
 	(t_token){'s', "x", 99, hex_small},
 	(t_token){'s', "X", 99, itoa},
 	(t_token){'s', "%", 1, NULL},

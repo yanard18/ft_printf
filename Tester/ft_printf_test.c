@@ -1,5 +1,6 @@
 #include "ft_printf_test.h"
 #include "../ft_printf.h"
+#include <limits.h>
 
 int	main(void)
 {
@@ -21,12 +22,22 @@ int	main(void)
 	TEST("42", ft_printf("%d", 42));
 	TEST("0", ft_printf("%d", 0));
 	TEST("-1", ft_printf("%d", -1));
+	TEST("-1", ft_printf("%d", -1));
+	TEST("2147483647", ft_printf("%d", INT_MAX));
+	TEST("-2147483648", ft_printf("%d", INT_MIN));
 	TEST("ABC: -1", ft_printf("ABC: %d", -1));
 	TEST("X:-1 Y:42", ft_printf("X:%d Y:%d", -1, 42));
 
 	dprintf(saved_stdout, "\ntest %%i:\n");
 	TEST("42", ft_printf("%i", 42));
 	TEST("42", ft_printf("%d", 0x2a));
+	TEST("-2147483648", ft_printf("%i", INT_MIN));
+
+	dprintf(saved_stdout, "\ntest %%u:\n");
+	TEST("0", ft_printf("%u", 0));
+	TEST("1", ft_printf("%u", 1)); // -1 wraps to UINT_MAX
+	TEST("4294967295", ft_printf("%u", -1)); // -1 wraps to UINT_MAX
+
 
 	dprintf(saved_stdout, "\ntest %%s:\n");
 	TEST("ABC", ft_printf("%s", "ABC"));
