@@ -82,6 +82,8 @@ char	*apply_hash_token(void *content, t_list *tokens)
 	if (token->value[0] == 'x')
 	{
 		s = (char *)content;
+		if (*s == '0' && *(s + 1) == '\0')
+			return ((char *)content);
 		content = ft_strjoin("0x", s);
 		if (*s == '-')
 		{

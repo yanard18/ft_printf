@@ -56,6 +56,7 @@ int	main(void)
 
 	dprintf(saved_stdout, "\ntest # flag:\n");
 	TEST("0x2a", ft_printf("%#x", 42));
+	TEST("0", ft_printf("%#x", 0));
 	TEST("-0x2a", ft_printf("%#x", -42));
 
 	dprintf(saved_stdout, "\ntest . precision:\n");
