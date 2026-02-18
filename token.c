@@ -55,7 +55,7 @@ static void	free_token(void *content)
 	}
 }
 
-t_token	*get_token(t_list *lst, const char type)
+t_token	*get_token_by_type(t_list *lst, const char type)
 {
 	while (lst->next)
 	{
@@ -193,7 +193,7 @@ char	*apply_width(t_list *token_lst, char *s)
 	t_token	*token;
 
 	temp_s = s;
-	token = get_token(token_lst, 'n');
+	token = get_token_by_type(token_lst, 'n');
 	if (!token)
 		return (s);
 	val = ft_atoi((char *)token->value);

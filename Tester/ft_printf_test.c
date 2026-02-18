@@ -30,8 +30,12 @@ int	main(void)
 	TEST("ABCabc", ft_printf("%s%s", "ABC", "abc"));
 	TEST("", ft_printf("%s", ""));
 	TEST("AB", ft_printf("%s", "AB\0C"));
+
+	/* negative values for %x is undefined behaviour */
 	dprintf(saved_stdout, "\ntest %%x:\n");
 	TEST("2a", ft_printf("%x", 42));
+	TEST("0", ft_printf("%x", 0));
+	TEST("2a", ft_printf("%+x", 42));
 
 	dprintf(saved_stdout, "\ntest %%%%:\n");
 	TEST("%", ft_printf("%%"));
@@ -40,11 +44,12 @@ int	main(void)
 
 	dprintf(saved_stdout, "\ntest '+' flag:\n");
 	TEST("+42", ft_printf("%+d", 42));
+	TEST("+42", ft_printf("%+i", 42));
+	TEST("42", ft_printf("%+u", 42));
+	TEST("2a", ft_printf("%+x", 42));
 	TEST("+0", ft_printf("%+d", 0));
 	TEST("-42", ft_printf("%+d", -42));
-	TEST("+ABC", ft_printf("%+s", "ABC")); // undefined behaviour
-	TEST("+2a", ft_printf("%+x", 42));
-	TEST("-2a", ft_printf("%+x", -42));
+	TEST("ABC", ft_printf("%+s", "ABC")); // undefined behaviour
 
 	dprintf(saved_stdout, "\ntest field width:\n");
 	TEST("<1>", ft_printf("<%0d>", 1));
@@ -67,10 +72,10 @@ int	main(void)
 
 	dprintf(saved_stdout, "\ntest combinational:\n");
 	TEST("NUM 42", ft_printf("%s %d", "NUM", 42));
-	TEST("<+0x00002a >", ft_printf("<%#-+10.6x>", 42));
-	TEST("<+0x00002a >", ft_printf("<%-+#10.6x>", 42));
+	TEST("<0x00002a >", ft_printf("<%#-+10.6x>", 42));
+	TEST("<0x00002a >", ft_printf("<%-+#10.6x>", 42));
+	TEST("<0x002a >%ABC", ft_printf("<%+#-8.4x>%%%s", 42, "ABC"));
 	TEST("<+000042 >", ft_printf("<%-+8.6d>", 42));
-	TEST("<+0x002a >%ABC", ft_printf("<%+#-8.4x>%%%s", 42, "ABC"));
 	TEARDOWN
 	return (0);
 }

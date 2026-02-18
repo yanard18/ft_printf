@@ -67,6 +67,8 @@ char	*apply_plus_flag(void *content, t_list *tokens)
 	s = (char *)content;
 	if (*s == '-')
 		return (s);
+	if (!get_token_by_val(tokens, "d") && !get_token_by_val(tokens, "i"))
+		return (s);
 	ret = ft_strjoin("+", s);
 	free(s);
 	return (ret);
@@ -78,7 +80,7 @@ char	*apply_hash_token(void *content, t_list *tokens)
 	char	*s;
 	t_token *token;
 
-	token = get_token(tokens->next, 's');
+	token = get_token_by_type(tokens->next, 's');
 	if (token->value[0] == 'x')
 	{
 		s = (char *)content;
@@ -103,8 +105,8 @@ char	*apply_precision(void *content, t_list *tokens)
 	char	*zero_str;
 	size_t	prec_len;
 
-	specifier_token = get_token(tokens->next, 's');
-	prec_len = ft_atoi(get_token(tokens, 'l')->value);
+	specifier_token = get_token_by_type(tokens->next, 's');
+	prec_len = ft_atoi(get_token_by_type(tokens, 'l')->value);
 	if (prec_len <= ft_strlen((char *)content))
 		return ((char *)content);
 	prec_len -= ft_strlen((char *)content);
