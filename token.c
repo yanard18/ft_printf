@@ -239,10 +239,11 @@ void	sort_tokens(t_list ** tokens)
 	}
 }
 
-void	read_token(const char **format, va_list args)
+size_t	read_token(const char **format, va_list args)
 {
 	t_list	*tokens;
 	char	*s;
+	size_t	len;		
 
 	tokens = tokenize(format);
 	sort_tokens(&tokens);
@@ -251,8 +252,10 @@ void	read_token(const char **format, va_list args)
 	s = read_precision(tokens, s);
 	s = apply_flags(tokens, s); // take next to skip initial '%'
 	s = apply_width(tokens, s);
+	len = ft_strlen(s);
 	ft_putstr_fd(s, 1);
 	free(s);
 	ft_lstclear(&tokens, free_token);
+	return (len);
 }
 

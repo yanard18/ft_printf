@@ -8,6 +8,16 @@ int	main(void)
 	//TEST("ABC", GET_STDOUT(ft_printf("ABC"))
 	//TEST(printf(...), ft_printf(...))
 	INIT
+
+	dprintf(saved_stdout, "\ntest return:\n");
+	TEST_RETURN(0, ft_printf(""))
+	TEST_RETURN(1, ft_printf("A"))
+	TEST_RETURN(2, ft_printf("AB"))
+	TEST_RETURN(3, ft_printf("ABC"))
+	TEST_RETURN(5, ft_printf("ABC %d", 0))
+	TEST_RETURN(6, ft_printf("ABC %d", 42))
+	TEST_RETURN(8, ft_printf("ABC %#x", 42))
+
 	dprintf(saved_stdout, "\ntest wihtout %%:\n");
 	TEST("ABC", ft_printf("ABC"))
 	TEST("ABC 5", ft_printf("ABC 5"))

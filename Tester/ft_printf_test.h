@@ -35,11 +35,15 @@
 
 # define TEST_RETURN(exp, print) {\
 	ret = print;\
+	printf("%c", '\0');\
 	fflush(stdout);\
+	memset(buf, 0, 1024);\
+	read(fd[0], buf, sizeof(buf) - 1);\
 	if (ret == exp)\
 		dprintf(saved_stdout, "[+] Succeed: RETURN: %s, expected: %d\n", #print, exp);\
 	else\
 		dprintf(saved_stdout, "[-] Fail: RETURN: %s, expected: %d, was: %d\n", #print, exp, ret);\
+	ret = 0;\
 }
 
 char	buf[BUFFER_SIZE];
