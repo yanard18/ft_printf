@@ -35,8 +35,8 @@ t_token specifiers[10] = {
 	(t_token){'s', "d", 99, itoa},
 	(t_token){'s', "i", 99, itoa},
 	(t_token){'s', "u", 99, convert_u},
-	(t_token){'s', "x", 99, hex_small},
-	(t_token){'s', "X", 99, itoa},
+	(t_token){'s', "x", 99, convert_x},
+	(t_token){'s', "X", 99, convert_bigx},
 	(t_token){'s', "%", 1, NULL},
 	(t_token){'0', NULL, 0, NULL}
 };
@@ -237,22 +237,6 @@ void	sort_tokens(t_list ** tokens)
 		*tokens = lst_start;
 		break ;
 	}
-}
-
-char	*eval_token(t_list *token_lst, char *s)
-{
-	t_token *token;
-	t_list	*s_lst;
-
-	s_lst = token_lst;
-	while (token_lst->next) // read flags
-	{
-		token = (t_token *)token_lst->content;
-		if (token->type == 'p')
-			s = token->f(s, s_lst);
-		token_lst = token_lst->next;
-	}
-	return (s);
 }
 
 void	read_token(const char **format, va_list args)

@@ -47,11 +47,14 @@ int	main(void)
 	TEST("AB", ft_printf("%s", "AB\0C"));
 
 
-	/* negative values for %x is undefined behaviour */
+	/* negative values for %x and %X are undefined behaviour */
 	dprintf(saved_stdout, "\ntest %%x:\n");
 	TEST("2a", ft_printf("%x", 42));
 	TEST("0", ft_printf("%x", 0));
-	TEST("2a", ft_printf("%+x", 42));
+
+	dprintf(saved_stdout, "\ntest %%X:\n");
+	TEST("2A", ft_printf("%X", 42));
+	TEST("0", ft_printf("%X", 0));
 
 	dprintf(saved_stdout, "\ntest %%%%:\n");
 	TEST("%", ft_printf("%%"));
@@ -76,9 +79,10 @@ int	main(void)
 	TEST("<  abc>", ft_printf("<%5s>", "abc"));
 
 	dprintf(saved_stdout, "\ntest # flag:\n");
-	TEST("0x2a", ft_printf("%#x", 42));
 	TEST("0", ft_printf("%#x", 0));
-	TEST("-0x2a", ft_printf("%#x", -42));
+	TEST("0x1", ft_printf("%#x", 1));
+	TEST("0x2a", ft_printf("%#x", 42));
+	TEST("0X2A", ft_printf("%#X", 42));
 
 	dprintf(saved_stdout, "\ntest . precision:\n");
 	TEST("42", ft_printf("%.0d", 42));

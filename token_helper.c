@@ -54,6 +54,45 @@ char	*get_str(void *content, t_list *tokens)
 	return (ft_strdup(*str));
 }
 
+static char *convert_hex(unsigned int n, char *base)
+{
+    unsigned int    temp;
+    int             len;
+    char            *str;
+
+    temp = n;
+    len = (n == 0) ? 1 : 0;
+    while (temp != 0)
+    {
+        temp /= 16;
+        len++;
+    }
+    str = (char *)malloc(sizeof(char) * (len + 1));
+    if (!str)
+        return (NULL);
+    str[len] = '\0';
+    if (n == 0)
+        str[0] = '0';
+    while (n != 0)
+    {
+        str[--len] = base[n % 16];
+        n /= 16;
+    }
+    return (str);
+}
+
+char    *convert_x(void *content, t_list *tokens)
+{
+    (void)tokens;
+    return (convert_hex(*(unsigned int *)content, "0123456789abcdef"));
+}
+
+char    *convert_bigx(void *content, t_list *tokens)
+{
+    (void)tokens;
+    return (convert_hex(*(unsigned int *)content, "0123456789ABCDEF"));
+}
+
 char	*hex_small(void *content, t_list *tokens)
 {
 	long	n;      // Using long to safely handle INT_MIN
@@ -114,23 +153,22 @@ char	*apply_plus_flag(void *content, t_list *tokens)
 
 char	*apply_hash_token(void *content, t_list *tokens)
 {
-	char	*s;
+	char    *s;
+	char    *ret;
 	t_token *token;
 
 	token = get_token_by_type(tokens->next, 's');
-	if (token->value[0] == 'x')
+	if (token && (token->value[0] == 'x' || token->value[0] == 'X'))
 	{
 		s = (char *)content;
-		if (*s == '0' && *(s + 1) == '\0')
-			return ((char *)content);
-		content = ft_strjoin("0x", s);
-		if (*s == '-')
-		{
-			((char *)content)[0] = '-';
-			((char *)content)[1] = '0';
-			((char *)content)[2] = 'x';
-		}
+		if (*s == '0' && *(s + 1) == '\0') 
+			return (s);
+		if (token->value[0] == 'x')
+			ret = ft_strjoin("0x", s);
+		else
+			ret = ft_strjoin("0X", s);
 		free(s);
+		return (ret);
 	}
 	return ((char *)content);
 }
