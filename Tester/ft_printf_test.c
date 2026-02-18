@@ -89,6 +89,7 @@ int	main(void)
 	TEST("42", ft_printf("%.1d", 42));
 	TEST("42", ft_printf("%.2d", 42));
 	TEST("042", ft_printf("%.3d", 42));
+	TEST("%.-3d", ft_printf("%.-3d", 42)); // no '-' after precision flag (!if invalid token print as string)
 
 	dprintf(saved_stdout, "\ntest combinational:\n");
 	TEST("NUM 42", ft_printf("%s %d", "NUM", 42));
