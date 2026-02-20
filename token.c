@@ -188,34 +188,6 @@ char	*apply_specifier(t_list *lst, va_list args)
 	return (token->f(&(void *){va_arg(args, void *)}, lst));
 }
 
-char	*apply_flags(t_list *lst, char *s)
-{
-	t_token *token;
-	t_list	*s_lst;
-
-	s_lst = lst;
-	while (lst->next)
-	{
-		token = (t_token *)lst->content;
-		if (token->type == 'f' && token->f)
-			s = token->f(s, s_lst);
-		lst = lst->next;
-	}
-	return (s);
-}
-
-char	*read_precision(t_list *lst, char *s)
-{
-	t_token *token;
-
-	token = get_token_by_type(lst, 'p');
-	if (token)
-	s = token->f(s, lst);
-	return (s);
-}
-
-
-
 void	sort_tokens(t_list **tokens)
 {
 	t_token	*cur_token;
@@ -290,13 +262,8 @@ ssize_t	read_token(const char **format, va_list args)
 	s = apply_specifier(lst, args);
 	sort_tokens(&lst);
 	//debug_tokenlst(lst);
-	// s = read_precision(lst, s);
-	// s = apply_flags(lst, s); // take next to skip initial '%'
-	// s = apply_width(lst, s);
 	while (lst)
 	s = eval_next_token(&lst, start_lst, s);
-		
-
 	len = ft_strlen(s);
 	ft_putstr_fd(s, 1);
 	free(s);
