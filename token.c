@@ -103,6 +103,14 @@ int	has_token(const char c, t_token *tokens, t_token **out)
 	return (-1);
 }
 
+static void push_token(t_list **lst, t_token *token)
+{
+
+	if (get_token_by_val(*lst, token->value))
+	return ;
+	ft_lstadd_back(lst, ft_lstnew(token));
+}
+
 static t_list	*tokenize(const char **format)
 {
 	t_list	*lst;
@@ -113,13 +121,13 @@ static t_list	*tokenize(const char **format)
 	(*format)++;
 	while (**format && has_token(**format, flags, &out_token) != -1)
 	{	
-		ft_lstadd_back(&lst, ft_lstnew(out_token));
+		push_token(&lst, out_token);
 		(*format)++;
 	}
 	if (ft_isdigit(**format))
 	{
 		widths[0].value = ft_itoa(ft_atoi(*format));
-		ft_lstadd_back(&lst, ft_lstnew(&widths[0]));
+		push_token(&lst, &widths[0]);
 	}
 	while (ft_isdigit(**format))
 	(*format)++;
@@ -128,13 +136,13 @@ static t_list	*tokenize(const char **format)
 		ft_lstadd_back(&lst, ft_lstnew(&precision[0]));
 		(*format)++;
 		plength[0].value = ft_itoa(ft_atoi(*format));
-		ft_lstadd_back(&lst, ft_lstnew(&plength[0]));
+		push_token(&lst, &plength[0]);
 		while (ft_isdigit(**format))
 		(*format)++;
 	}
 	if (has_token(**format, specifiers, &out_token) != -1)
 	{
-		ft_lstadd_back(&lst, ft_lstnew(out_token));
+		push_token(&lst, out_token);
 		(*format)++;
 	}
 	return (lst);

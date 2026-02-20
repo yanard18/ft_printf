@@ -6,7 +6,8 @@ int	main(void)
 {
 	/* Ideas for interface */
 	//TEST("ABC", GET_STDOUT(ft_printf("ABC"))
-	//TEST(printf(...), ft_printf(...))
+	//TEST_FUNC(printf(...), ft_printf(...))
+
 	INIT
 
 	dprintf(saved_stdout, "\ntest return:\n");
@@ -26,12 +27,21 @@ int	main(void)
 	TEST_RETURN(-1, ft_printf("ABC %"))
 	TEST_RETURN(-1, ft_printf("ABC %", 1))
 	TEST_RETURN(-1, ft_printf("%%%"))
-	TEST("%", ft_printf("%%%"))
 	TEST_RETURN(-1, ft_printf("%%%%%"))
+	TEST("%", ft_printf("%%%"))
+	TEST_RETURN(-1, ft_printf("%%%"))
+	TEST("%", ft_printf("% %%"))
+	TEST_RETURN(-1, ft_printf("% %%"))
+	TEST("% ", ft_printf("% % %"))
 	TEST_RETURN(-1, ft_printf("% % %"))
-	TEST("%", ft_printf("% % %"))
-	TEST("%42", ft_printf("%%%  d", 42))
-	TEST("%42", printf("%%%  d", 42))
+
+	dprintf(saved_stdout, "\ntest duplicate flags:\n");
+	TEST("+42", ft_printf("%++d", 42))
+	TEST_RETURN(3, ft_printf("%++d", 42))
+	TEST("+42", ft_printf("%+++d", 42))
+	TEST_RETURN(3, ft_printf("%+++d", 42))
+	TEST("% 42", ft_printf("%%%  d", 42))
+	TEST_RETURN(4, ft_printf("%%%  d", 42))
 
 	dprintf(saved_stdout, "\ntest wihtout %%:\n");
 	TEST("ABC", ft_printf("ABC"))
