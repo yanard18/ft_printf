@@ -7,7 +7,7 @@ char	*do_nothing(void *content, t_list *tokens)
 }
 
 t_token flags[4] = {
-	(t_token){'f', "#", 10, apply_hash_token},
+	(t_token){'f', "#", 10, convert_hash},
 	(t_token){'f', "-", 11, do_nothing},
 	(t_token){'f', "+", 12, apply_plus_flag},
 	(t_token){'0', NULL, 0, NULL}
@@ -122,7 +122,7 @@ static t_list	*tokenize(const char **format)
 		ft_lstadd_back(&lst, ft_lstnew(&widths[0]));
 	}
 	while (ft_isdigit(**format))
-		(*format)++;
+	(*format)++;
 	if (has_token(**format, precision, &out_token) != -1)
 	{
 		ft_lstadd_back(&lst, ft_lstnew(&precision[0]));
