@@ -236,14 +236,29 @@ void	sort_tokens(t_list ** tokens)
 	}
 }
 
-size_t	read_token(const char **format, va_list args)
+
+int validate_tokens(t_list *lst)
+{
+	if (!lst->next) 
+	return (0);
+	return (1);
+}
+
+
+ssize_t	read_token(const char **format, va_list args)
 {
 	t_list	*tokens;
+	int valid;
 	char	*s;
 	size_t	len;		
 
 	tokens = tokenize(format);
-	sort_tokens(&tokens);
+	valid = validate_tokens(tokens);
+	if (!valid)
+	{
+		return (-1);
+	}
+	//sort_tokens(&tokens);
 	//debug_tokenlst(tokens);
 	s = apply_specifier(tokens, args);
 	s = read_precision(tokens, s);

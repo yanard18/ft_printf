@@ -18,6 +18,21 @@ int	main(void)
 	TEST_RETURN(6, ft_printf("ABC %d", 42))
 	TEST_RETURN(8, ft_printf("ABC %#x", 42))
 
+	dprintf(saved_stdout, "\ntest undefined behaviour:\n");
+	TEST_RETURN(-1, ft_printf(0))
+	TEST_RETURN(-1, ft_printf("%"))
+	TEST("", ft_printf("%"))
+	TEST_RETURN(-1, ft_printf("%", 1))
+	TEST_RETURN(-1, ft_printf("ABC %"))
+	TEST_RETURN(-1, ft_printf("ABC %", 1))
+	TEST_RETURN(-1, ft_printf("%%%"))
+	TEST("%", ft_printf("%%%"))
+	TEST_RETURN(-1, ft_printf("%%%%%"))
+	TEST_RETURN(-1, ft_printf("% % %"))
+	TEST("%", ft_printf("% % %"))
+	TEST("%42", ft_printf("%%%  d", 42))
+	TEST("%42", printf("%%%  d", 42))
+
 	dprintf(saved_stdout, "\ntest wihtout %%:\n");
 	TEST("ABC", ft_printf("ABC"))
 	TEST("ABC 5", ft_printf("ABC 5"))
@@ -103,9 +118,12 @@ int	main(void)
 	dprintf(saved_stdout, "\ntest combinational:\n");
 	TEST("NUM 42", ft_printf("%s %d", "NUM", 42));
 	TEST("<0x00002a  >", ft_printf("<%#-10.6x>", 42));
+	TEST("<  0x00002a>", ft_printf("<%+#10.6x>", 42));
 	TEST("<0x002a  >%ABC", ft_printf("<%+#-8.4x>%%%s", 42, "ABC"));
 	TEST("<+000042 >", ft_printf("<%-+8.6d>", 42));
-	TEST("<+000042 >", printf("<%-+8.6d>", 42));
+	TEST("<+000042 >", ft_printf("<%-+8.6d>", 42));
+	TEST("< 42 >", ft_printf("<%   -4>", 42));
+	TEST("< 42 >", printf("<%   -4>", 42));
 	TEARDOWN
 	return (0);
 }

@@ -24,7 +24,7 @@ typedef	struct	s_token {
 }				t_token;
 
 int			ft_printf(const char *format, ...);
-size_t		read_token(const char **format, va_list args);
+ssize_t		read_token(const char **format, va_list args);
 t_token		*get_token_by_type(t_list* lst, const char type);
 t_token		*get_token_by_val(t_list *lst, const char *s);
 

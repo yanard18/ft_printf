@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wextras -Wall -Werror
+CFLAGS = -Wextra -Wall -Werror
 MAKE = make
 NAME = ft_printft_test
 FTPRINTF_DIR = ../
@@ -16,7 +16,7 @@ $(NAME): $(SRCS) $(HEADERS) $(LIBFTPRINTF)
 	./$(NAME)
 
 $(LIBFTPRINTF): FORCE
-	$(MAKE) -C $(FTPRINTF_DIR) USE_GDB=1 CFLAGS=-Wextras -Wall
+	$(MAKE) -C $(FTPRINTF_DIR) USE_GDB=1 CFLAGS=-Wextra -Wall
 
 clean:
 	rm $(NAME)
