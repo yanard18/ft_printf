@@ -1,7 +1,5 @@
 #include "ft_printf.h"
 
-
-
 t_token flags[5] = {
 	(t_token){'f', "#", 10, convert_hash},
 	(t_token){'f', "-", 11, NULL},
@@ -26,11 +24,11 @@ t_token plength[2] = {
 };
 
 t_token specifiers[10] = {
-	(t_token){'s', "c", 99, itoa},
+	(t_token){'s', "c", 99, convert_d},
 	(t_token){'s', "s", 99, convert_s},
-	(t_token){'s', "p", 99, itoa},
-	(t_token){'s', "d", 99, itoa},
-	(t_token){'s', "i", 99, itoa},
+	(t_token){'s', "p", 99, convert_d},
+	(t_token){'s', "d", 99, convert_d},
+	(t_token){'s', "i", 99, convert_d},
 	(t_token){'s', "u", 99, convert_u},
 	(t_token){'s', "x", 99, convert_x},
 	(t_token){'s', "X", 99, convert_bigx},
@@ -215,7 +213,6 @@ char *eval_next_token(t_list **lst, t_list *start_lst, char *s)
 	s = token->f(s, start_lst);
 	*lst = (*lst)->next;
 	return (s);
-
 }
 
 

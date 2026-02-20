@@ -31,8 +31,8 @@ t_token		*get_token_by_val(t_list *lst, const char *s);
 void	debug_token(void *content);
 void	debug_tokenlst(t_list *tokens);
 
-char	*itoa(void *content, t_list *tokens);
 char	*convert_width(void *str, t_list *lst);
+char	*convert_d(void *content, t_list *tokens);
 char    *convert_u(void *content, t_list *tokens);
 char	*convert_s(void *content, t_list *tokens);
 char    *convert_x(void *content, t_list *tokens);

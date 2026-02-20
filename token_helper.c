@@ -25,7 +25,7 @@ char	*convert_width(void *str, t_list *lst)
 	return (s);
 }
 
-char	*itoa(void *content, t_list *tokens)
+char	*convert_d(void *content, t_list *tokens)
 {
 	int		*np;
 
