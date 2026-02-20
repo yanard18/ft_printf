@@ -154,7 +154,7 @@ char	*apply_specifier(t_list *lst, va_list args)
 	t_token *token;
 
 	token = (t_token *)ft_lstlast(lst)->content;
-	if (ft_strncmp((char *)token->value, "%", 1) == 0)
+	if (token->value[0] == '%')
 		return (ft_strdup("%"));
 	return (token->f(&(void *){va_arg(args, void *)}, lst));
 }
