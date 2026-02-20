@@ -134,7 +134,7 @@ char	*hex_small(void *content, t_list *tokens)
 	return (str);
 }
 
-char	*apply_plus_flag(void *content, t_list *tokens)
+char	*convert_plus(void *content, t_list *tokens)
 {
 	char	*s;
 	char	*ret;

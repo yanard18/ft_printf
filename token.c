@@ -4,7 +4,7 @@ t_token flags[5] = {
 	(t_token){'f', "#", 10, convert_hash},
 	(t_token){'f', "-", 11, NULL},
 	(t_token){'f', " ", 12, convert_space},
-	(t_token){'f', "+", 13, apply_plus_flag},
+	(t_token){'f', "+", 13, convert_plus},
 	(t_token){'0', NULL, 0, NULL}
 };
 
@@ -191,7 +191,7 @@ char	*read_precision(t_list *token_lst, char *s)
 	return (s);
 }
 
-char	*apply_width(t_list *token_lst, char *s)
+char	*apply_width(t_list *lst, char *s)
 {
 	char	*space;
 	size_t		val;
@@ -199,7 +199,7 @@ char	*apply_width(t_list *token_lst, char *s)
 	t_token	*token;
 
 	temp_s = s;
-	token = get_token_by_type(token_lst, 'n');
+	token = get_token_by_type(lst, 'n');
 	if (!token)
 		return (s);
 	val = ft_atoi((char *)token->value);
@@ -209,7 +209,7 @@ char	*apply_width(t_list *token_lst, char *s)
 	space = (char *)malloc(sizeof(char) * val + 1);
 	ft_memset(space, 32, val);
 	space[val] = 0;
-	if (get_token_by_val(token_lst, "-"))
+	if (get_token_by_val(lst, "-"))
 		s = ft_strjoin(s, space);
 	else
 		s = ft_strjoin(space, s);

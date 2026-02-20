@@ -36,7 +36,7 @@ char    *convert_u(void *content, t_list *tokens);
 char	*get_str(void *content, t_list *tokens);
 char    *convert_x(void *content, t_list *tokens);
 char    *convert_bigx(void *content, t_list *tokens);
-char	*apply_plus_flag(void *content, t_list *tokens);
+char	*convert_plus(void *content, t_list *tokens);
 char	*convert_hash(void *content, t_list *tokens);
 char	*convert_space(void *content, t_list *tokens);
 char	*apply_precision(void *content, t_list *tokens);
