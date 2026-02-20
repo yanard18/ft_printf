@@ -2,13 +2,13 @@
 
 int	ft_printf(const char *format, ...)
 {
-	va_list	args;
-	size_t	len;
+    va_list	args;
+    size_t	len;
 
-	len = 0;
-	va_start(args, format);
-	while (*format)
-	{
+    len = 0;
+    va_start(args, format);
+    while (*format)
+    {
 		if (*format == '%')
 		{
 			len += read_token(&format, args);
@@ -17,7 +17,7 @@ int	ft_printf(const char *format, ...)
 		ft_putchar_fd(*format, 1);
 		format++;
 		len++;
-	}
-	va_end(args);
-	return (len);
+    }
+    va_end(args);
+    return (len);
 } 

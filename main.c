@@ -1,8 +1,8 @@
 #include "ft_printf.h"
+#include <stdio.h>
 
 int	main(void)
 {
-#include <stdio.h>
 	ft_printf("");
 	return (0);
 }

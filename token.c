@@ -127,14 +127,11 @@ static t_list	*tokenize(const char **format)
 	{
 		ft_lstadd_back(&lst, ft_lstnew(&precision[0]));
 		(*format)++;
-	}
-	if (ft_isdigit(**format))
-	{
 		plength[0].value = ft_itoa(ft_atoi(*format));
 		ft_lstadd_back(&lst, ft_lstnew(&plength[0]));
-	}
-	while (ft_isdigit(**format))
+		while (ft_isdigit(**format))
 		(*format)++;
+	}
 	if (has_token(**format, specifiers, &out_token) != -1)
 	{
 		ft_lstadd_back(&lst, ft_lstnew(out_token));

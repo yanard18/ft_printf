@@ -1,6 +1,7 @@
 *.o
 a.out
 tags
+TAGS
 unit.md
 *.swp
 Tester/*.a

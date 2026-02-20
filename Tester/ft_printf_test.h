@@ -7,7 +7,12 @@
 #include <stdlib.h>
 
 # define BUFFER_SIZE	1024
-# define RED			'\033[33m'
+/* Standard ANSI Colors */
+#define RED     "\033[31m"
+#define GREEN   "\033[32m"
+#define YELLOW  "\033[33m"
+#define BLUE    "\033[34m"
+#define RESET   "\033[0m"
 
 # define INIT {\
 	saved_stdout = dup(1);\
@@ -28,9 +33,9 @@
 	memset(buf, 0, 1024);\
 	read(fd[0], buf, sizeof(buf) - 1);\
 	if (strcmp(exp, buf) == 0)\
-		dprintf(saved_stdout, "[+] Succeed: %s, expected: \"%s\"\n", #print, exp);\
+		dprintf(saved_stdout, GREEN "[+] Succeed: %s, expected: \"%s\"\n" RESET, #print, exp);\
 	else\
-		dprintf(saved_stdout, "\033[33m[-] Fail: %s, expected: \"%s\", was: \"%s\"\n\033[0m", #print, exp, buf);\
+		dprintf(saved_stdout, RED "[-] Fail: %s, expected: \"%s\", was: \"%s\"\n\033[0m" RESET, #print, exp, buf);\
 }
 
 # define TEST_RETURN(exp, print) {\
@@ -40,9 +45,9 @@
 	memset(buf, 0, 1024);\
 	read(fd[0], buf, sizeof(buf) - 1);\
 	if (ret == exp)\
-		dprintf(saved_stdout, "[+] Succeed: RETURN: %s, expected: %d\n", #print, exp);\
+		dprintf(saved_stdout, GREEN "[+] Succeed: RETURN: %s, expected: %d\n" RESET, #print, exp);\
 	else\
-		dprintf(saved_stdout, "[-] Fail: RETURN: %s, expected: %d, was: %d\n", #print, exp, ret);\
+		dprintf(saved_stdout, RED "[-] Fail: RETURN: %s, expected: %d, was: %d\n" RESET, #print, exp, ret);\
 	ret = 0;\
 }
 
