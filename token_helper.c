@@ -71,7 +71,7 @@ char    *convert_u(void *content, t_list *tokens)
     return (str);
 }
 
-char	*get_str(void *content, t_list *tokens)
+char	*convert_s(void *content, t_list *tokens)
 {
 	(void)tokens;
 	char **str = content;

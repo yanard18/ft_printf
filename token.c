@@ -27,7 +27,7 @@ t_token plength[2] = {
 
 t_token specifiers[10] = {
 	(t_token){'s', "c", 99, itoa},
-	(t_token){'s', "s", 99, get_str},
+	(t_token){'s', "s", 99, convert_s},
 	(t_token){'s', "p", 99, itoa},
 	(t_token){'s', "d", 99, itoa},
 	(t_token){'s', "i", 99, itoa},
