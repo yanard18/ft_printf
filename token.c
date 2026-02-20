@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-t_token flags[5] = {
+static t_token g_flags[5] = {
 	(t_token){'f', "#", 10, convert_hash},
 	(t_token){'f', "-", 11, NULL},
 	(t_token){'f', " ", 12, convert_space},
@@ -8,22 +8,22 @@ t_token flags[5] = {
 	(t_token){'0', NULL, 0, NULL}
 };
 
-t_token widths[2] = {
+static t_token g_widths[2] = {
 	(t_token){'n', NULL, 20, convert_width},
 	(t_token){'0', NULL, 0, NULL}
 };
 
-t_token precision[2] = {
+static t_token g_precision[2] = {
 	(t_token){'p', ".", 5, apply_precision},
 	(t_token){'0', NULL, 0, NULL}
 };
 
-t_token plength[2] = {
+static t_token g_plength[2] = {
 	(t_token){'l', NULL, 6, NULL},
 	(t_token){'0', NULL, 0, NULL}
 };
 
-t_token specifiers[10] = {
+static t_token g_specifiers[10] = {
 	(t_token){'s', "c", 99, convert_d},
 	(t_token){'s', "s", 99, convert_s},
 	(t_token){'s', "p", 99, convert_d},
@@ -124,28 +124,28 @@ static t_list	*tokenize(const char **format)
 
 	lst = NULL;
 	(*format)++;
-	while (**format && has_token(**format, flags, &out_token) != -1)
+	while (**format && has_token(**format, g_flags, &out_token) != -1)
 	{	
 		push_token(&lst, out_token);
 		(*format)++;
 	}
 	if (ft_isdigit(**format))
 	{
-		widths[0].value = ft_itoa(ft_atoi(*format));
-		push_token(&lst, &widths[0]);
+		g_widths[0].value = ft_itoa(ft_atoi(*format));
+		push_token(&lst, &g_widths[0]);
 	}
 	while (ft_isdigit(**format))
 	(*format)++;
-	if (has_token(**format, precision, &out_token) != -1)
+	if (has_token(**format, g_precision, &out_token) != -1)
 	{
-		ft_lstadd_back(&lst, ft_lstnew(&precision[0]));
+		ft_lstadd_back(&lst, ft_lstnew(&g_precision[0]));
 		(*format)++;
-		plength[0].value = ft_itoa(ft_atoi(*format));
-		push_token(&lst, &plength[0]);
+		g_plength[0].value = ft_itoa(ft_atoi(*format));
+		push_token(&lst, &g_plength[0]);
 		while (ft_isdigit(**format))
 		(*format)++;
 	}
-	if (has_token(**format, specifiers, &out_token) != -1)
+	if (has_token(**format, g_specifiers, &out_token) != -1)
 	{
 		push_token(&lst, out_token);
 		(*format)++;
@@ -225,6 +225,7 @@ ssize_t	read_token(const char **format, va_list args)
 	size_t	len;		
 
 	lst = tokenize(format);
+	//debug_tokenlst(lst);
 	start_lst = lst;
 	valid = validate_tokens(lst);
 	if (!valid)
@@ -234,7 +235,6 @@ ssize_t	read_token(const char **format, va_list args)
 	}
 	s = apply_specifier(lst, args);
 	sort_tokens(&lst);
-	//debug_tokenlst(lst);
 	while (lst)
 	s = eval_next_token(&lst, start_lst, s);
 	len = ft_strlen(s);
