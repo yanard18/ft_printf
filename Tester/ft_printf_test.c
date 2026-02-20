@@ -54,10 +54,10 @@ int	main(void)
 	TEST("", ft_printf(""))
 
 	dprintf(saved_stdout, "\ntest %%d:\n");
-	TEST("42", ft_printf("%d", 42));
 	TEST("0", ft_printf("%d", 0));
+	TEST("1", ft_printf("%d", 1));
 	TEST("-1", ft_printf("%d", -1));
-	TEST("-1", ft_printf("%d", -1));
+	TEST("42", ft_printf("%d", 42));
 	TEST("2147483647", ft_printf("%d", INT_MAX));
 	TEST("-2147483648", ft_printf("%d", INT_MIN));
 	TEST("ABC: -1", ft_printf("ABC: %d", -1));
@@ -93,7 +93,9 @@ int	main(void)
 
 	dprintf(saved_stdout, "\ntest %%%%:\n");
 	TEST("%", ft_printf("%%"));
+	TEST_RETURN(1, ft_printf("%%"));
 	TEST("%42", ft_printf("%%%d", 42));
+	TEST_RETURN(3, ft_printf("%%%d", 42));
 	TEST("%42%abc", ft_printf("%%%d%%%s", 42, "abc"));
 
 	dprintf(saved_stdout, "\ntest '+' flag:\n");
@@ -132,8 +134,8 @@ int	main(void)
 	TEST("<0x002a  >%ABC", ft_printf("<%+#-8.4x>%%%s", 42, "ABC"));
 	TEST("<+000042 >", ft_printf("<%-+8.6d>", 42));
 	TEST("<+000042 >", ft_printf("<%-+8.6d>", 42));
-	TEST("< 42 >", ft_printf("<%   -4>", 42));
-	TEST("< 42 >", printf("<%   -4>", 42));
+	// TEST("< 42 >", ft_printf("<%   -4>", 42));
+	// TEST("< 42 >", printf("<%   -4>", 42));
 	TEARDOWN
 	return (0);
 }

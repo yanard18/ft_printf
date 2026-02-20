@@ -150,6 +150,22 @@ char	*apply_plus_flag(void *content, t_list *tokens)
 	return (ret);
 }
 
+char    *convert_space(void *content, t_list *tokens)
+{
+	char *s;
+
+	if (((char *)content)[0] == '-')
+	{
+		return ((char *)content);
+	}
+	if (get_token_by_val(tokens, "d"))
+	{
+		s = ft_strjoin(" ", (char *)content);
+		free(content);
+		return (s);
+	}
+	return ((char *)content);
+}
 
 char	*convert_hash(void *content, t_list *tokens)
 {

@@ -14,7 +14,7 @@ int	ft_printf(const char *format, ...)
     {
 		if (*format == '%')
 		{
-			token_len =read_token(&format, args);
+			token_len = read_token(&format, args);
 			if (token_len == -1)
 			  return (-1);
 			len += token_len;

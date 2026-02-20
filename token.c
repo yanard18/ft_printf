@@ -6,10 +6,11 @@ char	*do_nothing(void *content, t_list *tokens)
 	return (content);
 }
 
-t_token flags[4] = {
+t_token flags[5] = {
 	(t_token){'f', "#", 10, convert_hash},
 	(t_token){'f', "-", 11, do_nothing},
-	(t_token){'f', "+", 12, apply_plus_flag},
+	(t_token){'f', " ", 12, convert_space},
+	(t_token){'f', "+", 13, apply_plus_flag},
 	(t_token){'0', NULL, 0, NULL}
 };
 
@@ -106,9 +107,15 @@ int	has_token(const char c, t_token *tokens, t_token **out)
 static void push_token(t_list **lst, t_token *token)
 {
 
+	if (ft_strncmp(token->value, "%", 1) == 0)
+	{
+		ft_lstadd_back(lst, ft_lstnew(token));
+		return ;
+	}
 	if (get_token_by_val(*lst, token->value))
-	return ;
-	ft_lstadd_back(lst, ft_lstnew(token));
+		return ;
+	else
+		ft_lstadd_back(lst, ft_lstnew(token));
 }
 
 static t_list	*tokenize(const char **format)
