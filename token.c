@@ -264,6 +264,7 @@ ssize_t	read_token(const char **format, va_list args)
 	valid = validate_tokens(tokens);
 	if (!valid)
 	{
+		ft_lstclear(&tokens, free_token);
 		return (-1);
 	}
 	//sort_tokens(&tokens);
