@@ -1,14 +1,8 @@
 #include "ft_printf.h"
 
-char	*do_nothing(void *content, t_list *tokens)
-{
-	(void)tokens;
-	return (content);
-}
-
 t_token flags[5] = {
 	(t_token){'f', "#", 10, convert_hash},
-	(t_token){'f', "-", 11, do_nothing},
+	(t_token){'f', "-", 11, NULL},
 	(t_token){'f', " ", 12, convert_space},
 	(t_token){'f', "+", 13, apply_plus_flag},
 	(t_token){'0', NULL, 0, NULL}
@@ -171,10 +165,10 @@ char	*apply_flags(t_list *token_lst, char *s)
 	t_list	*s_lst;
 
 	s_lst = token_lst;
-	while (token_lst->next) // read flags
+	while (token_lst->next)
 	{
 		token = (t_token *)token_lst->content;
-		if (token->type == 'f')
+		if (token->type == 'f' && token->f)
 			s = token->f(s, s_lst);
 		token_lst = token_lst->next;
 	}

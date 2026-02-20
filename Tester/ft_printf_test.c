@@ -91,7 +91,7 @@ int	main(void)
 	TEST("2A", ft_printf("%X", 42));
 	TEST("0", ft_printf("%X", 0));
 
-	dprintf(saved_stdout, "\ntest %%%%:\n");
+dprintf(saved_stdout, "\ntest %%%%:\n");
 	TEST("%", ft_printf("%%"));
 	TEST_RETURN(1, ft_printf("%%"));
 	TEST("%42", ft_printf("%%%d", 42));
