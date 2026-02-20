@@ -3,6 +3,6 @@
 
 int	main(void)
 {
-	ft_printf(0);
+	ft_printf("<%-#.3d>", 1);
 	return (0);
 }

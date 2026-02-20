@@ -1,5 +1,30 @@
 #include "ft_printf.h"
 
+char	*apply_width(void *str, t_list *lst)
+{
+	char	*space;
+	size_t		val;
+	char	*temp_s;
+	char *s;
+
+	s = (char *)str;
+	temp_s = s;
+	val = ft_atoi(get_token_by_type(lst, 'n')->value);
+	if (val <= ft_strlen(s))
+		return (s);
+	val -= ft_strlen(s);
+	space = (char *)malloc(sizeof(char) * val + 1);
+	ft_memset(space, 32, val);
+	space[val] = 0;
+	if (get_token_by_val(lst, "-"))
+		s = ft_strjoin(s, space);
+	else
+		s = ft_strjoin(space, s);
+	free(space);
+	free(temp_s);
+	return (s);
+}
+
 t_token flags[5] = {
 	(t_token){'f', "#", 10, convert_hash},
 	(t_token){'f', "-", 11, NULL},
@@ -9,7 +34,7 @@ t_token flags[5] = {
 };
 
 t_token widths[2] = {
-	(t_token){'n', NULL, 20, NULL},
+	(t_token){'n', NULL, 20, apply_width},
 	(t_token){'0', NULL, 0, NULL}
 };
 
@@ -189,32 +214,7 @@ char	*read_precision(t_list *lst, char *s)
 	return (s);
 }
 
-char	*apply_width(t_list *lst, char *s)
-{
-	char	*space;
-	size_t		val;
-	char	*temp_s;
-	t_token	*token;
 
-	temp_s = s;
-	token = get_token_by_type(lst, 'n');
-	if (!token)
-		return (s);
-	val = ft_atoi((char *)token->value);
-	if (val <= ft_strlen(s))
-		return (s);
-	val -= ft_strlen(s);
-	space = (char *)malloc(sizeof(char) * val + 1);
-	ft_memset(space, 32, val);
-	space[val] = 0;
-	if (get_token_by_val(lst, "-"))
-		s = ft_strjoin(s, space);
-	else
-		s = ft_strjoin(space, s);
-	free(space);
-	free(temp_s);
-	return (s);
-}
 
 void	sort_tokens(t_list **tokens)
 {
@@ -222,7 +222,9 @@ void	sort_tokens(t_list **tokens)
 	t_token	*next_token;
 	t_token *temp_token;
 	t_list	*lst_start;
+	int changed;
 
+	changed = 0;
 	lst_start = *tokens;
 	while (1)
 	{
@@ -235,12 +237,16 @@ void	sort_tokens(t_list **tokens)
 				temp_token = cur_token;
 				(*tokens)->content = next_token;
 				(*tokens)->next->content = temp_token;
+				changed = 1;
 			}
 			*tokens = (*tokens)->next;
 		}
 		*tokens = lst_start;
+		if (changed == 0)
 		break ;
+		changed = 0;
 	}
+	*tokens = lst_start;
 }
 
 
@@ -251,31 +257,50 @@ int validate_tokens(t_list *lst)
 	return (1);
 }
 
+char *eval_next_token(t_list **lst, t_list *start_lst, char *s)
+{
+	t_token *token;
+
+	token = (t_token *)((*lst)->content);
+	if (token && token->type != 's' && token->f)
+	s = token->f(s, start_lst);
+	*lst = (*lst)->next;
+	return (s);
+
+}
+
+
 
 ssize_t	read_token(const char **format, va_list args)
 {
 	t_list	*lst;
+	t_list	*start_lst;
 	int valid;
 	char	*s;
 	size_t	len;		
 
 	lst = tokenize(format);
+	start_lst = lst;
 	valid = validate_tokens(lst);
 	if (!valid)
 	{
 		ft_lstclear(&lst, free_token);
 		return (-1);
 	}
-	//sort_lst(&lst);
-	//debug_tokenlst(lst);
 	s = apply_specifier(lst, args);
-	s = read_precision(lst, s);
-	s = apply_flags(lst, s); // take next to skip initial '%'
-	s = apply_width(lst, s);
+	sort_tokens(&lst);
+	//debug_tokenlst(lst);
+	// s = read_precision(lst, s);
+	// s = apply_flags(lst, s); // take next to skip initial '%'
+	// s = apply_width(lst, s);
+	while (lst)
+	s = eval_next_token(&lst, start_lst, s);
+		
+
 	len = ft_strlen(s);
 	ft_putstr_fd(s, 1);
 	free(s);
-	ft_lstclear(&lst, free_token);
+	ft_lstclear(&start_lst, free_token);
 	return (len);
 }
 
