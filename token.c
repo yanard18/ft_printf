@@ -101,6 +101,11 @@ int	has_token(const char c, t_token *tokens, t_token **out)
 static void push_token(t_list **lst, t_token *token)
 {
 
+	if (!*lst)
+	{
+		*lst = ft_lstnew(token);
+		return ;
+	}
 	if (ft_strncmp(token->value, "%", 1) == 0)
 	{
 		ft_lstadd_back(lst, ft_lstnew(token));
@@ -117,8 +122,7 @@ static t_list	*tokenize(const char **format)
 	t_list	*lst;
 	t_token	*out_token;
 
-	has_token('%', specifiers, &out_token);
-	lst = ft_lstnew(out_token);
+	lst = NULL;
 	(*format)++;
 	while (**format && has_token(**format, flags, &out_token) != -1)
 	{	
@@ -248,7 +252,7 @@ void	sort_tokens(t_list ** tokens)
 
 int validate_tokens(t_list *lst)
 {
-	if (!lst->next) 
+	if (!lst) 
 	return (0);
 	return (1);
 }
