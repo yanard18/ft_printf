@@ -163,29 +163,29 @@ char	*apply_specifier(t_list *lst, va_list args)
 	return (token->f(&(void *){va_arg(args, void *)}, lst));
 }
 
-char	*apply_flags(t_list *token_lst, char *s)
+char	*apply_flags(t_list *lst, char *s)
 {
 	t_token *token;
 	t_list	*s_lst;
 
-	s_lst = token_lst;
-	while (token_lst->next)
+	s_lst = lst;
+	while (lst->next)
 	{
-		token = (t_token *)token_lst->content;
+		token = (t_token *)lst->content;
 		if (token->type == 'f' && token->f)
 			s = token->f(s, s_lst);
-		token_lst = token_lst->next;
+		lst = lst->next;
 	}
 	return (s);
 }
 
-char	*read_precision(t_list *token_lst, char *s)
+char	*read_precision(t_list *lst, char *s)
 {
 	t_token *token;
 
-	token = get_token_by_type(token_lst, 'p');
+	token = get_token_by_type(lst, 'p');
 	if (token)
-	s = token->f(s, token_lst);
+	s = token->f(s, lst);
 	return (s);
 }
 
@@ -216,7 +216,7 @@ char	*apply_width(t_list *lst, char *s)
 	return (s);
 }
 
-void	sort_tokens(t_list ** tokens)
+void	sort_tokens(t_list **tokens)
 {
 	t_token	*cur_token;
 	t_token	*next_token;
@@ -254,28 +254,28 @@ int validate_tokens(t_list *lst)
 
 ssize_t	read_token(const char **format, va_list args)
 {
-	t_list	*tokens;
+	t_list	*lst;
 	int valid;
 	char	*s;
 	size_t	len;		
 
-	tokens = tokenize(format);
-	valid = validate_tokens(tokens);
+	lst = tokenize(format);
+	valid = validate_tokens(lst);
 	if (!valid)
 	{
-		ft_lstclear(&tokens, free_token);
+		ft_lstclear(&lst, free_token);
 		return (-1);
 	}
-	//sort_tokens(&tokens);
-	//debug_tokenlst(tokens);
-	s = apply_specifier(tokens, args);
-	s = read_precision(tokens, s);
-	s = apply_flags(tokens, s); // take next to skip initial '%'
-	s = apply_width(tokens, s);
+	//sort_lst(&lst);
+	//debug_tokenlst(lst);
+	s = apply_specifier(lst, args);
+	s = read_precision(lst, s);
+	s = apply_flags(lst, s); // take next to skip initial '%'
+	s = apply_width(lst, s);
 	len = ft_strlen(s);
 	ft_putstr_fd(s, 1);
 	free(s);
-	ft_lstclear(&tokens, free_token);
+	ft_lstclear(&lst, free_token);
 	return (len);
 }
 
