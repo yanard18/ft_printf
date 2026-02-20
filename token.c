@@ -182,16 +182,10 @@ char	*apply_flags(t_list *token_lst, char *s)
 char	*read_precision(t_list *token_lst, char *s)
 {
 	t_token *token;
-	t_list	*s_lst;
 
-	s_lst = token_lst;
-	while (token_lst->next) // read flags
-	{
-		token = (t_token *)token_lst->content;
-		if (token->type == 'p')
-			s = token->f(s, s_lst);
-		token_lst = token_lst->next;
-	}
+	token = get_token_by_type(token_lst, 'p');
+	if (token)
+	s = token->f(s, token_lst);
 	return (s);
 }
 
