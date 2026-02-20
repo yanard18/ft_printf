@@ -34,6 +34,7 @@ void	debug_tokenlst(t_list *tokens);
 char	*itoa(void *content, t_list *tokens);
 char    *convert_u(void *content, t_list *tokens);
 char	*get_str(void *content, t_list *tokens);
+char	*convert_width(void *str, t_list *lst);
 char    *convert_x(void *content, t_list *tokens);
 char    *convert_bigx(void *content, t_list *tokens);
 char	*convert_plus(void *content, t_list *tokens);

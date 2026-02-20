@@ -1,5 +1,30 @@
 #include "ft_printf.h"
 
+char	*convert_width(void *str, t_list *lst)
+{
+	char	*space;
+	size_t		val;
+	char	*temp_s;
+	char *s;
+
+	s = (char *)str;
+	temp_s = s;
+	val = ft_atoi(get_token_by_type(lst, 'n')->value);
+	if (val <= ft_strlen(s))
+		return (s);
+	val -= ft_strlen(s);
+	space = (char *)malloc(sizeof(char) * val + 1);
+	ft_memset(space, 32, val);
+	space[val] = 0;
+	if (get_token_by_val(lst, "-"))
+		s = ft_strjoin(s, space);
+	else
+		s = ft_strjoin(space, s);
+	free(space);
+	free(temp_s);
+	return (s);
+}
+
 char	*itoa(void *content, t_list *tokens)
 {
 	int		*np;
