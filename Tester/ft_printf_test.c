@@ -107,6 +107,14 @@ dprintf(saved_stdout, "\ntest %%%%:\n");
 	TEST("-42", ft_printf("%+d", -42));
 	TEST("ABC", ft_printf("%+s", "ABC")); // undefined behaviour
 
+	dprintf(saved_stdout, "\ntest '0' flag:\n");
+	TEST("42", ft_printf("%00d", 42));
+	TEST("42", ft_printf("%01d", 42));
+	TEST("42", ft_printf("%02d", 42));
+	TEST("042", ft_printf("%03d", 42));
+	TEST("00042", ft_printf("%05d", 42));
+	TEST("42000", ft_printf("%0-5d", 42));
+
 	dprintf(saved_stdout, "\ntest field width:\n");
 	TEST("<1>", ft_printf("<%0d>", 1));
 	TEST("<1>", ft_printf("<%1d>", 1));

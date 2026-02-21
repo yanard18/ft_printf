@@ -3,10 +3,15 @@
 char	*convert_width(void *str, t_list *lst)
 {
 	char	*space;
-	size_t		val;
+	size_t	val;
 	char	*temp_s;
-	char *s;
+	char 	*s;
+	char	c;
 
+	if (get_token_by_val(lst, "0") && get_token_by_val(lst, "0")->type == 'f')
+		c = '0';
+	else
+		c = ' ';
 	s = (char *)str;
 	temp_s = s;
 	val = ft_atoi(get_token_by_type(lst, 'n')->value);
@@ -14,7 +19,7 @@ char	*convert_width(void *str, t_list *lst)
 		return (s);
 	val -= ft_strlen(s);
 	space = (char *)malloc(sizeof(char) * val + 1);
-	ft_memset(space, 32, val);
+	ft_memset(space, c, val);
 	space[val] = 0;
 	if (get_token_by_val(lst, "-"))
 		s = ft_strjoin(s, space);

@@ -1,8 +1,9 @@
 #include "ft_printf.h"
 
-static t_token g_flags[5] = {
+static t_token g_flags[6] = {
 	(t_token){'f', "#", 10, convert_hash},
 	(t_token){'f', "-", 11, NULL},
+	(t_token){'f', "0", 11, NULL},
 	(t_token){'f', " ", 12, convert_space},
 	(t_token){'f', "+", 13, convert_plus},
 	(t_token){'0', NULL, 0, NULL}
@@ -215,12 +216,11 @@ char *eval_next_token(t_list **lst, t_list *start_lst, char *s)
 	return (s);
 }
 
-
 ssize_t	read_token(const char **format, va_list args)
 {
 	t_list	*lst;
 	t_list	*start_lst;
-	int valid;
+	int 	valid;
 	char	*s;
 	size_t	len;		
 
@@ -243,4 +243,3 @@ ssize_t	read_token(const char **format, va_list args)
 	ft_lstclear(&start_lst, free_token);
 	return (len);
 }
-
