@@ -27,7 +27,7 @@ static t_token g_plength[2] = {
 static t_token g_specifiers[10] = {
 	(t_token){'s', "c", 99, convert_d},
 	(t_token){'s', "s", 99, convert_s},
-	(t_token){'s', "p", 99, convert_d},
+	(t_token){'s', "p", 99, convert_p},
 	(t_token){'s', "d", 99, convert_d},
 	(t_token){'s', "i", 99, convert_d},
 	(t_token){'s', "u", 99, convert_u},

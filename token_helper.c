@@ -84,9 +84,9 @@ char	*convert_s(void *content, t_list *tokens)
 	return (ft_strdup(*str));
 }
 
-static char *convert_hex(unsigned int n, char *base)
+static char *convert_hex(unsigned long n, char *base)
 {
-    unsigned int    temp;
+    unsigned long    temp;
     int             len;
     char            *str;
 
@@ -114,13 +114,21 @@ static char *convert_hex(unsigned int n, char *base)
 char    *convert_x(void *content, t_list *tokens)
 {
     (void)tokens;
-    return (convert_hex(*(unsigned int *)content, "0123456789abcdef"));
+    return (convert_hex(*(long *)content, "0123456789abcdef"));
 }
 
 char    *convert_bigx(void *content, t_list *tokens)
 {
     (void)tokens;
-    return (convert_hex(*(unsigned int *)content, "0123456789ABCDEF"));
+    return (convert_hex(*(long *)content, "0123456789ABCDEF"));
+}
+
+char *convert_p(void *content, t_list *tokens)
+{
+	void **addr = content;
+	long val = *((long *)addr);
+	(void)val;
+	return (convert_x((long *)addr, tokens));
 }
 
 char	*hex_small(void *content, t_list *tokens)

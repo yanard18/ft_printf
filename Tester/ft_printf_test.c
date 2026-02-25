@@ -4,10 +4,6 @@
 
 int	main(void)
 {
-	/* Ideas for interface */
-	//TEST("ABC", GET_STDOUT(ft_printf("ABC"))
-	//TEST_FUNC(printf(...), ft_printf(...))
-
 	INIT
 
 	dprintf(saved_stdout, "\ntest return:\n");
@@ -90,6 +86,8 @@ int	main(void)
 	dprintf(saved_stdout, "\ntest %%X:\n");
 	TEST("2A", ft_printf("%X", 42));
 	TEST("0", ft_printf("%X", 0));
+
+dprintf(saved_stdout, "\ntest %%p:\n");
 
 dprintf(saved_stdout, "\ntest %%%%:\n");
 	TEST("%", ft_printf("%%"));
