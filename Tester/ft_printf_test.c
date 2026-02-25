@@ -87,7 +87,10 @@ int	main(void)
 	TEST("2A", ft_printf("%X", 42));
 	TEST("0", ft_printf("%X", 0));
 
-dprintf(saved_stdout, "\ntest %%p:\n");
+	dprintf(saved_stdout, "\ntest %%p:\n");
+	int x = 0;
+	TEST_STDOUT_FUNC(printf("%p", &x), ft_printf("%p", &x));
+	TEST_STDOUT_FUNC(printf("%p", 0), ft_printf("%p", 0));
 
 dprintf(saved_stdout, "\ntest %%%%:\n");
 	TEST("%", ft_printf("%%"));

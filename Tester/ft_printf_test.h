@@ -49,7 +49,25 @@
 	ret = 0;\
 }
 
+# define TEST_STDOUT_FUNC(exp_f, res_f) {\
+	exp_f;\
+	printf("%c", '\0');\
+	fflush(stdout);\
+	memset(buf, 0, 1024);\
+	read(fd[0], buf, sizeof(buf) - 1);\
+	res_f;\
+	printf("%c", '\0');\
+	fflush(stdout);\
+	memset(buf2, 0, 1024);\
+	read(fd[0], buf2, sizeof(buf2) - 1);\
+if (strcmp(buf, buf2) == 0)\
+		dprintf(saved_stdout, GREEN "[+] Succeed: %s, expected: \"%s\"\n" RESET, #res_f, buf);\
+	else\
+		dprintf(saved_stdout, RED "[-] Fail: %s, expected: \"%s\", was: \"%s\"\n" RESET, #res_f, buf, buf2);\
+}
+
 char	buf[BUFFER_SIZE];
+char	buf2[BUFFER_SIZE];
 int		fd[2];
 int		saved_stdout;
 int		ret = 0;

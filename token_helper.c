@@ -108,7 +108,7 @@ static char *convert_hex(unsigned long n, char *base)
     char            *str;
 
     temp = n;
-    len = (n == 0) ? 1 : 0;
+    len = n == 0;
     while (temp != 0)
     {
         temp /= 16;
