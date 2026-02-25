@@ -1,5 +1,6 @@
 #include "ft_printf.h"
 
+
 char	*convert_width(void *str, t_list *lst)
 {
 	char	*space;
@@ -28,6 +29,22 @@ char	*convert_width(void *str, t_list *lst)
 	free(space);
 	free(temp_s);
 	return (s);
+}
+
+static char *add_hex_prefix(void *content, int capitalize)
+{
+	char    *s;
+	char    *ret;
+
+	s = (char *)content;
+	if (*s == '0' && *(s + 1) == '\0') 
+		return (s);
+	if (capitalize == 0)
+		ret = ft_strjoin("0x", s);
+	else
+		ret = ft_strjoin("0X", s);
+	free(s);
+	return (ret);
 }
 
 char	*convert_d(void *content, t_list *tokens)
@@ -125,10 +142,12 @@ char    *convert_bigx(void *content, t_list *tokens)
 
 char *convert_p(void *content, t_list *tokens)
 {
+	char *ret;
 	void **addr = content;
-	long val = *((long *)addr);
-	(void)val;
-	return (convert_x((long *)addr, tokens));
+
+	ret = convert_x((long *)addr, tokens);
+	ret = add_hex_prefix(ret, 0);
+	return (ret);
 }
 
 char	*hex_small(void *content, t_list *tokens)
@@ -207,25 +226,21 @@ char    *convert_space(void *content, t_list *tokens)
 
 char	*convert_hash(void *content, t_list *tokens)
 {
-	char    *s;
-	char    *ret;
 	t_token *token;
 
 	token = get_token_by_type(tokens->next, 's');
-	if (token && (token->value[0] == 'x' || token->value[0] == 'X'))
-	{
-		s = (char *)content;
-		if (*s == '0' && *(s + 1) == '\0') 
-			return (s);
-		if (token->value[0] == 'x')
-			ret = ft_strjoin("0x", s);
-		else
-			ret = ft_strjoin("0X", s);
-		free(s);
-		return (ret);
-	}
+	if (token && token->value[0] == 'x')
+		{
+			return (add_hex_prefix(content, 0));
+		}
+	if (token && token->value[0] == 'X')
+		{
+			return (add_hex_prefix(content, 1));
+		}
 	return ((char *)content);
 }
+
+
 
 char	*apply_precision(void *content, t_list *tokens)
 {
