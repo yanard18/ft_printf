@@ -15,7 +15,7 @@ char	*convert_width(void *str, t_list *lst)
 		c = ' ';
 	s = (char *)str;
 	temp_s = s;
-	val = ft_atoi(get_token_by_type(lst, 'n')->value);
+	val = ft_atoi(get_token_by_type(lst, 'w')->value);
 	if (val <= ft_strlen(s))
 		return (s);
 	val -= ft_strlen(s);

@@ -6,7 +6,7 @@ static t_token g_token_buf[17] = {
 	(t_token){'f', "0", 11, NULL},
 	(t_token){'f', " ", 12, convert_space},
 	(t_token){'f', "+", 13, convert_plus},
-	(t_token){'n', NULL, 20, convert_width},
+	(t_token){'w', NULL, 20, convert_width},
 	(t_token){'.', NULL, 5, apply_precision},
 	(t_token){'s', "c", 99, convert_d},
 	(t_token){'s', "s", 99, convert_s},
@@ -27,14 +27,13 @@ static void	free_token(void *content)
 	token = (t_token *)content;
 	if (!token)
 		return ;
-	if (token->type == 'n' || token->type == '.')
+	if (token->type == 'w' || token->type == '.')
 		{
 			if (token->value)
 				{
 					free(token->value);
 					token->value = NULL;
 				}
-
 		}
 }
 
