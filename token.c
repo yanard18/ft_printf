@@ -15,12 +15,7 @@ static t_token g_widths[2] = {
 };
 
 static t_token g_precision[2] = {
-	(t_token){'p', ".", 5, apply_precision},
-	(t_token){'0', NULL, 0, NULL}
-};
-
-static t_token g_plength[2] = {
-	(t_token){'l', NULL, 6, NULL},
+	(t_token){'.', NULL, 5, apply_precision},
 	(t_token){'0', NULL, 0, NULL}
 };
 
@@ -44,7 +39,7 @@ static void	free_token(void *content)
 	token = (t_token *)content;
 	if (!token)
 		return ;
-	if (token->type == 'n' || token->type == 'l')
+	if (token->type == 'n' || token->type == '.')
 	{
 		if (token->value)
 			free(token->value);
@@ -126,31 +121,30 @@ static t_list	*tokenize(const char **format)
 	lst = NULL;
 	(*format)++;
 	while (**format && has_token(**format, g_flags, &out_token) != -1)
-	{	
-		push_token(&lst, out_token);
-		(*format)++;
-	}
+		{	
+			push_token(&lst, out_token);
+			(*format)++;
+		}
 	if (ft_isdigit(**format))
-	{
-		g_widths[0].value = ft_itoa(ft_atoi(*format));
-		push_token(&lst, &g_widths[0]);
-	}
+		{
+			g_widths[0].value = ft_itoa(ft_atoi(*format));
+			push_token(&lst, &g_widths[0]);
+		}
 	while (ft_isdigit(**format))
-	(*format)++;
-	if (has_token(**format, g_precision, &out_token) != -1)
-	{
-		ft_lstadd_back(&lst, ft_lstnew(&g_precision[0]));
 		(*format)++;
-		g_plength[0].value = ft_itoa(ft_atoi(*format));
-		push_token(&lst, &g_plength[0]);
-		while (ft_isdigit(**format))
-		(*format)++;
-	}
+	if (**format == '.')
+		{
+			ft_lstadd_back(&lst, ft_lstnew(&g_precision[0]));
+			(*format)++;
+			g_precision[0].value = ft_itoa(ft_atoi(*format));
+			while (ft_isdigit(**format))
+				(*format)++;
+		}
 	if (has_token(**format, g_specifiers, &out_token) != -1)
-	{
-		push_token(&lst, out_token);
-		(*format)++;
-	}
+		{
+			push_token(&lst, out_token);
+			(*format)++;
+		}
 	return (lst);
 }
 
@@ -207,11 +201,10 @@ int validate_tokens(t_list *lst)
 
 char *eval_next_token(t_list **lst, t_list *start_lst, char *s)
 {
-	t_token *token;
+	t_token *token = (t_token *)((*lst)->content);
 
-	token = (t_token *)((*lst)->content);
 	if (token && token->type != 's' && token->f)
-	s = token->f(s, start_lst);
+		s = token->f(s, start_lst);
 	*lst = (*lst)->next;
 	return (s);
 }

@@ -3,9 +3,6 @@
 
 int	main(void)
 {
-	int x = 0;
-	printf("printf: %p\n", &x);
-	fflush(stdout);
-	ft_printf("ft_printf: %p", &x);
+	ft_printf("%d", 42);
 	return (0);
 }

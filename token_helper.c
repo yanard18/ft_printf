@@ -254,7 +254,7 @@ char	*apply_precision(void *content, t_list *tokens)
 	size_t	prec_len;
 
 	specifier_token = get_token_by_type(tokens->next, 's');
-	prec_len = ft_atoi(get_token_by_type(tokens, 'l')->value);
+	prec_len = ft_atoi(get_token_by_type(tokens, '.')->value);
 	if (prec_len <= ft_strlen((char *)content))
 		return ((char *)content);
 	prec_len -= ft_strlen((char *)content);
