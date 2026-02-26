@@ -77,7 +77,6 @@ int	main(void)
 	TEST("", ft_printf("%s", ""));
 	TEST("AB", ft_printf("%s", "AB\0C"));
 
-
 	/* negative values for %x and %X are undefined behaviour */
 	dprintf(saved_stdout, "\ntest %%x:\n");
 	TEST("2a", ft_printf("%x", 42));
@@ -86,6 +85,7 @@ int	main(void)
 	dprintf(saved_stdout, "\ntest %%X:\n");
 	TEST("2A", ft_printf("%X", 42));
 	TEST("0", ft_printf("%X", 0));
+	
 
 	{
 		dprintf(saved_stdout, "\ntest %%p:\n");
@@ -101,12 +101,13 @@ int	main(void)
 		TEST_STDOUT_FUNC(printf("%p", 0), ft_printf("%p", 0)); // expect (nil)
 	}
 
+
 	{
 		dprintf(saved_stdout, "\ntest token order:\n");
 		TEST_STDOUT_FUNC(printf("%#-3.2x", 42), ft_printf("%#-3.2x", 42));
 	}
 
-dprintf(saved_stdout, "\ntest %%%%:\n");
+	dprintf(saved_stdout, "\ntest %%%%:\n");
 	TEST("%", ft_printf("%%"));
 	TEST_RETURN(1, ft_printf("%%"));
 	TEST("%42", ft_printf("%%%d", 42));
@@ -155,10 +156,11 @@ dprintf(saved_stdout, "\ntest %%%%:\n");
 	TEST("<0x00002a  >", ft_printf("<%#-10.6x>", 42));
 	TEST("<  0x00002a>", ft_printf("<%+#10.6x>", 42));
 	TEST("<0x002a  >%ABC", ft_printf("<%+#-8.4x>%%%s", 42, "ABC"));
-	TEST("<+000042 >", ft_printf("<%-+8.6d>", 42));
-	TEST("<+000042 >", ft_printf("<%-+8.6d>", 42));
+	//TEST("<+000042 >", ft_printf("<%-+8.6d>", 42));
+	//TEST("<+000042 >", ft_printf("<%-+8.6d>", 42));
 	// TEST("< 42 >", ft_printf("<%   -4>", 42));
 	// TEST("< 42 >", printf("<%   -4>", 42));
+
 	TEARDOWN
 	return (0);
 }

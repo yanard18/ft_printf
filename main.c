@@ -3,6 +3,6 @@
 
 int	main(void)
 {
-	ft_printf("%d", 42);
+	ft_printf("<%+#-8.4x>%%%s", 42, "ABC");
 	return (0);
 }

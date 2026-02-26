@@ -1,25 +1,13 @@
 #include "ft_printf.h"
 
-static t_token g_flags[6] = {
+static t_token g_token_buf[17] = {
 	(t_token){'f', "#", 10, convert_hash},
 	(t_token){'f', "-", 11, NULL},
 	(t_token){'f', "0", 11, NULL},
 	(t_token){'f', " ", 12, convert_space},
 	(t_token){'f', "+", 13, convert_plus},
-	(t_token){'0', NULL, 0, NULL}
-};
-
-static t_token g_widths[2] = {
 	(t_token){'n', NULL, 20, convert_width},
-	(t_token){'0', NULL, 0, NULL}
-};
-
-static t_token g_precision[2] = {
 	(t_token){'.', NULL, 5, apply_precision},
-	(t_token){'0', NULL, 0, NULL}
-};
-
-static t_token g_specifiers[10] = {
 	(t_token){'s', "c", 99, convert_d},
 	(t_token){'s', "s", 99, convert_s},
 	(t_token){'s', "p", 99, convert_p},
@@ -40,10 +28,14 @@ static void	free_token(void *content)
 	if (!token)
 		return ;
 	if (token->type == 'n' || token->type == '.')
-	{
-		if (token->value)
-			free(token->value);
-	}
+		{
+			if (token->value)
+				{
+					free(token->value);
+					token->value = NULL;
+				}
+
+		}
 }
 
 t_token	*get_token_by_type(t_list *lst, const char type)
@@ -84,11 +76,11 @@ static int	is_token(const char c, t_token *tokens, t_token **out)
 	i = 0;
 	while(tokens[i].type != '0')
 	{
-		if (tokens[i].value[0] == c)
-		{
-			*out = (tokens + i);
-			return (1);
-		}
+		if (tokens[i].value != NULL && tokens[i].value[0] == c)
+			{
+				*out = (tokens + i);
+				return (1);
+			}
 		i++;
 	}
 	return (0);
@@ -120,27 +112,27 @@ static t_list	*tokenize(const char **format)
 
 	lst = NULL;
 	(*format)++;
-	while (**format && is_token(**format, g_flags, &out_token))
+	while (**format && is_token(**format, g_token_buf, &out_token) && out_token->type == 'f')
 		{	
 			push_token(&lst, out_token);
 			(*format)++;
 		}
 	if (ft_isdigit(**format))
 		{
-			g_widths[0].value = ft_itoa(ft_atoi(*format));
-			push_token(&lst, &g_widths[0]);
+			g_token_buf[5].value = ft_itoa(ft_atoi(*format));
+			push_token(&lst, &g_token_buf[5]);
 			while (ft_isdigit(**format))
 				(*format)++;
 		}
 	if (**format == '.')
 		{
-			ft_lstadd_back(&lst, ft_lstnew(&g_precision[0]));
+			ft_lstadd_back(&lst, ft_lstnew(&g_token_buf[6]));
 			(*format)++;
-			g_precision[0].value = ft_itoa(ft_atoi(*format));
+			g_token_buf[6].value = ft_itoa(ft_atoi(*format));
 			while (ft_isdigit(**format))
 				(*format)++;
 		}
-	if (is_token(**format, g_specifiers, &out_token))
+	if (is_token(**format, g_token_buf, &out_token) && out_token->type == 's')
 		{
 			push_token(&lst, out_token);
 			(*format)++;
