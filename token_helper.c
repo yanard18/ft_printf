@@ -98,6 +98,8 @@ char	*convert_s(void *content, t_list *tokens)
 	(void)tokens;
 	char **str = content;
 
+	if (*str == 0)
+		return (ft_strdup("(null)"));
 	return (ft_strdup(*str));
 }
 
