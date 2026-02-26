@@ -147,6 +147,8 @@ char *convert_p(void *content, t_list *tokens)
 	char *ret;
 	void **addr = content;
 
+	if (*addr == 0)
+		return (ft_strdup("(nil)"));
 	ret = convert_x((long *)addr, tokens);
 	ret = add_hex_prefix(ret, 0);
 	return (ret);
