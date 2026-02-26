@@ -244,8 +244,6 @@ char	*convert_hash(void *content, t_list *tokens)
 	return ((char *)content);
 }
 
-
-
 char	*apply_precision(void *content, t_list *tokens)
 {
 	t_token *specifier_token;

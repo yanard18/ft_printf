@@ -75,7 +75,19 @@ static int	is_token(const char c, t_token *tokens, t_token **out)
 	i = 0;
 	while(tokens[i].type != '0')
 	{
+		// for specifier and flags
+		// TODO: combine if statements
 		if (tokens[i].value != NULL && tokens[i].value[0] == c)
+			{
+				*out = (tokens + i);
+				return (1);
+			}
+		else if (tokens[i].type == '.' && c == '.') // no need tokens-> type
+			{
+				*out = (tokens + i);
+				return (1);
+			}
+		else if (tokens[i].type == 'w' && ft_isdigit(c)) // no need tokens->type
 			{
 				*out = (tokens + i);
 				return (1);
@@ -111,30 +123,41 @@ static t_list	*tokenize(const char **format)
 
 	lst = NULL;
 	(*format)++;
-	while (**format && is_token(**format, g_token_buf, &out_token) && out_token->type == 'f')
-		{	
-			push_token(&lst, out_token);
-			(*format)++;
-		}
-	if (ft_isdigit(**format))
+	while (**format)
 		{
-			g_token_buf[5].value = ft_itoa(ft_atoi(*format));
-			push_token(&lst, &g_token_buf[5]);
-			while (ft_isdigit(**format))
-				(*format)++;
-		}
-	if (**format == '.')
-		{
-			ft_lstadd_back(&lst, ft_lstnew(&g_token_buf[6]));
+			is_token(**format, g_token_buf, &out_token);
+			if (out_token)
+				{
+					if (out_token->type == 'f')
+						{
+							push_token(&lst, out_token);
+						}
+					else if (out_token->type == '.')
+						{
+							(*format)++;
+							out_token->value = ft_itoa(ft_atoi(*format));
+							push_token(&lst, out_token);
+							while (ft_isdigit(**format))
+								(*format)++;
+							(*format)--;
+						}
+					else if (out_token->type == 'w')
+						{
+							out_token->value = ft_itoa(ft_atoi(*format));
+							push_token(&lst, out_token);
+							while (ft_isdigit(**format))
+								(*format)++;
+							(*format)--;
+						}
+					else if (out_token->type == 's')
+						{
+							push_token(&lst, out_token);
+							(*format)++;
+							break ;
+						}
+				}
 			(*format)++;
-			g_token_buf[6].value = ft_itoa(ft_atoi(*format));
-			while (ft_isdigit(**format))
-				(*format)++;
-		}
-	if (is_token(**format, g_token_buf, &out_token) && out_token->type == 's')
-		{
-			push_token(&lst, out_token);
-			(*format)++;
+			out_token = NULL;
 		}
 	return (lst);
 }
