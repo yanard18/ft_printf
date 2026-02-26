@@ -73,6 +73,7 @@ static int	is_token(const char c, t_token *tokens, t_token **out)
 	unsigned int	i;
 
 	i = 0;
+	*out = NULL;
 	while(tokens[i].type != '0')
 	{
 		// for specifier and flags
@@ -122,22 +123,15 @@ static t_list	*tokenize(const char **format)
 	t_token	*out_token;
 
 	lst = NULL;
-	(*format)++;
-	while (**format)
+	while (*++(*format))
 		{
 			is_token(**format, g_token_buf, &out_token);
 			if (out_token)
 				{
 					push_token(&lst, out_token);
 					if (out_token->type == '.')
-						{
-							(*format)++;
-							out_token->value = ft_itoa(ft_atoi(*format));
-							while (ft_isdigit(**format))
-								(*format)++;
-							(*format)--;
-						}
-					else if (out_token->type == 'w')
+						(*format)++;
+					if (out_token->type == '.' || out_token->type == 'w')
 						{
 							out_token->value = ft_itoa(ft_atoi(*format));
 							while (ft_isdigit(**format))
@@ -150,7 +144,6 @@ static t_list	*tokenize(const char **format)
 							break ;
 						}
 				}
-			(*format)++;
 			out_token = NULL;
 		}
 	return (lst);
