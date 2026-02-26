@@ -105,12 +105,12 @@ static void push_token(t_list **lst, t_token *token)
 		*lst = ft_lstnew(token);
 		return ;
 	}
-	if (ft_strncmp(token->value, "%", 1) == 0)
+	if (token->value && token->value[0] == '%')
 	{
 		ft_lstadd_back(lst, ft_lstnew(token));
 		return ;
 	}
-	if (get_token_by_val(*lst, token->value))
+	if (token->value && get_token_by_val(*lst, token->value))
 		return ;
 	else
 		ft_lstadd_back(lst, ft_lstnew(token));
@@ -128,15 +128,11 @@ static t_list	*tokenize(const char **format)
 			is_token(**format, g_token_buf, &out_token);
 			if (out_token)
 				{
-					if (out_token->type == 'f')
-						{
-							push_token(&lst, out_token);
-						}
-					else if (out_token->type == '.')
+					push_token(&lst, out_token);
+					if (out_token->type == '.')
 						{
 							(*format)++;
 							out_token->value = ft_itoa(ft_atoi(*format));
-							push_token(&lst, out_token);
 							while (ft_isdigit(**format))
 								(*format)++;
 							(*format)--;
@@ -144,14 +140,12 @@ static t_list	*tokenize(const char **format)
 					else if (out_token->type == 'w')
 						{
 							out_token->value = ft_itoa(ft_atoi(*format));
-							push_token(&lst, out_token);
 							while (ft_isdigit(**format))
 								(*format)++;
 							(*format)--;
 						}
 					else if (out_token->type == 's')
 						{
-							push_token(&lst, out_token);
 							(*format)++;
 							break ;
 						}
