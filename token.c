@@ -76,19 +76,9 @@ static int	is_token(const char c, t_token *tokens, t_token **out)
 	*out = NULL;
 	while(tokens[i].type != '0')
 	{
-		// for specifier and flags
-		// TODO: combine if statements
-		if (tokens[i].value != NULL && tokens[i].value[0] == c)
-			{
-				*out = (tokens + i);
-				return (1);
-			}
-		else if (tokens[i].type == '.' && c == '.') // no need tokens-> type
-			{
-				*out = (tokens + i);
-				return (1);
-			}
-		else if (tokens[i].type == 'w' && ft_isdigit(c)) // no need tokens->type
+		if ((tokens[i].value != NULL && tokens[i].value[0] == c)
+			|| (tokens[i].type == '.' && c == '.')
+			|| (tokens[i].type == 'w' && ft_isdigit(c)))
 			{
 				*out = (tokens + i);
 				return (1);
