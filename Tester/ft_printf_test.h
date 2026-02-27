@@ -12,31 +12,6 @@
 #define GREEN   "\033[0m"
 #define RESET   "\033[0m"
 
-# define TEST(exp, print) {												\
-		print;															\
-		printf("%c", '\0');												\
-		fflush(stdout);													\
-		memset(buf, 0, 1024);											\
-		read(fd[0], buf, sizeof(buf) - 1);								\
-		if (strcmp(exp, buf) == 0)										\
-			dprintf(saved_stdout, GREEN "[+] Succeed: %s, expected: \"%s\"\n" RESET, #print, exp); \
-		else															\
-			dprintf(saved_stdout, RED "[-] Fail: %s, expected: \"%s\", was: \"%s\"\n\033[0m" RESET, #print, exp, buf); \
-	}
-
-# define TEST_RETURN(exp, print) {										\
-		ret = print;													\
-		printf("%c", '\0');												\
-		fflush(stdout);													\
-		memset(buf, 0, 1024);											\
-		read(fd[0], buf, sizeof(buf) - 1);								\
-		if (ret == exp)													\
-			dprintf(saved_stdout, GREEN "[+] Succeed: RETURN: %s, expected: %d\n" RESET, #print, exp); \
-		else															\
-			dprintf(saved_stdout, RED "[-] Fail: RETURN: %s, expected: %d, was: %d\n" RESET, #print, exp, ret);	\
-		ret = 0;														\
-	}
-
 # define TEST_STDOUT_FUNC(exp_f, res_f) {								\
 	{																	\
 		saved_stdout = dup(1);											\
