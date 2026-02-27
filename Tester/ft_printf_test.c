@@ -145,11 +145,21 @@ int	main(void)
 	TEST("0x2a", ft_printf("%#x", 42));
 	TEST("0X2A", ft_printf("%#X", 42));
 
-	dprintf(saved_stdout, "\ntest . precision:\n");
-	TEST("42", ft_printf("%.0d", 42));
-	TEST("42", ft_printf("%.1d", 42));
-	TEST("42", ft_printf("%.2d", 42));
-	TEST("042", ft_printf("%.3d", 42));
+	{
+		dprintf(saved_stdout, "\ntest . precision:\n");
+		TEST_STDOUT_FUNC(printf("%.d", 42), ft_printf("%.d", 42));
+		TEST_STDOUT_FUNC(printf("%.0d", 42), ft_printf("%.0d", 42));
+		TEST_STDOUT_FUNC(printf("%.1d", 42), ft_printf("%.1d", 42));
+		TEST_STDOUT_FUNC(printf("%.2d", 42), ft_printf("%.2d", 42));
+		TEST_STDOUT_FUNC(printf("%.3d", 42), ft_printf("%.3d", 42));
+	}
+
+	{
+		dprintf(saved_stdout, "\ntest undefined token values:\n");
+		TEST_STDOUT_FUNC(printf("%t", 42), ft_printf("%t", 42));
+		TEST_STDOUT_FUNC(printf("%L", 42), ft_printf("%L", 42));
+		TEST_STDOUT_FUNC(printf("%", 42), ft_printf("%", 42));
+	}
 
 	{
 		dprintf(saved_stdout, "\ntest combinational:\n");
