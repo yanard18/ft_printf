@@ -12,7 +12,7 @@
 #define GREEN   "\033[0m"
 #define RESET   "\033[0m"
 
-# define TEST_STDOUT_FUNC(exp_f, res_f) {								\
+# define TEST_STDOUT_FUNC(exp_f, res_f, ...) {								\
 	{																	\
 	char	buf[BUFFER_SIZE];											\
 	char	buf2[BUFFER_SIZE];											\
@@ -24,12 +24,12 @@
 	dup2(fd[1], 1);														\
 	int exp_ret;														\
 	int res_ret;														\
-	exp_ret = exp_f;													\
+	exp_ret = exp_f(__VA_ARGS__);										\
 	printf("%c", '\0');													\
 	fflush(stdout);														\
 	memset(buf, 0, 1024);												\
 	read(fd[0], buf, sizeof(buf) - 1);									\
-	res_ret = res_f;													\
+	res_ret = res_f(__VA_ARGS__);										\
 	printf("%c", '\0');													\
 	fflush(stdout);														\
 	memset(buf2, 0, 1024);												\
