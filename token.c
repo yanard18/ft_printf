@@ -1,25 +1,5 @@
 #include "ft_printf.h"
 
-static t_token g_token_buf[17] = {
-	(t_token){'f', "#", 10, convert_hash},
-	(t_token){'f', "-", 11, NULL},
-	(t_token){'f', "0", 11, NULL},
-	(t_token){'f', " ", 12, convert_space},
-	(t_token){'f', "+", 13, convert_plus},
-	(t_token){'w', NULL, 20, convert_width},
-	(t_token){'.', NULL, 5, apply_precision},
-	(t_token){'s', "c", 99, convert_d},
-	(t_token){'s', "s", 99, convert_s},
-	(t_token){'s', "p", 99, convert_p},
-	(t_token){'s', "d", 99, convert_d},
-	(t_token){'s', "i", 99, convert_d},
-	(t_token){'s', "u", 99, convert_u},
-	(t_token){'s', "x", 99, convert_x},
-	(t_token){'s', "X", 99, convert_bigx},
-	(t_token){'s', "%", 1, NULL},
-	(t_token){'0', NULL, 0, NULL}
-};
-
 static void	free_token(void *content)
 {
 	t_token	*token;
@@ -117,7 +97,7 @@ static void int_to_token(const char **format, t_token *out_token)
 	(*format)--;
 }
 
-static t_list	*tokenize(const char **format)
+static t_list	*tokenize(const char **format, t_token *g_token_buf)
 {
 	t_list	*lst;
 	t_token	*out_token;
@@ -205,7 +185,7 @@ char *eval_next_token(t_list **lst, t_list *start_lst, char *s)
 	return (s);
 }
 
-ssize_t	read_token(const char **format, va_list args)
+ssize_t	read_token(const char **format, va_list args, t_token *g_token_buf)
 {
 	t_list	*lst;
 	t_list	*start_lst;
@@ -213,7 +193,7 @@ ssize_t	read_token(const char **format, va_list args)
 	char	*s;
 	size_t	len;		
 
-	lst = tokenize(format);
+	lst = tokenize(format, g_token_buf);
 	//debug_tokenlst(lst);
 	start_lst = lst;
 	valid = validate_tokens(lst);
