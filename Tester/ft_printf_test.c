@@ -4,8 +4,6 @@
 
 int	main(void)
 {
-	INIT
-
 	dprintf(saved_stdout, "\ntest basic:\n");
 	TEST_STDOUT_FUNC(printf(""), ft_printf(""))
 	TEST_STDOUT_FUNC(printf("A"), ft_printf("A"))
@@ -160,7 +158,5 @@ int	main(void)
 		TEST_STDOUT_FUNC(printf("<%+#-8.4x>%%%s", 42, "ABC"), ft_printf("<%+#-8.4x>%%%s", 42, "ABC"));
 		TEST_STDOUT_FUNC(printf("<%-+8.6d>", 42), ft_printf("<%-+8.6d>", 42));
 	}
-
-	TEARDOWN
 	return (0);
 }

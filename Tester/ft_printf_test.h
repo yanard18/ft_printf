@@ -12,18 +12,6 @@
 #define GREEN   "\033[0m"
 #define RESET   "\033[0m"
 
-# define INIT {									\
-		saved_stdout = dup(1);					\
-		pipe(fd);								\
-		dup2(fd[1], 1);							\
-	}
-
-# define TEARDOWN {								\
-		dup2(saved_stdout, 1);					\
-		close(fd[1]);							\
-		close(fd[0]);							\
-	}
-
 # define TEST(exp, print) {												\
 		print;															\
 		printf("%c", '\0');												\
@@ -50,6 +38,10 @@
 	}
 
 # define TEST_STDOUT_FUNC(exp_f, res_f) {								\
+	{																	\
+		saved_stdout = dup(1);											\
+		pipe(fd);														\
+		dup2(fd[1], 1);													\
 		int exp_ret;													\
 		int res_ret;													\
 		exp_ret = exp_f;												\
@@ -66,7 +58,11 @@
 			dprintf(saved_stdout, GREEN "[+] Succeed: for %s --> stdout: \"%s\" ret: %i\n" RESET, #res_f, buf, exp_ret); \
 		else															\
 			dprintf(saved_stdout, RED "[-] Fail: %s --> expected stdout: \"%s\", was: \"%s\" expected ret: %i was: %i\n" RESET, #res_f, buf, buf2, exp_ret, res_ret); \
-	}
+		dup2(saved_stdout, 1);											\
+		close(fd[1]);													\
+		close(fd[0]);													\
+	}																	\
+}
 
 char	buf[BUFFER_SIZE];
 char	buf2[BUFFER_SIZE];
