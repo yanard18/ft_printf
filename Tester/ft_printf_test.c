@@ -54,6 +54,7 @@ int	main(void)
 	TEST_STDOUT_FUNC(printf("%i", 42), ft_printf("%i", 42));
 	TEST_STDOUT_FUNC(printf("%d", 0x2a), ft_printf("%d", 0x2a));
 	TEST_STDOUT_FUNC(printf("%i", INT_MIN), ft_printf("%i", INT_MIN));
+	TEST_STDOUT_FUNC(printf("%i", INT_MAX), ft_printf("%i", INT_MAX));
 
 	dprintf(saved_stdout, "\ntest %%u:\n");
 	TEST_STDOUT_FUNC(printf("%u", 0), ft_printf("%u", 0));
@@ -100,8 +101,6 @@ int	main(void)
 
 	dprintf(saved_stdout, "\ntest %%%%:\n");
 	TEST_STDOUT_FUNC(printf("%%"), ft_printf("%%"));
-	TEST_STDOUT_FUNC(printf("%%"), ft_printf("%%"));
-	TEST_STDOUT_FUNC(printf("%%%d", 42), ft_printf("%%%d", 42));
 	TEST_STDOUT_FUNC(printf("%%%d", 42), ft_printf("%%%d", 42));
 	TEST_STDOUT_FUNC(printf("%%%d%%%s", 42, "abc"), ft_printf("%%%d%%%s", 42, "abc"));
 
@@ -121,6 +120,7 @@ int	main(void)
 	TEST_STDOUT_FUNC(printf("%03d", 42), ft_printf("%03d", 42));
 	TEST_STDOUT_FUNC(printf("%05d", 42), ft_printf("%05d", 42));
 	TEST_STDOUT_FUNC(printf("%0-5d", 42), ft_printf("%0-5d", 42));
+	TEST_STDOUT_FUNC(printf("%-05d", 42), ft_printf("%-05d", 42));
 
 	dprintf(saved_stdout, "\ntest field width:\n");
 	TEST_STDOUT_FUNC(printf("<%0d>", 1), ft_printf("<%0d>", 1));
