@@ -194,7 +194,6 @@ ssize_t	read_token(const char **format, va_list args, t_token *g_token_buf)
 	size_t	len;		
 
 	lst = tokenize(format, g_token_buf);
-	//debug_tokenlst(lst);
 	start_lst = lst;
 	valid = validate_tokens(lst);
 	if (!valid)

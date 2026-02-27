@@ -1,7 +1,7 @@
 CC			= cc
 CFLAGS		= -Wextra -Wall -Werror
 NAME		= libftprintf.a
-FILES		= ft_printf token token_debug token_helper
+FILES		= ft_printf token token_helper
 MAKE		= make
 LIBFT		= libft/libft.a
 LIBFT_DIR	= libft/
@@ -25,7 +25,7 @@ libft:
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 	echo $(FILES)
-	
+
 $(OBJS): %.o: %.c
 ifeq ($(USE_GDB),1)
 	$(CC) $(CFLAGS) -g $^ -c -o $@

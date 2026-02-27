@@ -28,9 +28,6 @@ ssize_t		read_token(const char **format, va_list args, t_token *g_token_buf);
 t_token		*get_token_by_type(t_list* lst, const char type);
 t_token		*get_token_by_val(t_list *lst, const char *s);
 
-void	debug_token(void *content);
-void	debug_tokenlst(t_list *tokens);
-
 char	*convert_width(void *str, t_list *lst);
 char	*convert_d(void *content, t_list *tokens);
 char    *convert_u(void *content, t_list *tokens);
