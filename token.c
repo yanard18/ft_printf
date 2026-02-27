@@ -185,13 +185,12 @@ char *eval_next_token(t_list **lst, t_list *start_lst, char *s)
 	return (s);
 }
 
-ssize_t	read_token(const char **format, va_list args, t_token *g_token_buf)
+char *read_token(const char **format, va_list args, t_token *g_token_buf)
 {
 	t_list	*lst;
 	t_list	*start_lst;
 	int 	valid;
 	char	*s;
-	size_t	len;		
 
 	lst = tokenize(format, g_token_buf);
 	start_lst = lst;
@@ -199,15 +198,12 @@ ssize_t	read_token(const char **format, va_list args, t_token *g_token_buf)
 	if (!valid)
 	{
 		ft_lstclear(&lst, free_token);
-		return (-1);
+		return (NULL);
 	}
 	s = apply_specifier(lst, args);
 	sort_tokens(&lst);
 	while (lst)
 		s = eval_next_token(&lst, start_lst, s);
-	len = ft_strlen(s);
-	ft_putstr_fd(s, 1);
-	free(s);
 	ft_lstclear(&start_lst, free_token);
-	return (len);
+	return (s);
 }

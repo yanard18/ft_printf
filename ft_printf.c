@@ -25,33 +25,59 @@ static t_token *init_token_buf()
 	return (buf);
 }
 
+static char *move_str_to_chr(const char **format, char c)
+{
+	const char *format_start;
+
+	if (*format == NULL)
+		return (NULL);
+	format_start = *format;
+	while (**format)
+		{
+			(*format)++;
+			if (**format == c)
+					break ;
+		}
+	return (ft_substr(format_start, 0, *format - format_start));
+}
+
+static char *strjoin_safe(char *s1, char *s2)
+{
+	char *res;
+
+	res = ft_strjoin(s1, s2);
+	free(s1);
+	free(s2);
+	return (res);
+}
+
 int	ft_printf(const char *format, ...)
 {
 	va_list	args;
-	size_t	len;
-	int  	token_len;
 	t_token *token_buf;
+	char *res;
+	int len;
 
 	if (!format)
 		return (-1);
-    len = 0;
+	res = ft_strdup("");
     va_start(args, format);
     while (*format)
 		{
 			if (*format == '%')
 				{
 					token_buf = init_token_buf();
-					token_len = read_token(&format, args, token_buf);
+					res = strjoin_safe(res, read_token(&format, args, token_buf));
 					free(token_buf);
-					if (token_len == -1)
+					if (!res)
 						return (-1);
-					len += token_len;
 					continue ;
 				}
-			ft_putchar_fd(*format, 1);
-			format++;
-			len++;
+			res = strjoin_safe(res, move_str_to_chr(&format, '%'));
 		}
 	va_end(args);
+	len = ft_strlen(res);
+	ft_putstr_fd(res, 1);
+	free(res);
 	return (len);
 } 
