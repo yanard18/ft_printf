@@ -151,15 +151,14 @@ int	main(void)
 	TEST("42", ft_printf("%.2d", 42));
 	TEST("042", ft_printf("%.3d", 42));
 
-	dprintf(saved_stdout, "\ntest combinational:\n");
-	TEST("NUM 42", ft_printf("%s %d", "NUM", 42));
-	TEST("<0x00002a  >", ft_printf("<%#-10.6x>", 42));
-	TEST("<  0x00002a>", ft_printf("<%+#10.6x>", 42));
-	TEST("<0x002a  >%ABC", ft_printf("<%+#-8.4x>%%%s", 42, "ABC"));
-	//TEST("<+000042 >", ft_printf("<%-+8.6d>", 42));
-	//TEST("<+000042 >", ft_printf("<%-+8.6d>", 42));
-	// TEST("< 42 >", ft_printf("<%   -4>", 42));
-	// TEST("< 42 >", printf("<%   -4>", 42));
+	{
+		dprintf(saved_stdout, "\ntest combinational:\n");
+		TEST_STDOUT_FUNC(printf("%s %d", "NUM", 42), ft_printf("%s %d", "NUM", 42));
+		TEST_STDOUT_FUNC(printf("<%#-10.6x>", 42), ft_printf("<%#-10.6x>", 42));
+		TEST_STDOUT_FUNC(printf("<%+#10.6x>", 42), ft_printf("<%+#10.6x>", 42));
+		TEST_STDOUT_FUNC(printf("<%+#-8.4x>%%%s", 42, "ABC"), ft_printf("<%+#-8.4x>%%%s", 42, "ABC"));
+		TEST_STDOUT_FUNC(printf("<%-+8.6d>", 42), ft_printf("<%-+8.6d>", 42));
+	}
 
 	TEARDOWN
 	return (0);

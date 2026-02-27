@@ -171,7 +171,7 @@ void	sort_tokens(t_list **tokens)
 int validate_tokens(t_list *lst)
 {
 	if (!lst) 
-	return (0);
+		return (0);
 	return (1);
 }
 
