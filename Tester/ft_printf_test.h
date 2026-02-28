@@ -6,19 +6,37 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-# define BUFFER_SIZE	1024
 /* Standard ANSI Colors */
 #define RED     "\033[31m"
 #define GREEN   "\033[0m"
 #define RESET   "\033[0m"
 
-# define TEST_STDOUT_FUNC(exp_f, res_f, ...) {								\
+typedef struct s_test {
+	const char *name;
+	void (*func)(void);
+	struct s_test *next;
+} t_test;
+
+extern t_test *g_test_lst;
+
+void register_test(const char *name, void (*func)(void));
+
+# define REGISTER_TEST(func_ptr)				\
+	__attribute__((constructor))				\
+	static void register_##func_ptr(void) {		\
+		register_test(#func_ptr, func_ptr);		\
+		printf("register: %s\n", #func_ptr);	\
+	}											
+
+# define BUFFER_SIZE	1024
+# define TEST_STDOUT_FUNC(exp_f, res_f, ...) {							\
 	{																	\
 	char	buf[BUFFER_SIZE];											\
 	char	buf2[BUFFER_SIZE];											\
 	int		fd[2];														\
 	int		saved_stdout;												\
 	int		ret = 0;													\
+	fflush(stdout);														\
 	saved_stdout = dup(1);												\
 	pipe(fd);															\
 	dup2(fd[1], 1);														\

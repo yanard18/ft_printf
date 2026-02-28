@@ -4,9 +4,9 @@ MAKE = make
 NAME = ft_printft_test
 FTPRINTF_DIR = ../
 LIBFTPRINTF = $(FTPRINTF_DIR)/libftprintf.a
-FILES = ft_printf_test
+FILES = ft_printf_test basic
 SRCS = $(addsuffix .c, $(FILES))
-HEADERS = $(addsuffix .h, $(FILES))
+HEADERS = ft_printf_test.h
 
 all: $(NAME)
 	valgrind --leak-check=full ./$(NAME)
