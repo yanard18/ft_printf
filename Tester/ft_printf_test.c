@@ -21,6 +21,5 @@ int	main(void)
 			free(g_test_lst);
 			g_test_lst = next_test;
 		}
-	
 	return (0);
 }
