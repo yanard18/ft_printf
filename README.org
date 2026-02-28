@@ -77,3 +77,12 @@ Decided to only tokenize the conversion specifiers and print the strings without
 To fix this, decided to allocate strings with strjoin and allocate the conversion specifiers with tokenization. However better approach would be tokenize the whole text then print the whole token chain at once. This can be a future development task.
 
 This would also fix the issue that, current system initialize a token_buf each time for read_token(). Here, bad design implemented because I was not aware that static globals are forbiden for this project. To be honest I still believe that making token_buf global is best approach for both memory and extendibility.
+
+* Tester
+Main design idea of this tester to have minimum amount of duplication while testing variadic functions and comapring two identical functions.
+
+1. Only have TEST_STDOUT_FUNC func (macro func)
+2. Directly compare two functions
+3. No duplication while passing arguments
+4. Supports multiple files and registering more tests
+5. TEST_STDOUT_FUNC test both stdout and return values
