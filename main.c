@@ -3,6 +3,6 @@
 
 int	main(void)
 {
-	ft_printf("ABC % MORE");
+	ft_printf("ABC %MORE%");
 	return (0);
 }

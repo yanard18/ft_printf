@@ -193,14 +193,19 @@ char *read_token(const char **format, va_list args, t_token *g_token_buf)
 	t_list	*start_lst;
 	int 	valid;
 	char	*s;
+	const char	*rewind_str_addr;
 
+	rewind_str_addr = *format;
 	lst = tokenize(format, g_token_buf);
 	start_lst = lst;
 	valid = validate_tokens(lst);
 	if (!valid)
 	{
 		ft_lstclear(&lst, free_token);
-		return (NULL);
+		*format = rewind_str_addr + 1;
+		if (**format == '\0')
+			return (NULL);
+		return (ft_strdup("%"));
 	}
 	s = apply_specifier(lst, args);
 	sort_tokens(&lst);

@@ -44,12 +44,18 @@ static char *move_str_to_chr(const char **format, char c)
 static char *strjoin_safe(char *s1, char *s2)
 {
 	char *res;
-
 	if (s1 && s2 == NULL)
-		return (s1);
+	{
+		free(s1);
+		return (NULL);
+	}
 	else if (s2 && s1 == NULL)
-		return (s2);
+	{
+		free(s2);
+		return (NULL);
+	}
 	res = ft_strjoin(s1, s2);
+
 	free(s1);
 	free(s2);
 	return (res);
@@ -79,22 +85,15 @@ int	ft_printf(const char *format, ...)
 	if (!format)
 		return (-1);
 	res = ft_strdup("");
+	token_buf = init_token_buf();
     va_start(args, format);
-    while (*format)
-		{
-			if (*format == '%')
-				{
-					token_buf = init_token_buf();
-					res = strjoin_safe(res, read_token(&format, args, token_buf));
-					free(token_buf);
-					continue ;
-					/*
-					if (!res)
-						return (flush(res, args, 1));
-					continue ;
-					*/
-				}
+	while (*format)
+	{
+		if (*format == '%')
+			res = strjoin_safe(res, read_token(&format, args, token_buf));
+		else
 			res = strjoin_safe(res, move_str_to_chr(&format, '%'));
-		}
+	}
+	free(token_buf);
 	return (flush(res, args));
 } 
