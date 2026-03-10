@@ -5,3 +5,4 @@ TAGS
 unit.md
 *.swp
 Tester/*.a
+libftprintf.a

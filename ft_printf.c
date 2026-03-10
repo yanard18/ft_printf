@@ -73,7 +73,6 @@ int	ft_printf(const char *format, ...)
 	va_list	args;
 	t_token *token_buf;
 	char *res;
-	int len;
 
 	if (!format)
 		return (-1);
