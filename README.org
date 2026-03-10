@@ -4,7 +4,8 @@ How to create core dump file:
 
 #+begin_src bash
   ulimit -c unlimited
-  ./a.out gdb ./a.out core
+  ./a.out 
+  gdb ./a.out core
 #+end_src
 
 Then to debug
