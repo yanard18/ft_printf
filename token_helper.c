@@ -9,10 +9,11 @@ char	*convert_width(void *str, t_list *lst)
 	char 	*s;
 	char	c;
 
-	if (get_token_by_val(lst, "0") && get_token_by_val(lst, "0")->type == 'f')
-		c = '0';
-	else
+	c = ' ';
+	if (get_token_by_val(lst, "-") && get_token_by_val(lst, "-")->type == FLAG)
 		c = ' ';
+	else if (get_token_by_val(lst, "0") && get_token_by_val(lst, "0")->type == FLAG)
+		c = '0';
 	s = (char *)str;
 	temp_s = s;
 	val = ft_atoi(get_token_by_type(lst, 'w')->value);
@@ -268,3 +269,4 @@ char	*apply_precision(void *content, t_list *tokens)
 	}
 	return ((char *)content);
 }
+
