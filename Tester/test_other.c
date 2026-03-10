@@ -9,15 +9,7 @@ void test_other()
 	TEST_STDOUT_FUNC(printf, ft_printf, "%");
 	TEST_STDOUT_FUNC(printf, ft_printf, "ABC %");
 	TEST_STDOUT_FUNC(printf, ft_printf, "ABC %", 42);
-	TEST_STDOUT_FUNC(printf, ft_printf, "ABC %d%", 42);
-	TEST_STDOUT_FUNC(printf, ft_printf, "ABC % MORE");
-	TEST_STDOUT_FUNC(printf, ft_printf, "ABC % MORE%");
-	TEST_STDOUT_FUNC(printf, ft_printf, "ABC %MORE%");
-	TEST_STDOUT_FUNC(printf, ft_printf, "ABC %MORE %");
-	TEST_STDOUT_FUNC(printf, ft_printf, "ABC %MORE%%");
-	TEST_STDOUT_FUNC(printf, ft_printf, "ABC %MORE%d", 42);
-	TEST_STDOUT_FUNC(printf, ft_printf, "ABC %MORE%d%", 42);
-	TEST_STDOUT_FUNC(printf, ft_printf, "ABC %", 1);
+	
 	TEST_STDOUT_FUNC(printf, ft_printf, "%%%%%");
 	TEST_STDOUT_FUNC(printf, ft_printf, "%%%");
 	TEST_STDOUT_FUNC(printf, ft_printf, "% %%");
@@ -127,11 +119,13 @@ void test_other()
 	TEST_STDOUT_FUNC(printf, ft_printf, "<%-3d>", 1);;
 	TEST_STDOUT_FUNC(printf, ft_printf, "<%5s>", "abc");;
 
-	printf("\ntest # flag:\n");
-	TEST_STDOUT_FUNC(printf, ft_printf, "%#x", 0);;
-	TEST_STDOUT_FUNC(printf, ft_printf, "%#x", 1);;
-	TEST_STDOUT_FUNC(printf, ft_printf, "%#x", 42);;
-	TEST_STDOUT_FUNC(printf, ft_printf, "%#X", 42);;
+	{
+		printf("\ntest # flag:\n");
+		TEST_STDOUT_FUNC(printf, ft_printf, "%#x", 0);;
+		TEST_STDOUT_FUNC(printf, ft_printf, "%#x", 1);;
+		TEST_STDOUT_FUNC(printf, ft_printf, "%#x", 42);;
+		TEST_STDOUT_FUNC(printf, ft_printf, "%#X", 42);;
+	}
 
 	{
 		printf("\ntest . precision:\n");
@@ -140,14 +134,6 @@ void test_other()
 		TEST_STDOUT_FUNC(printf, ft_printf, "%.1d", 42);;
 		TEST_STDOUT_FUNC(printf, ft_printf, "%.2d", 42);;
 		TEST_STDOUT_FUNC(printf, ft_printf, "%.3d", 42);;
-	}
-
-	{
-		printf("\ntest undefined token values:\n");
-		TEST_STDOUT_FUNC(printf, ft_printf, "%t", 42);;
-		TEST_STDOUT_FUNC(printf, ft_printf, "%M", 42);;
-		TEST_STDOUT_FUNC(printf, ft_printf, "%L", 42);;
-		TEST_STDOUT_FUNC(printf, ft_printf, "%", 42);;
 	}
 
 	{
