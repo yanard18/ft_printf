@@ -172,6 +172,8 @@ int validate_tokens(t_list *lst)
 {
 	if (!lst) 
 		return (0);
+	if(get_token_by_type(lst, 's') == NULL)
+		return (0);
 	return (1);
 }
 
