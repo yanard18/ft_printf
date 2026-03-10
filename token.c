@@ -1,41 +1,5 @@
 #include "ft_printf.h"
 
-static t_token g_flags[5] = {
-	(t_token){'f', "#", 10, convert_hash},
-	(t_token){'f', "-", 11, NULL},
-	(t_token){'f', " ", 12, convert_space},
-	(t_token){'f', "+", 13, convert_plus},
-	(t_token){'0', NULL, 0, NULL}
-};
-
-static t_token g_widths[2] = {
-	(t_token){'n', NULL, 20, convert_width},
-	(t_token){'0', NULL, 0, NULL}
-};
-
-static t_token g_precision[2] = {
-	(t_token){'p', ".", 5, apply_precision},
-	(t_token){'0', NULL, 0, NULL}
-};
-
-static t_token g_plength[2] = {
-	(t_token){'l', NULL, 6, NULL},
-	(t_token){'0', NULL, 0, NULL}
-};
-
-static t_token g_specifiers[10] = {
-	(t_token){'s', "c", 99, convert_d},
-	(t_token){'s', "s", 99, convert_s},
-	(t_token){'s', "p", 99, convert_d},
-	(t_token){'s', "d", 99, convert_d},
-	(t_token){'s', "i", 99, convert_d},
-	(t_token){'s', "u", 99, convert_u},
-	(t_token){'s', "x", 99, convert_x},
-	(t_token){'s', "X", 99, convert_bigx},
-	(t_token){'s', "%", 1, NULL},
-	(t_token){'0', NULL, 0, NULL}
-};
-
 static void	free_token(void *content)
 {
 	t_token	*token;
@@ -43,11 +7,14 @@ static void	free_token(void *content)
 	token = (t_token *)content;
 	if (!token)
 		return ;
-	if (token->type == 'n' || token->type == 'l')
-	{
-		if (token->value)
-			free(token->value);
-	}
+	if (token->type == 'w' || token->type == '.')
+		{
+			if (token->value)
+				{
+					free(token->value);
+					token->value = NULL;
+				}
+		}
 }
 
 t_token	*get_token_by_type(t_list *lst, const char type)
@@ -81,21 +48,24 @@ t_token *get_token_by_val(t_list *lst, const char *s)
 
 }
 
-int	has_token(const char c, t_token *tokens, t_token **out)
+static int	is_token(const char c, t_token *tokens, t_token **out)
 {
 	unsigned int	i;
 
 	i = 0;
+	*out = NULL;
 	while(tokens[i].type != '0')
 	{
-		if (tokens[i].value[0] == c)
-		{
-			*out = (tokens + i);
-			return (i);
-		}
+		if ((tokens[i].value != NULL && tokens[i].value[0] == c)
+			|| (tokens[i].type == '.' && c == '.')
+			|| (tokens[i].type == 'w' && ft_isdigit(c)))
+			{
+				*out = (tokens + i);
+				return (1);
+			}
 		i++;
 	}
-	return (-1);
+	return (0);
 }
 
 static void push_token(t_list **lst, t_token *token)
@@ -106,50 +76,51 @@ static void push_token(t_list **lst, t_token *token)
 		*lst = ft_lstnew(token);
 		return ;
 	}
-	if (ft_strncmp(token->value, "%", 1) == 0)
+	if (token->value && token->value[0] == '%')
 	{
 		ft_lstadd_back(lst, ft_lstnew(token));
 		return ;
 	}
-	if (get_token_by_val(*lst, token->value))
+	if (token->value && get_token_by_val(*lst, token->value))
 		return ;
 	else
 		ft_lstadd_back(lst, ft_lstnew(token));
 }
 
-static t_list	*tokenize(const char **format)
+static void int_to_token(const char **format, t_token *out_token)
+{
+	if (!out_token)
+		return ;
+	out_token->value = ft_itoa(ft_atoi(*format));
+	while (ft_isdigit(**format))
+		(*format)++;
+	(*format)--;
+}
+
+static t_list	*tokenize(const char **format, t_token *g_token_buf)
 {
 	t_list	*lst;
 	t_token	*out_token;
 
 	lst = NULL;
-	(*format)++;
-	while (**format && has_token(**format, g_flags, &out_token) != -1)
-	{	
-		push_token(&lst, out_token);
-		(*format)++;
-	}
-	if (ft_isdigit(**format))
-	{
-		g_widths[0].value = ft_itoa(ft_atoi(*format));
-		push_token(&lst, &g_widths[0]);
-	}
-	while (ft_isdigit(**format))
-	(*format)++;
-	if (has_token(**format, g_precision, &out_token) != -1)
-	{
-		ft_lstadd_back(&lst, ft_lstnew(&g_precision[0]));
-		(*format)++;
-		g_plength[0].value = ft_itoa(ft_atoi(*format));
-		push_token(&lst, &g_plength[0]);
-		while (ft_isdigit(**format))
-		(*format)++;
-	}
-	if (has_token(**format, g_specifiers, &out_token) != -1)
-	{
-		push_token(&lst, out_token);
-		(*format)++;
-	}
+	while (*++(*format))
+		{
+			is_token(**format, g_token_buf, &out_token);
+			if (out_token)
+				{
+					push_token(&lst, out_token);
+					if (out_token->type == '.')
+						(*format)++;
+					if (out_token->type == '.' || out_token->type == 'w')
+							int_to_token(format, out_token);
+					else if (out_token->type == 's')
+						{
+							(*format)++;
+							break ;
+						}
+				}
+			out_token = NULL;
+		}
 	return (lst);
 }
 
@@ -200,47 +171,39 @@ void	sort_tokens(t_list **tokens)
 int validate_tokens(t_list *lst)
 {
 	if (!lst) 
-	return (0);
+		return (0);
 	return (1);
 }
 
 char *eval_next_token(t_list **lst, t_list *start_lst, char *s)
 {
-	t_token *token;
+	t_token *token = (t_token *)((*lst)->content);
 
-	token = (t_token *)((*lst)->content);
 	if (token && token->type != 's' && token->f)
-	s = token->f(s, start_lst);
+		s = token->f(s, start_lst);
 	*lst = (*lst)->next;
 	return (s);
 }
 
-
-ssize_t	read_token(const char **format, va_list args)
+char *read_token(const char **format, va_list args, t_token *g_token_buf)
 {
 	t_list	*lst;
 	t_list	*start_lst;
-	int valid;
+	int 	valid;
 	char	*s;
-	size_t	len;		
 
-	lst = tokenize(format);
-	//debug_tokenlst(lst);
+	lst = tokenize(format, g_token_buf);
 	start_lst = lst;
 	valid = validate_tokens(lst);
 	if (!valid)
 	{
 		ft_lstclear(&lst, free_token);
-		return (-1);
+		return (NULL);
 	}
 	s = apply_specifier(lst, args);
 	sort_tokens(&lst);
 	while (lst)
-	s = eval_next_token(&lst, start_lst, s);
-	len = ft_strlen(s);
-	ft_putstr_fd(s, 1);
-	free(s);
+		s = eval_next_token(&lst, start_lst, s);
 	ft_lstclear(&start_lst, free_token);
-	return (len);
+	return (s);
 }
-

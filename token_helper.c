@@ -1,20 +1,26 @@
 #include "ft_printf.h"
 
+
 char	*convert_width(void *str, t_list *lst)
 {
 	char	*space;
-	size_t		val;
+	size_t	val;
 	char	*temp_s;
-	char *s;
+	char 	*s;
+	char	c;
 
+	if (get_token_by_val(lst, "0") && get_token_by_val(lst, "0")->type == 'f')
+		c = '0';
+	else
+		c = ' ';
 	s = (char *)str;
 	temp_s = s;
-	val = ft_atoi(get_token_by_type(lst, 'n')->value);
+	val = ft_atoi(get_token_by_type(lst, 'w')->value);
 	if (val <= ft_strlen(s))
 		return (s);
 	val -= ft_strlen(s);
 	space = (char *)malloc(sizeof(char) * val + 1);
-	ft_memset(space, 32, val);
+	ft_memset(space, c, val);
 	space[val] = 0;
 	if (get_token_by_val(lst, "-"))
 		s = ft_strjoin(s, space);
@@ -23,6 +29,22 @@ char	*convert_width(void *str, t_list *lst)
 	free(space);
 	free(temp_s);
 	return (s);
+}
+
+static char *add_hex_prefix(void *content, int capitalize)
+{
+	char    *s;
+	char    *ret;
+
+	s = (char *)content;
+	if (*s == '0' && *(s + 1) == '\0') 
+		return (s);
+	if (capitalize == 0)
+		ret = ft_strjoin("0x", s);
+	else
+		ret = ft_strjoin("0X", s);
+	free(s);
+	return (ret);
 }
 
 char	*convert_d(void *content, t_list *tokens)
@@ -76,17 +98,19 @@ char	*convert_s(void *content, t_list *tokens)
 	(void)tokens;
 	char **str = content;
 
+	if (*str == 0)
+		return (ft_strdup("(null)"));
 	return (ft_strdup(*str));
 }
 
-static char *convert_hex(unsigned int n, char *base)
+static char *convert_hex(unsigned long n, char *base)
 {
-    unsigned int    temp;
+    unsigned long    temp;
     int             len;
     char            *str;
 
     temp = n;
-    len = (n == 0) ? 1 : 0;
+    len = n == 0;
     while (temp != 0)
     {
         temp /= 16;
@@ -109,13 +133,25 @@ static char *convert_hex(unsigned int n, char *base)
 char    *convert_x(void *content, t_list *tokens)
 {
     (void)tokens;
-    return (convert_hex(*(unsigned int *)content, "0123456789abcdef"));
+    return (convert_hex(*(long *)content, "0123456789abcdef"));
 }
 
 char    *convert_bigx(void *content, t_list *tokens)
 {
     (void)tokens;
-    return (convert_hex(*(unsigned int *)content, "0123456789ABCDEF"));
+    return (convert_hex(*(long *)content, "0123456789ABCDEF"));
+}
+
+char *convert_p(void *content, t_list *tokens)
+{
+	char *ret;
+	void **addr = content;
+
+	if (*addr == 0)
+		return (ft_strdup("(nil)"));
+	ret = convert_x((long *)addr, tokens);
+	ret = add_hex_prefix(ret, 0);
+	return (ret);
 }
 
 char	*hex_small(void *content, t_list *tokens)
@@ -194,23 +230,17 @@ char    *convert_space(void *content, t_list *tokens)
 
 char	*convert_hash(void *content, t_list *tokens)
 {
-	char    *s;
-	char    *ret;
 	t_token *token;
 
 	token = get_token_by_type(tokens->next, 's');
-	if (token && (token->value[0] == 'x' || token->value[0] == 'X'))
-	{
-		s = (char *)content;
-		if (*s == '0' && *(s + 1) == '\0') 
-			return (s);
-		if (token->value[0] == 'x')
-			ret = ft_strjoin("0x", s);
-		else
-			ret = ft_strjoin("0X", s);
-		free(s);
-		return (ret);
-	}
+	if (token && token->value[0] == 'x')
+		{
+			return (add_hex_prefix(content, 0));
+		}
+	if (token && token->value[0] == 'X')
+		{
+			return (add_hex_prefix(content, 1));
+		}
 	return ((char *)content);
 }
 
@@ -222,7 +252,7 @@ char	*apply_precision(void *content, t_list *tokens)
 	size_t	prec_len;
 
 	specifier_token = get_token_by_type(tokens->next, 's');
-	prec_len = ft_atoi(get_token_by_type(tokens, 'l')->value);
+	prec_len = ft_atoi(get_token_by_type(tokens, '.')->value);
 	if (prec_len <= ft_strlen((char *)content))
 		return ((char *)content);
 	prec_len -= ft_strlen((char *)content);
