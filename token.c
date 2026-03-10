@@ -204,6 +204,7 @@ char *read_token(const char **format, va_list args, t_token *g_token_buf)
 	{
 		ft_lstclear(&lst, free_token);
 		*format = rewind_str_addr + 1;
+		g_token_buf[16].type = DOWNGRADE;
 		if (**format == '\0')
 			return (NULL);
 		return (ft_strdup("%"));
