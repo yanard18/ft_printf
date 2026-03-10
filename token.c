@@ -136,7 +136,7 @@ char	*apply_specifier(t_list *lst, va_list args)
 	return (token->f(&(void *){va_arg(args, void *)}, lst));
 }
 
-void	sort_tokens(t_list **tokens)
+static void	sort_tokens(t_list **tokens)
 {
 	t_token	*cur_token;
 	t_token	*next_token;
@@ -168,7 +168,6 @@ void	sort_tokens(t_list **tokens)
 	}
 	*tokens = lst_start;
 }
-
 
 int validate_tokens(t_list *lst)
 {
