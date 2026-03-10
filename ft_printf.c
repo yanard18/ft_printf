@@ -51,15 +51,21 @@ static char *strjoin_safe(char *s1, char *s2)
 	return (res);
 }
 
-static int flush(char *res, va_list args)
+static int flush(char *res, va_list args, int should_fail)
 {
 	int	len;
 
 	va_end(args);
-	len = ft_strlen(res);
-	ft_putstr_fd(res, 1);
-	free(res);
-	return (len);
+	if (should_fail == 1)
+		return (-1);
+	else if (res)
+	{
+		ft_putstr_fd(res, 1);
+		len = ft_strlen(res);
+		free(res);
+		return (len);
+	}
+	return (0);
 }
 
 int	ft_printf(const char *format, ...)
@@ -81,11 +87,10 @@ int	ft_printf(const char *format, ...)
 					res = strjoin_safe(res, read_token(&format, args, token_buf));
 					free(token_buf);
 					if (!res)
-						return (-1);
+						return (flush(res, args, 1));
 					continue ;
 				}
 			res = strjoin_safe(res, move_str_to_chr(&format, '%'));
 		}
-	
-	return (flush(res, args));
+	return (flush(res, args, 0));
 } 
