@@ -145,6 +145,7 @@ void test_other()
 	{
 		printf("\ntest undefined token values:\n");
 		TEST_STDOUT_FUNC(printf, ft_printf, "%t", 42);;
+		TEST_STDOUT_FUNC(printf, ft_printf, "%M", 42);;
 		TEST_STDOUT_FUNC(printf, ft_printf, "%L", 42);;
 		TEST_STDOUT_FUNC(printf, ft_printf, "%", 42);;
 	}
