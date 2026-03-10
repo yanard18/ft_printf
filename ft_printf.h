@@ -6,7 +6,7 @@
 	/*   By: dyanar <dyanar@student.42istanbul.com.tr>  +#+  +:+       +#+        */
 	/*                                                +#+#+#+#+#+   +#+           */
 	/*   Created: 2026/02/12 04:45:32 by dyanar            #+#    #+#             */
-/*   Updated: 2026/02/18 05:31:10 by dyanar           ###   ########.fr       */
+/*   Updated: 2026/03/10 21:21:41 by dyanar           ###   ########.fr       */
 	/*                                                                            */
 	/* ************************************************************************** */
 
@@ -15,6 +15,15 @@
 
 #include <stdarg.h>
 #include "libft/libft.h"
+
+typedef enum	e_token_type
+{
+	FLAG = 'f',
+	WIDTH = 'w',
+	PRECISION = '.',
+	SPECIFIER = 's',
+	END = '0'
+}				t_token_type;
 
 typedef	struct	s_token {
 	char	type;

@@ -7,7 +7,7 @@ static void	free_token(void *content)
 	token = (t_token *)content;
 	if (!token)
 		return ;
-	if (token->type == 'w' || token->type == '.')
+	if (token->type == WIDTH || token->type == PRECISION)
 		{
 			if (token->value)
 				{
@@ -57,8 +57,8 @@ static int	is_token(const char c, t_token *tokens, t_token **out)
 	while(tokens[i].type != '0')
 	{
 		if ((tokens[i].value != NULL && tokens[i].value[0] == c)
-			|| (tokens[i].type == '.' && c == '.')
-			|| (tokens[i].type == 'w' && ft_isdigit(c)))
+			|| (tokens[i].type == PRECISION && c == '.')
+			|| (tokens[i].type == WIDTH && ft_isdigit(c)))
 			{
 				*out = (tokens + i);
 				return (1);
@@ -109,11 +109,11 @@ static t_list	*tokenize(const char **format, t_token *g_token_buf)
 			if (out_token)
 				{
 					push_token(&lst, out_token);
-					if (out_token->type == '.')
+					if (out_token->type == PRECISION)
 						(*format)++;
-					if (out_token->type == '.' || out_token->type == 'w')
+					if (out_token->type == PRECISION || out_token->type == WIDTH)
 							int_to_token(format, out_token);
-					else if (out_token->type == 's')
+					else if (out_token->type == SPECIFIER)
 						{
 							(*format)++;
 							break ;
@@ -174,7 +174,7 @@ int validate_tokens(t_list *lst)
 {
 	if (!lst) 
 		return (0);
-	if(get_token_by_type(lst, 's') == NULL)
+	if(get_token_by_type(lst, SPECIFIER) == NULL)
 		return (0);
 	return (1);
 }
@@ -183,7 +183,7 @@ char *eval_next_token(t_list **lst, t_list *start_lst, char *s)
 {
 	t_token *token = (t_token *)((*lst)->content);
 
-	if (token && token->type != 's' && token->f)
+	if (token && token->type != SPECIFIER && token->f)
 		s = token->f(s, start_lst);
 	*lst = (*lst)->next;
 	return (s);
