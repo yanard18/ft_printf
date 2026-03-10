@@ -8,8 +8,15 @@ void test_other()
 	TEST_STDOUT_FUNC(printf, ft_printf, 0);
 	TEST_STDOUT_FUNC(printf, ft_printf, "%");
 	TEST_STDOUT_FUNC(printf, ft_printf, "ABC %");
+	TEST_STDOUT_FUNC(printf, ft_printf, "ABC %", 42);
+	TEST_STDOUT_FUNC(printf, ft_printf, "ABC %d%", 42);
 	TEST_STDOUT_FUNC(printf, ft_printf, "ABC % MORE");
+	TEST_STDOUT_FUNC(printf, ft_printf, "ABC % MORE%");
 	TEST_STDOUT_FUNC(printf, ft_printf, "ABC %MORE%");
+	TEST_STDOUT_FUNC(printf, ft_printf, "ABC %MORE %");
+	TEST_STDOUT_FUNC(printf, ft_printf, "ABC %MORE%%");
+	TEST_STDOUT_FUNC(printf, ft_printf, "ABC %MORE%d", 42);
+	TEST_STDOUT_FUNC(printf, ft_printf, "ABC %MORE%d%", 42);
 	TEST_STDOUT_FUNC(printf, ft_printf, "ABC %", 1);
 	TEST_STDOUT_FUNC(printf, ft_printf, "%%%%%");
 	TEST_STDOUT_FUNC(printf, ft_printf, "%%%");

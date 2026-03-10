@@ -119,7 +119,9 @@ static t_list	*tokenize(const char **format, t_token *g_token_buf)
 							break ;
 						}
 				}
-			out_token = NULL;
+			else
+				return (lst);
+			//out_token = NULL;
 		}
 	return (lst);
 }
