@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dyanar <dyanar@student.42istanbul.com.tr>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/11 20:23:56 by dyanar            #+#    #+#             */
+/*   Updated: 2026/03/11 20:27:48 by dyanar           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-static t_token *init_token_buf()
+static	t_token	*init_token_buf(void)
 {
-	t_token *buf;
+	t_token	*buf;
 
 	buf = (t_token *)malloc(sizeof(t_token) * 18);
 	buf[0] = (t_token){'f', "#", 10, convert_hash};
@@ -26,10 +38,10 @@ static t_token *init_token_buf()
 	return (buf);
 }
 
-static int flush(char *res, va_list args, t_token *token_buf)
+static	int	flush(char *res, va_list args, t_token *token_buf)
 {
 	int	len;
-	int downgraded;
+	int	downgraded;
 
 	downgraded = token_buf[16].type == DOWNGRADE;
 	free(token_buf);
@@ -49,14 +61,14 @@ static int flush(char *res, va_list args, t_token *token_buf)
 int	ft_printf(const char *format, ...)
 {
 	va_list	args;
-	t_token *token_buf;
-	char *res;
+	t_token	*token_buf;
+	char	*res;
 
 	if (!format)
 		return (-1);
 	res = ft_strdup("");
 	token_buf = init_token_buf();
-    va_start(args, format);
+	va_start(args, format);
 	while (*format)
 	{
 		if (*format == '%')
@@ -65,4 +77,4 @@ int	ft_printf(const char *format, ...)
 			res = strjoin_safe(res, move_str_to_chr(&format, '%'));
 	}
 	return (flush(res, args, token_buf));
-} 
+}
