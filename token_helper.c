@@ -6,7 +6,7 @@
 /*   By: dyanar <dyanar@student.42istanbul.com.tr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:59:08 by dyanar            #+#    #+#             */
-/*   Updated: 2026/03/11 20:29:23 by dyanar           ###   ########.fr       */
+/*   Updated: 2026/03/11 20:41:38 by dyanar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ char	*convert_width(void *str, t_list *lst)
 {
 	char	*space;
 	size_t	val;
-	char	*temp_s;
-	char 	*s;
 	char	c;
 
 	c = ' ';
@@ -25,22 +23,18 @@ char	*convert_width(void *str, t_list *lst)
 		c = ' ';
 	else if (get_token_by_val(lst, "0") && get_token_by_val(lst, "0")->type == FLAG)
 		c = '0';
-	s = (char *)str;
-	temp_s = s;
 	val = ft_atoi(get_token_by_type(lst, 'w')->value);
-	if (val <= ft_strlen(s))
-		return (s);
-	val -= ft_strlen(s);
+	if (val <= ft_strlen((char *)str))
+		return ((char *)str);
+	val -= ft_strlen((char *)str);
 	space = (char *)malloc(sizeof(char) * val + 1);
 	ft_memset(space, c, val);
 	space[val] = 0;
 	if (get_token_by_val(lst, "-"))
-		s = ft_strjoin(s, space);
+		str = (char *)strjoin_safe((char *)str, space);
 	else
-		s = ft_strjoin(space, s);
-	free(space);
-	free(temp_s);
-	return (s);
+		str = (char *)strjoin_safe(space, (char *)str);
+	return ((char *)str);
 }
 
 static char *add_hex_prefix(void *content, int capitalize)
