@@ -60,4 +60,6 @@ char	*convert_hash(void *content, t_list *tokens);
 char	*convert_space(void *content, t_list *tokens);
 char	*apply_precision(void *content, t_list *tokens);
 
+char	*add_hex_prefix(void *content, int capitalize);
+
 #endif
