@@ -6,7 +6,7 @@
 	/*   By: dyanar <dyanar@student.42istanbul.com.tr>  +#+  +:+       +#+        */
 	/*                                                +#+#+#+#+#+   +#+           */
 	/*   Created: 2026/02/12 04:45:32 by dyanar            #+#    #+#             */
-/*   Updated: 2026/03/11 18:28:01 by dyanar           ###   ########.fr       */
+/*   Updated: 2026/03/11 19:02:00 by dyanar           ###   ########.fr       */
 	/*                                                                            */
 	/* ************************************************************************** */
 
@@ -41,6 +41,11 @@ char		*read_token(const char **format, va_list args, t_token *g_token_buf);
 t_token		*get_token_by_type(t_list* lst, const char type);
 t_token		*get_token_by_val(t_list *lst, const char *s);
 
+t_token *get_token_by_type(t_list *lst, const char type);
+t_token *get_token_by_val(t_list *lst, const char *s);
+int		is_token(const char c, t_token *tokens, t_token **out);
+void    push_token(t_list **lst, t_token *token);
+void    int_to_token(const char **format, t_token *out_token);
 
 char	*convert_width(void *str, t_list *lst);
 char	*convert_d(void *content, t_list *tokens);
