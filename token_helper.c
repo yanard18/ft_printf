@@ -6,7 +6,7 @@
 /*   By: dyanar <dyanar@student.42istanbul.com.tr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:59:08 by dyanar            #+#    #+#             */
-/*   Updated: 2026/03/11 20:48:32 by dyanar           ###   ########.fr       */
+/*   Updated: 2026/03/11 22:20:43 by dyanar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ char	*convert_width(void *str, t_list *lst)
 	return ((char *)str);
 }
 
-static char *add_hex_prefix(void *content, int capitalize)
+static char	*add_hex_prefix(void *content, int capitalize)
 {
-	char    *s;
-	char    *ret;
+	char	*s;
+	char	*ret;
 
 	s = (char *)content;
-	if (*s == '0' && *(s + 1) == '\0') 
+	if (*s == '0' && *(s + 1) == '\0')
 		return (s);
 	if (capitalize == 0)
 		ret = ft_strjoin("0x", s);
@@ -62,97 +62,94 @@ char	*convert_d(void *content, t_list *tokens)
 	return (ft_itoa(*np));
 }
 
-char    *convert_u(void *content, t_list *tokens)
+char	*convert_u(void *content, t_list *tokens)
 {
-    unsigned int    n;      // Changed to unsigned int
-    unsigned int    temp;
-    int             len;
-    char            *str;
-    char            *base = "0123456789"; // Base 10
+	unsigned int	n;
+	unsigned int	temp;
+	int				len;
+	char			*str;
+	char			*base;
 
-    (void)tokens;
-    // Cast the void pointer to an unsigned int pointer
-    n = *(unsigned int *)content; 
-    
-    temp = n;
-    len = (n == 0) ? 1 : 0;
-    while (temp != 0)
-    {
-        temp /= 10;
-        len++;
-    }
-    
-    str = (char *)malloc(sizeof(char) * (len + 1));
-    if (!str)
-        return (NULL);
-    
-    str[len] = '\0';
-    if (n == 0)
-        str[0] = '0';
-        
-    while (n != 0)
-    {
-        str[--len] = base[n % 10];
-        n /= 10;
-    }
-    
-    return (str);
+	base = "0123456789";
+	(void)tokens;
+	n = *(unsigned int *)content;
+	temp = n;
+	len = n == 0;
+	while (temp != 0)
+	{
+		temp /= 10;
+		len++;
+	}
+	str = (char *)malloc(sizeof(char) * (len + 1));
+	if (!str)
+		return (NULL);
+	str[len] = '\0';
+	if (n == 0)
+		str[0] = '0';
+	while (n != 0)
+	{
+		str[--len] = base[n % 10];
+		n /= 10;
+	}
+	return (str);
 }
 
 char	*convert_s(void *content, t_list *tokens)
 {
-	(void)tokens;
-	char **str = content;
+	char	**str;
 
+	(void)tokens;
+	str = content;
 	if (*str == 0)
 		return (ft_strdup("(null)"));
 	return (ft_strdup(*str));
 }
 
-static char *convert_hex(unsigned long n, char *base)
+static char	*convert_hex(unsigned long n, char *base)
 {
-    unsigned long    temp;
-    int             len;
-    char            *str;
+	unsigned long	temp;
+	int				len;
+	char			*str;
 
-    temp = n;
-    len = n == 0;
-    while (temp != 0)
-    {
-        temp /= 16;
-        len++;
-    }
-    str = (char *)malloc(sizeof(char) * (len + 1));
-    if (!str)
-        return (NULL);
-    str[len] = '\0';
-    if (n == 0)
-        str[0] = '0';
-    while (n != 0)
-    {
-        str[--len] = base[n % 16];
-        n /= 16;
-    }
-    return (str);
+	temp = n;
+	len = n == 0;
+	while (temp != 0)
+	{
+		temp /= 16;
+		len++;
+	}
+	str = (char *)malloc(sizeof(char) * (len + 1));
+	if (!str)
+		return (NULL);
+	str[len] = '\0';
+	if (n == 0)
+		str[0] = '0';
+	while (n != 0)
+	{
+		str[--len] = base[n % 16];
+		n /= 16;
+	}
+	return (str);
 }
 
-char    *convert_x(void *content, t_list *tokens)
+char	*convert_x(void *content, t_list *tokens)
 {
-    (void)tokens;
-    return (convert_hex(*(long *)content, "0123456789abcdef"));
+	(void)tokens;
+	return (convert_hex(*(long *)content, "0123456789abcdef"));
 }
 
-char    *convert_bigx(void *content, t_list *tokens)
+char	*convert_bigx(void *content, t_list *tokens)
 {
-    (void)tokens;
-    return (convert_hex(*(long *)content, "0123456789ABCDEF"));
+	(void)tokens;
+	return (convert_hex(*(long *)content, "0123456789ABCDEF"));
 }
 
-char *convert_p(void *content, t_list *tokens)
+char	*convert_p(void *content, t_list *tokens)
 {
-	char *ret;
-	void **addr = content;
+	char	*ret;
+	void	**addr;
 
+	addr = content;
 	if (*addr == 0)
 		return (ft_strdup("(nil)"));
 	ret = convert_x((long *)addr, tokens);
@@ -162,15 +159,16 @@ char *convert_p(void *content, t_list *tokens)
 
 char	*hex_small(void *content, t_list *tokens)
 {
-	long	n;      // Using long to safely handle INT_MIN
+	long	n;
 	long	temp;
 	int		len;
 	int		is_neg;
 	char	*str;
-	char	*base = "0123456789abcdef";
+	char	*base;
 
 	(void)tokens;
-	n = *(int *)content; 
+	base = "0123456789abcdef";
+	n = *(int *)content;
 	is_neg = 0;
 	if (n < 0)
 	{
@@ -178,7 +176,7 @@ char	*hex_small(void *content, t_list *tokens)
 		n = -n;
 	}
 	temp = n;
-	len = (n == 0) ? 1 : 0;
+	len = n == 0;
 	while (temp != 0)
 	{
 		temp /= 16;
@@ -217,9 +215,9 @@ char	*convert_plus(void *content, t_list *tokens)
 	return (ret);
 }
 
-char    *convert_space(void *content, t_list *tokens)
+char	*convert_space(void *content, t_list *tokens)
 {
-	char *s;
+	char	*s;
 
 	if (((char *)content)[0] == '-')
 	{
@@ -236,23 +234,23 @@ char    *convert_space(void *content, t_list *tokens)
 
 char	*convert_hash(void *content, t_list *tokens)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = get_token_by_type(tokens->next, 's');
 	if (token && token->value[0] == 'x')
-		{
-			return (add_hex_prefix(content, 0));
-		}
+	{
+		return (add_hex_prefix(content, 0));
+	}
 	if (token && token->value[0] == 'X')
-		{
-			return (add_hex_prefix(content, 1));
-		}
+	{
+		return (add_hex_prefix(content, 1));
+	}
 	return ((char *)content);
 }
 
 char	*apply_precision(void *content, t_list *tokens)
 {
-	t_token *specifier_token;
+	t_token	*specifier_token;
 	char	*ret;
 	char	*zero_str;
 	size_t	prec_len;
@@ -274,4 +272,3 @@ char	*apply_precision(void *content, t_list *tokens)
 	}
 	return ((char *)content);
 }
-
