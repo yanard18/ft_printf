@@ -62,6 +62,18 @@ char	*convert_d(void *content, t_list *tokens)
 	return (ft_itoa(*np));
 }
 
+
+char	*convert_s(void *content, t_list *tokens)
+{
+	char	**str;
+
+	(void)tokens;
+	str = content;
+	if (*str == 0)
+		return (ft_strdup("(null)"));
+	return (ft_strdup(*str));
+}
+
 char	*convert_u(void *content, t_list *tokens)
 {
 	unsigned int	n;
@@ -92,17 +104,6 @@ char	*convert_u(void *content, t_list *tokens)
 		n /= 10;
 	}
 	return (str);
-}
-
-char	*convert_s(void *content, t_list *tokens)
-{
-	char	**str;
-
-	(void)tokens;
-	str = content;
-	if (*str == 0)
-		return (ft_strdup("(null)"));
-	return (ft_strdup(*str));
 }
 
 static char	*convert_hex(unsigned long n, char *base)
@@ -157,47 +158,6 @@ char	*convert_p(void *content, t_list *tokens)
 	return (ret);
 }
 
-char	*hex_small(void *content, t_list *tokens)
-{
-	long	n;
-	long	temp;
-	int		len;
-	int		is_neg;
-	char	*str;
-	char	*base;
-
-	(void)tokens;
-	base = "0123456789abcdef";
-	n = *(int *)content;
-	is_neg = 0;
-	if (n < 0)
-	{
-		is_neg = 1;
-		n = -n;
-	}
-	temp = n;
-	len = n == 0;
-	while (temp != 0)
-	{
-		temp /= 16;
-		len++;
-	}
-	len += is_neg;
-	str = (char *)malloc(sizeof(char) * (len + 1));
-	if (!str)
-		return (NULL);
-	str[len] = '\0';
-	if (n == 0)
-		str[0] = '0';
-	while (n != 0)
-	{
-		str[--len] = base[n % 16];
-		n /= 16;
-	}
-	if (is_neg)
-		str[0] = '-';
-	return (str);
-}
 
 char	*convert_plus(void *content, t_list *tokens)
 {
