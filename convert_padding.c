@@ -1,32 +1,45 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   convert_padding.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dyanar <dyanar@student.42istanbul.com.tr>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/12 02:02:59 by dyanar            #+#    #+#             */
+/*   Updated: 2026/03/12 02:03:00 by dyanar           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-char    *convert_width(void *str, t_list *lst)
+char	*convert_width(void *str, t_list *lst)
 {
-    char    *space;
-    size_t    val;
-    char    c;
+	char	*space;
+	size_t	val;
+	char	c;
 
-    c = ' ';
-    if (get_token_by_val(lst, "-") && get_token_by_val(lst, "-")->type == FLAG)
-        c = ' ';
-    else if (get_token_by_val(lst, "0") && get_token_by_val(lst, "0")->type == FLAG)
-        c = '0';
-    val = ft_atoi(get_token_by_type(lst, 'w')->value);
-    if (val <= ft_strlen((char *)str))
-        return ((char *)str);
-    val -= ft_strlen((char *)str);
-    space = (char *)malloc(sizeof(char) * val + 1);
-    ft_memset(space, c, val);
-    space[val] = 0;
-    if (get_token_by_val(lst, "-"))
-        str = (char *)strjoin_safe((char *)str, space);
-    else
-        str = (char *)strjoin_safe(space, (char *)str);
-    return ((char *)str);
-} 
+	c = ' ';
+	if (get_token_by_val(lst, "-")
+		&& get_token_by_val(lst, "-")->type == FLAG)
+		c = ' ';
+	else if (get_token_by_val(lst, "0")
+		&& get_token_by_val(lst, "0")->type == FLAG)
+		c = '0';
+	val = ft_atoi(get_token_by_type(lst, 'w')->value);
+	if (val <= ft_strlen((char *)str))
+		return ((char *)str);
+	val -= ft_strlen((char *)str);
+	space = (char *)malloc(sizeof(char) * val + 1);
+	ft_memset(space, c, val);
+	space[val] = 0;
+	if (get_token_by_val(lst, "-"))
+		str = (char *)strjoin_safe((char *)str, space);
+	else
+		str = (char *)strjoin_safe(space, (char *)str);
+	return ((char *)str);
+}
 
 char	*apply_precision(void *content, t_list *tokens)
-
 {
 	t_token	*spec;
 	char	*ret;

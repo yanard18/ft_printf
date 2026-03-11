@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokensort.c                                        :+:      :+:    :+:   */
+/*   token_sort.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dyanar <dyanar@student.42istanbul.com.tr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/11 20:13:22 by dyanar            #+#    #+#             */
-/*   Updated: 2026/03/11 20:13:48 by dyanar           ###   ########.fr       */
+/*   Created: 2026/03/12 01:51:40 by dyanar            #+#    #+#             */
+/*   Updated: 2026/03/12 01:52:55 by dyanar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,27 @@
 
 void	sort_tokens(t_list **tokens)
 {
-	t_token	*cur_token;
-	t_token	*next_token;
-	t_token	*temp_token;
-	t_list	*lst_start;
 	int		changed;
+	t_list	*curr;
+	t_token	*t1;
+	t_token	*t2;
 
-	changed = 0;
-	lst_start = *tokens;
-	while (1)
+	changed = 1;
+	while (changed && tokens && *tokens)
 	{
-		while ((*tokens)->next)
+		changed = 0;
+		curr = *tokens;
+		while (curr->next)
 		{
-			cur_token = (t_token *)(*tokens)->content;
-			next_token = (t_token *)((t_list *)((*tokens)->next)->content);
-			if (cur_token->priority > next_token->priority)
+			t1 = curr->content;
+			t2 = curr->next->content;
+			if (t1->priority > t2->priority)
 			{
-				temp_token = cur_token;
-				(*tokens)->content = next_token;
-				(*tokens)->next->content = temp_token;
+				curr->content = t2;
+				curr->next->content = t1;
 				changed = 1;
 			}
-			*tokens = (*tokens)->next;
+			curr = curr->next;
 		}
-		*tokens = lst_start;
-		if (changed == 0)
-			break ;
-		changed = 0;
 	}
-	*tokens = lst_start;
 }
-

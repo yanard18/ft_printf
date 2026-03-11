@@ -21,7 +21,6 @@ char	*convert_d(void *content, t_list *tokens)
 	return (ft_itoa(*np));
 }
 
-
 char	*convert_s(void *content, t_list *tokens)
 {
 	char	**str;
