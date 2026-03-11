@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dyanar <dyanar@student.42istanbul.com.tr>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/11 20:09:27 by dyanar            #+#    #+#             */
+/*   Updated: 2026/03/11 20:19:59 by dyanar           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
 static void	free_token(void *content)
@@ -8,16 +20,14 @@ static void	free_token(void *content)
 	if (!token)
 		return ;
 	if (token->type == WIDTH || token->type == PRECISION)
+	{
+		if (token->value)
 		{
-			if (token->value)
-				{
-					free(token->value);
-					token->value = NULL;
-				}
+			free(token->value);
+			token->value = NULL;
 		}
+	}
 }
-
-
 
 static t_list	*tokenize(const char **format, t_token *g_token_buf)
 {
@@ -26,31 +36,30 @@ static t_list	*tokenize(const char **format, t_token *g_token_buf)
 
 	lst = NULL;
 	while (*++(*format))
+	{
+		is_token(**format, g_token_buf, &out_token);
+		if (out_token)
 		{
-			is_token(**format, g_token_buf, &out_token);
-			if (out_token)
-				{
-					push_token(&lst, out_token);
-					if (out_token->type == PRECISION)
-						(*format)++;
-					if (out_token->type == PRECISION || out_token->type == WIDTH)
-							int_to_token(format, out_token);
-					else if (out_token->type == SPECIFIER)
-						{
-							(*format)++;
-							break ;
-						}
-				}
-			else
-				return (lst);
-			//out_token = NULL;
+			push_token(&lst, out_token);
+			if (out_token->type == PRECISION)
+				(*format)++;
+			if (out_token->type == PRECISION || out_token->type == WIDTH)
+				int_to_token(format, out_token);
+			else if (out_token->type == SPECIFIER)
+			{
+				(*format)++;
+				break ;
+			}
 		}
+		else
+			return (lst);
+	}
 	return (lst);
 }
 
-char	*apply_specifier(t_list *lst, va_list args)
+static char	*apply_specifier(t_list *lst, va_list args)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = (t_token *)ft_lstlast(lst)->content;
 	if (token->value[0] == '%')
@@ -58,64 +67,23 @@ char	*apply_specifier(t_list *lst, va_list args)
 	return (token->f(&(void *){va_arg(args, void *)}, lst));
 }
 
-static void	sort_tokens(t_list **tokens)
+char	*eval_next_token(t_list **lst, t_list *start_lst, char *s)
 {
-	t_token	*cur_token;
-	t_token	*next_token;
-	t_token *temp_token;
-	t_list	*lst_start;
-	int changed;
+	t_token	*token;
 
-	changed = 0;
-	lst_start = *tokens;
-	while (1)
-	{
-		while ((*tokens)->next)
-		{
-			cur_token = (t_token *)(*tokens)->content;
-			next_token = (t_token *)((t_list *)((*tokens)->next)->content);
-			if (cur_token->priority > next_token->priority)
-			{
-				temp_token = cur_token;
-				(*tokens)->content = next_token;
-				(*tokens)->next->content = temp_token;
-				changed = 1;
-			}
-			*tokens = (*tokens)->next;
-		}
-		*tokens = lst_start;
-		if (changed == 0)
-		break ;
-		changed = 0;
-	}
-	*tokens = lst_start;
-}
-
-int validate_tokens(t_list *lst)
-{
-	if (!lst) 
-		return (0);
-	if(get_token_by_type(lst, SPECIFIER) == NULL)
-		return (0);
-	return (1);
-}
-
-char *eval_next_token(t_list **lst, t_list *start_lst, char *s)
-{
-	t_token *token = (t_token *)((*lst)->content);
-
+	token = (t_token *)((*lst)->content);
 	if (token && token->type != SPECIFIER && token->f)
 		s = token->f(s, start_lst);
 	*lst = (*lst)->next;
 	return (s);
 }
 
-char *read_token(const char **format, va_list args, t_token *g_token_buf)
+char	*read_token(const char **format, va_list args, t_token *g_token_buf)
 {
-	t_list	*lst;
-	t_list	*start_lst;
-	int 	valid;
-	char	*s;
+	t_list		*lst;
+	t_list		*start_lst;
+	int			valid;
+	char		*s;
 	const char	*rewind_str_addr;
 
 	rewind_str_addr = *format;
