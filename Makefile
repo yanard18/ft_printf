@@ -3,7 +3,7 @@ CFLAGS		= -Wextra -Wall -Werror
 NAME		= libftprintf.a
 FILES		= 	ft_printf \
 				token token_helper token_utils token_validate token_sort \
-				str_utils convert_base convert_padding
+				str_utils convert_base convert_padding convert_flags
 MAKE		= make
 LIBFT		= libft/libft.a
 LIBFT_DIR	= libft/

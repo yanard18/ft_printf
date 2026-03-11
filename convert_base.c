@@ -57,15 +57,17 @@ char	*convert_bigx(void *content, t_list *tokens)
 	return (convert_base_generic(*(unsigned int *)content, "0123456789ABCDEF", 16));
 }
 
-char	*convert_p(void *content, t_list *tokens)
+char    *convert_p(void *content, t_list *tokens)
 {
-	char	*ret;
-	void	**addr;
+    char    *ret;
+    void    **addr;
 
-	addr = content;
-	if (*addr == 0)
-		return (ft_strdup("(nil)"));
-	ret = convert_x((long *)addr, tokens);
-	ret = add_hex_prefix(ret, 0);
-	return (ret);
+    (void)tokens;
+    addr = content;
+    if (*addr == 0)
+        return (ft_strdup("(nil)"));
+    ret = convert_base_generic((unsigned long)*addr, "0123456789abcdef", 16);
+    ret = add_hex_prefix(ret, 0);
+    return (ret);
 }
+
