@@ -6,7 +6,7 @@
 	/*   By: dyanar <dyanar@student.42istanbul.com.tr>  +#+  +:+       +#+        */
 	/*                                                +#+#+#+#+#+   +#+           */
 	/*   Created: 2026/02/12 04:45:32 by dyanar            #+#    #+#             */
-/*   Updated: 2026/03/11 02:24:37 by dyanar           ###   ########.fr       */
+/*   Updated: 2026/03/11 18:28:01 by dyanar           ###   ########.fr       */
 	/*                                                                            */
 	/* ************************************************************************** */
 
@@ -33,10 +33,14 @@ typedef	struct	s_token {
 	char	*(*f)(void *content, t_list *tokens);
 }				t_token;
 
+char	*strjoin_safe(char *s1, char *s2);
+char	*move_str_to_chr(const char **format, char c);
+
 int			ft_printf(const char *format, ...);
 char		*read_token(const char **format, va_list args, t_token *g_token_buf);
 t_token		*get_token_by_type(t_list* lst, const char type);
 t_token		*get_token_by_val(t_list *lst, const char *s);
+
 
 char	*convert_width(void *str, t_list *lst);
 char	*convert_d(void *content, t_list *tokens);
