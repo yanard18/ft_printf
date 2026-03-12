@@ -148,11 +148,12 @@ void test_other()
 
 	{
 		printf("\ntest combinational:\n");
-		TEST_STDOUT_FUNC(printf, ft_printf, "%s %d", "NUM", 42);;
-		TEST_STDOUT_FUNC(printf, ft_printf, "<%#-10.6x>", 42);;
-		TEST_STDOUT_FUNC(printf, ft_printf, "<%+#10.6x>", 42);;
-		TEST_STDOUT_FUNC(printf, ft_printf, "<%+#-8.4x>%%%s", 42, "ABC");;
-		TEST_STDOUT_FUNC(printf, ft_printf, "<%-+8.6d>", 42);;
+		TEST_STDOUT_FUNC(printf, ft_printf, "%s %d", "NUM", 42);
+		TEST_STDOUT_FUNC(printf, ft_printf, "<%#-10.6x>", 42);
+		TEST_STDOUT_FUNC(printf, ft_printf, "<%+#10.6x>", 42);
+		TEST_STDOUT_FUNC(printf, ft_printf, "<%+#-8.4x>%%%s", 42, "ABC");
+		TEST_STDOUT_FUNC(printf, ft_printf, "<%-+8.6d>", 42);
+		TEST_STDOUT_FUNC(printf, ft_printf, "<%#-08.2x>", 1);
 	}
 }
 

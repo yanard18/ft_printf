@@ -49,6 +49,20 @@ static char	*apply_pad(char *s, int p_len, char c, int align_r)
 	return (ret);
 }
 
+static char	*handle_num_prec(char *s, int prec)
+{
+	int	len;
+
+	len = (int)ft_strlen(s);
+	/* The Magic Edge Case: 0 value with 0 precision yields an empty string */
+	if (prec == 0 && s[0] == '0' && len == 1)
+	{
+		free(s);
+		return (ft_strdup(""));
+	}
+	return (apply_pad(s, prec - len + (s[0] == '-'), '0', 1));
+}
+
 char	*convert_width(void *str, t_list *lst)
 {
 	int		val;
@@ -64,7 +78,7 @@ char	*convert_width(void *str, t_list *lst)
 	else
 	{
 		tok = get_token_by_val(lst, "0");
-		if (tok && tok->type == FLAG)
+		if (tok && tok->type == FLAG && !get_token_by_type(lst, '.'))
 			c = '0';
 	}
 	val = ft_atoi(get_token_by_type(lst, 'w')->value);
@@ -77,21 +91,19 @@ char	*apply_precision(void *content, t_list *tokens)
 	char	*s;
 	char	*ret;
 	int		prec;
-	int		len;
 
 	s = (char *)content;
 	spec = get_token_by_type(tokens, 's');
 	if (!spec)
 		return (s);
 	prec = ft_atoi(get_token_by_type(tokens, '.')->value);
-	len = (int)ft_strlen(s);
-	if (spec->value[0] == 's' && prec < len)
+	if (spec->value[0] == 's' && prec < (int)ft_strlen(s))
 	{
 		ret = ft_substr(s, 0, prec);
 		free(s);
 		return (ret);
 	}
-	if (ft_strchr("dixX", spec->value[0]))
-		return (apply_pad(s, prec - len + (s[0] == '-'), '0', 1));
+	if (ft_strchr("diuxX", spec->value[0]))
+		return (handle_num_prec(s, prec));
 	return (s);
 }
