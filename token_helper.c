@@ -39,13 +39,13 @@ char	*convert_c(void *content, t_list *tokens)
 
 	(void)tokens;
 	c = *((char *)content);
-    ret = malloc(2);
+	ret = malloc(2);
 	if (!ret)
-        return (NULL);
-    if (c == '\0')
-        ret[0] = '\1';
-    else
-        ret[0] = c;
+		return (NULL);
+	if (c == '\0')
+		ret[0] = '\1';
+	else
+		ret[0] = c;
 	ret[1] = '\0';
 	return (ret);
 }

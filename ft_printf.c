@@ -36,38 +36,37 @@ static	t_token	*init_token_buf(void)
 	buf[1] = (t_token){'f', "-", 0, NULL, FLAG_ZERO};
 	buf[2] = (t_token){'f', "0", 0, NULL};
 	buf[16] = (t_token){'+', NULL, 0, NULL};
-	buf[17] = (t_token){'0', NULL, 0, NULL}; 
+	buf[17] = (t_token){'0', NULL, 0, NULL};
 	return (buf);
 }
 
-
-static    int    flush(char *res, va_list args, t_token *token_buf)
+static int	flush(char *res, va_list args, t_token *token_buf)
 {
-    int    len;
-    int    downgraded;
-    int    i;
+	int	len;
+	int	downgraded;
+	int	i;
 
-    downgraded = token_buf[16].type == DOWNGRADE;
-    free(token_buf);
-    va_end(args);
-    if (res)
-    {
-        len = ft_strlen(res);
-        i = 0;
-        while (i < len)
-        {
-            if (res[i] == '\1')
-                write(1, "\0", 1);
-            else
-                write(1, &res[i], 1);
-            i++;
-        }
-        free(res);
-        if (downgraded)
-            return (-1);
-        return (len);
-    }
-    return (-1);
+	downgraded = token_buf[16].type == DOWNGRADE;
+	free(token_buf);
+	va_end(args);
+	if (res)
+	{
+		len = ft_strlen(res);
+		i = 0;
+		while (i < len)
+		{
+			if (res[i] == '\1')
+				write(1, "\0", 1);
+			else
+				write(1, &res[i], 1);
+			i++;
+		}
+		free(res);
+		if (downgraded)
+			return (-1);
+		return (len);
+	}
+	return (-1);
 }
 
 int	ft_printf(const char *format, ...)
