@@ -88,6 +88,7 @@ void test_other()
 		TEST_STDOUT_FUNC(printf, ft_printf, "%#-3.2x", 42);;
 	}
 
+
 	printf("\ntest %%%%:\n");
 	TEST_STDOUT_FUNC(printf, ft_printf, "%%");;
 	TEST_STDOUT_FUNC(printf, ft_printf, "%%%d", 42);;
@@ -103,13 +104,17 @@ void test_other()
 	TEST_STDOUT_FUNC(printf, ft_printf, "%+s", "ABC"); // undefined behaviour;
 
 	printf("\ntest '0' flag:\n");
-	TEST_STDOUT_FUNC(printf, ft_printf, "%00d", 42);;
-	TEST_STDOUT_FUNC(printf, ft_printf, "%01d", 42);;
-	TEST_STDOUT_FUNC(printf, ft_printf, "%02d", 42);;
-	TEST_STDOUT_FUNC(printf, ft_printf, "%03d", 42);;
-	TEST_STDOUT_FUNC(printf, ft_printf, "%05d", 42);;
-	TEST_STDOUT_FUNC(printf, ft_printf, "%0-5d", 42);;
-	TEST_STDOUT_FUNC(printf, ft_printf, "%-05d", 42);;
+	TEST_STDOUT_FUNC(printf, ft_printf, "%00d", 42);
+	TEST_STDOUT_FUNC(printf, ft_printf, "%01d", 42);
+	TEST_STDOUT_FUNC(printf, ft_printf, "%02d", 42);
+	TEST_STDOUT_FUNC(printf, ft_printf, "%03d", 42);
+	TEST_STDOUT_FUNC(printf, ft_printf, "%05d", 42);
+	TEST_STDOUT_FUNC(printf, ft_printf, "%0-5d", 42);
+	TEST_STDOUT_FUNC(printf, ft_printf, "%-05d", 42);
+	TEST_STDOUT_FUNC(printf, ft_printf, "%0-5d", 42);
+	TEST_STDOUT_FUNC(printf, ft_printf, "%05d", -42);
+	TEST_STDOUT_FUNC(printf, ft_printf, "%05d", -42);
+	TEST_STDOUT_FUNC(printf, ft_printf, "%015d", -42);
 
 	printf("\ntest field width:\n");
 	TEST_STDOUT_FUNC(printf, ft_printf, "<%0d>", 1);;

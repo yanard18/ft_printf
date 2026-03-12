@@ -12,49 +12,53 @@
 
 #include "ft_printf.h"
 
-static char	*pad_num(char *s, int prec, int len)
+static char	*apply_pad(char *s, int p_len, char c, int align_r)
 {
-	char	*zeros;
+	char	*pad;
 	char	*ret;
+	int		is_neg;
 
-	if (prec <= len)
+	if (p_len <= 0)
 		return (s);
-	zeros = (char *)malloc(prec - len + 1);
-	if (!zeros)
+	pad = (char *)malloc(p_len + 1);
+	if (!pad)
 		return (NULL);
-	ft_memset(zeros, '0', prec - len);
-	zeros[prec - len] = '\0';
-	ret = ft_strjoin(zeros, s);
+	ft_memset(pad, c, p_len);
+	pad[p_len] = '\0';
+	is_neg = (c == '0' && s[0] == '-');
+	if (is_neg)
+		s[0] = '0';
+	if (align_r)
+		ret = ft_strjoin(pad, s);
+	else
+		ret = ft_strjoin(s, pad);
+	if (is_neg)
+		ret[0] = '-';
 	free(s);
-	free(zeros);
+	free(pad);
 	return (ret);
 }
 
 char	*convert_width(void *str, t_list *lst)
 {
-	char	*space;
-	size_t	val;
+	int		val;
 	char	c;
+	int		align_r;
+	t_token	*tok;
 
 	c = ' ';
-	if (get_token_by_val(lst, "-")
-		&& get_token_by_val(lst, "-")->type == FLAG)
-		c = ' ';
-	else if (get_token_by_val(lst, "0")
-		&& get_token_by_val(lst, "0")->type == FLAG)
-		c = '0';
-	val = ft_atoi(get_token_by_type(lst, 'w')->value);
-	if (val <= ft_strlen((char *)str))
-		return ((char *)str);
-	val -= ft_strlen((char *)str);
-	space = (char *)malloc(sizeof(char) * val + 1);
-	ft_memset(space, c, val);
-	space[val] = 0;
-	if (get_token_by_val(lst, "-"))
-		str = (char *)strjoin_safe((char *)str, space);
+	align_r = 1;
+	tok = get_token_by_val(lst, "-");
+	if (tok && tok->type == FLAG)
+		align_r = 0;
 	else
-		str = (char *)strjoin_safe(space, (char *)str);
-	return ((char *)str);
+	{
+		tok = get_token_by_val(lst, "0");
+		if (tok && tok->type == FLAG)
+			c = '0';
+	}
+	val = ft_atoi(get_token_by_type(lst, 'w')->value);
+	return (apply_pad((char *)str, val - (int)ft_strlen(str), c, align_r));
 }
 
 char	*apply_precision(void *content, t_list *tokens)
@@ -78,6 +82,6 @@ char	*apply_precision(void *content, t_list *tokens)
 		return (ret);
 	}
 	if (ft_strchr("dixX", spec->value[0]))
-		return (pad_num(s, prec, len));
-	return (s = 10, s);
+		return (apply_pad(s, prec - len + (s[0] == '-'), '0', 1));
+	return (s);
 }
