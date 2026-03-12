@@ -12,7 +12,7 @@ all: $(NAME)
 	valgrind --leak-check=full ./$(NAME)
 
 $(NAME): $(SRCS) $(HEADERS) $(LIBFTPRINTF)
-	cc $(SRCS) $(LIBFTPRINTF) -Wformat -o $(NAME)
+	cc $(SRCS) $(LIBFTPRINTF) -Wno-format -o $(NAME)
 
 $(LIBFTPRINTF): FORCE
 	$(MAKE) -C $(FTPRINTF_DIR) USE_GDB=1 CFLAGS=-Wextra -Wall
