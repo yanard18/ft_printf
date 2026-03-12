@@ -40,52 +40,60 @@ static	t_token	*init_token_buf(void)
 	return (buf);
 }
 
-static int	flush(char *res, va_list args, t_token *token_buf)
+static int  print_and_free_chunk(char *s)
 {
-	int	len;
-	int	downgraded;
-	int	i;
+    int len;
+    int i;
 
-	downgraded = token_buf[16].type == DOWNGRADE;
-	free(token_buf);
-	va_end(args);
-	if (res)
-	{
-		len = ft_strlen(res);
-		i = 0;
-		while (i < len)
-		{
-			if (res[i] == '\1')
-				write(1, "\0", 1);
-			else
-				write(1, &res[i], 1);
-			i++;
-		}
-		free(res);
-		if (downgraded)
-			return (-1);
-		return (len);
-	}
-	return (-1);
+    if (!s)
+        return (0);
+    len = ft_strlen(s);
+    i = 0;
+    while (i < len)
+    {
+        if (s[i] == '\1')
+            write(1, "\0", 1);
+        else
+            write(1, &s[i], 1);
+        i++;
+    }
+    free(s);
+    return (len);
 }
 
-int	ft_printf(const char *format, ...)
+static int  process_format(const char **format, va_list args, t_token *buf)
 {
-	va_list	args;
-	t_token	*token_buf;
-	char	*res;
+    int len;
 
-	if (!format)
-		return (-1);
-	res = ft_strdup("");
-	token_buf = init_token_buf();
-	va_start(args, format);
-	while (*format)
-	{
-		if (*format == '%')
-			res = strjoin_safe(res, read_token(&format, args, token_buf));
-		else
-			res = strjoin_safe(res, move_str_to_chr(&format, '%'));
-	}
-	return (flush(res, args, token_buf));
+    len = 0;
+    if (**format == '%')
+        len += print_and_free_chunk(read_token(format, args, buf));
+    else
+    {
+        len += write(1, *format, 1);
+        (*format)++;
+    }
+    return (len);
+}
+
+int ft_printf(const char *format, ...)
+{
+    va_list args;
+    t_token *buf;
+    int     len;
+
+    if (!format)
+        return (-1);
+    buf = init_token_buf();
+    if (!buf)
+        return (-1);
+    va_start(args, format);
+    len = 0;
+    while (*format)
+        len += process_format(&format, args, buf);
+    va_end(args);
+    if (buf[16].type == DOWNGRADE)
+        len = -1;
+    free(buf);
+    return (len);
 }
