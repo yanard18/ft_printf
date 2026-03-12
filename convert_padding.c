@@ -54,7 +54,6 @@ static char	*handle_num_prec(char *s, int prec)
 	int	len;
 
 	len = (int)ft_strlen(s);
-	/* The Magic Edge Case: 0 value with 0 precision yields an empty string */
 	if (prec == 0 && s[0] == '0' && len == 1)
 	{
 		free(s);

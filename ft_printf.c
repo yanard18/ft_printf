@@ -33,7 +33,7 @@ static	t_token	*init_token_buf(void)
 	buf[4] = (t_token){'f', "+", 30, convert_plus};
 	buf[3] = (t_token){'f', " ", 31, convert_space};
 	buf[5] = (t_token){'w', NULL, 40, convert_width};
-	buf[1] = (t_token){'f', "-", 0, NULL};
+	buf[1] = (t_token){'f', "-", 0, NULL, FLAG_ZERO};
 	buf[2] = (t_token){'f', "0", 0, NULL};
 	buf[16] = (t_token){'+', NULL, 0, NULL};
 	buf[17] = (t_token){'0', NULL, 0, NULL}; 
