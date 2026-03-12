@@ -12,11 +12,24 @@
 
 #include "ft_printf.h"
 
+static void	fix_prefix(char *s, char *ret, int p_len)
+{
+	if (s[0] == '-' || s[0] == '+' || s[0] == ' ')
+	{
+		ret[0] = s[0];
+		ret[p_len] = '0';
+	}
+	else if (s[0] == '0' && (s[1] == 'x' || s[1] == 'X'))
+	{
+		ret[1] = s[1];
+		ret[p_len + 1] = '0';
+	}
+}
+
 static char	*apply_pad(char *s, int p_len, char c, int align_r)
 {
 	char	*pad;
 	char	*ret;
-	int		is_neg;
 
 	if (p_len <= 0)
 		return (s);
@@ -25,15 +38,12 @@ static char	*apply_pad(char *s, int p_len, char c, int align_r)
 		return (NULL);
 	ft_memset(pad, c, p_len);
 	pad[p_len] = '\0';
-	is_neg = (c == '0' && s[0] == '-');
-	if (is_neg)
-		s[0] = '0';
 	if (align_r)
 		ret = ft_strjoin(pad, s);
 	else
 		ret = ft_strjoin(s, pad);
-	if (is_neg)
-		ret[0] = '-';
+	if (align_r && c == '0')
+		fix_prefix(s, ret, p_len);
 	free(s);
 	free(pad);
 	return (ret);
@@ -70,7 +80,7 @@ char	*apply_precision(void *content, t_list *tokens)
 	int		len;
 
 	s = (char *)content;
-	spec = get_token_by_type(tokens->next, 's');
+	spec = get_token_by_type(tokens, 's');
 	if (!spec)
 		return (s);
 	prec = ft_atoi(get_token_by_type(tokens, '.')->value);

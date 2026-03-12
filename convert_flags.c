@@ -65,7 +65,7 @@ char	*convert_hash(void *content, t_list *tokens)
 {
 	t_token	*token;
 
-	token = get_token_by_type(tokens->next, 's');
+	token = get_token_by_type(tokens, 's');
 	if (token && token->value[0] == 'x')
 		return (add_hex_prefix(content, 0));
 	if (token && token->value[0] == 'X')

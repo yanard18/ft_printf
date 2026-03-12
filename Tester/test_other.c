@@ -132,6 +132,7 @@ void test_other()
 		TEST_STDOUT_FUNC(printf, ft_printf, "%#x", 1);;
 		TEST_STDOUT_FUNC(printf, ft_printf, "%#x", 42);;
 		TEST_STDOUT_FUNC(printf, ft_printf, "%#X", 42);;
+		TEST_STDOUT_FUNC(printf, ft_printf, "%#012x", 1);;
 	}
 
 	{

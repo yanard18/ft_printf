@@ -17,26 +17,29 @@ static	t_token	*init_token_buf(void)
 	t_token	*buf;
 
 	buf = (t_token *)malloc(sizeof(t_token) * 18);
-	buf[0] = (t_token){'f', "#", 10, convert_hash};
-	buf[1] = (t_token){'f', "-", 11, NULL};
-	buf[2] = (t_token){'f', "0", 11, NULL};
-	buf[3] = (t_token){'f', " ", 12, convert_space};
-	buf[4] = (t_token){'f', "+", 13, convert_plus};
-	buf[5] = (t_token){'w', NULL, 20, convert_width};
-	buf[6] = (t_token){'.', NULL, 5, apply_precision};
-	buf[7] = (t_token){'s', "c", 99, convert_c};
-	buf[8] = (t_token){'s', "s", 99, convert_s};
-	buf[9] = (t_token){'s', "p", 99, convert_p};
-	buf[10] = (t_token){'s', "d", 99, convert_d};
-	buf[11] = (t_token){'s', "i", 99, convert_d};
-	buf[12] = (t_token){'s', "u", 99, convert_u};
-	buf[13] = (t_token){'s', "x", 99, convert_x};
-	buf[14] = (t_token){'s', "X", 99, convert_bigx};
-	buf[15] = (t_token){'s', "%", 1, NULL};
+	if (!buf)
+		return (NULL);
+	buf[7] = (t_token){'s', "c", 10, convert_c};
+	buf[8] = (t_token){'s', "s", 10, convert_s};
+	buf[9] = (t_token){'s', "p", 10, convert_p};
+	buf[10] = (t_token){'s', "d", 10, convert_d};
+	buf[11] = (t_token){'s', "i", 10, convert_d};
+	buf[12] = (t_token){'s', "u", 10, convert_u};
+	buf[13] = (t_token){'s', "x", 10, convert_x};
+	buf[14] = (t_token){'s', "X", 10, convert_bigx};
+	buf[15] = (t_token){'s', "%", 10, NULL};
+	buf[6] = (t_token){'.', NULL, 20, apply_precision};
+	buf[0] = (t_token){'f', "#", 30, convert_hash};
+	buf[4] = (t_token){'f', "+", 30, convert_plus};
+	buf[3] = (t_token){'f', " ", 31, convert_space};
+	buf[5] = (t_token){'w', NULL, 40, convert_width};
+	buf[1] = (t_token){'f', "-", 0, NULL};
+	buf[2] = (t_token){'f', "0", 0, NULL};
 	buf[16] = (t_token){'+', NULL, 0, NULL};
-	buf[17] = (t_token){'0', NULL, 0, NULL};
+	buf[17] = (t_token){'0', NULL, 0, NULL}; 
 	return (buf);
 }
+
 
 static    int    flush(char *res, va_list args, t_token *token_buf)
 {
