@@ -49,6 +49,7 @@ void	sort_tokens(t_list **tokens);
 int		validate_tokens(t_list *lst);
 
 char	*convert_width(void *str, t_list *lst);
+char	*convert_c(void *content, t_list *tokens);
 char	*convert_d(void *content, t_list *tokens);
 char	*convert_u(void *content, t_list *tokens);
 char	*convert_s(void *content, t_list *tokens);

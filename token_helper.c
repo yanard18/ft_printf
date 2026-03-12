@@ -31,3 +31,21 @@ char	*convert_s(void *content, t_list *tokens)
 		return (ft_strdup("(null)"));
 	return (ft_strdup(*str));
 }
+
+char	*convert_c(void *content, t_list *tokens)
+{
+	char	*ret;
+	char	c;
+
+	(void)tokens;
+	c = *((char *)content);
+    ret = malloc(2);
+	if (!ret)
+        return (NULL);
+    if (c == '\0')
+        ret[0] = '\1';
+    else
+        ret[0] = c;
+	ret[1] = '\0';
+	return (ret);
+}
