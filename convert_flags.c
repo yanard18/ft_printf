@@ -33,7 +33,6 @@ char	*convert_plus(void *content, t_list *tokens)
 	char	*s;
 	char	*ret;
 
-	(void)tokens;
 	s = (char *)content;
 	if (*s == '-')
 		return (s);
@@ -48,15 +47,18 @@ char	*convert_space(void *content, t_list *tokens)
 {
 	char	*s;
 
-	if (((char *)content)[0] == '-')
-		return ((char *)content);
-	if (get_token_by_val(tokens, "d"))
+	s = (char *)content;
+	if (*s == '-')
+		return (s);
+	if (get_token_by_val(tokens, "+"))
+		return (s);
+	if (get_token_by_val(tokens, "d") || get_token_by_val(tokens, "i"))
 	{
 		s = ft_strjoin(" ", (char *)content);
 		free(content);
 		return (s);
 	}
-	return ((char *)content);
+	return (s);
 }
 
 char	*convert_hash(void *content, t_list *tokens)

@@ -101,6 +101,8 @@ void test_other()
 	TEST_STDOUT_FUNC(printf, ft_printf, "%+x", 42);;
 	TEST_STDOUT_FUNC(printf, ft_printf, "%+d", 0);;
 	TEST_STDOUT_FUNC(printf, ft_printf, "%+d", -42);;
+	TEST_STDOUT_FUNC(printf, ft_printf, "%+ d", 1);;
+	TEST_STDOUT_FUNC(printf, ft_printf, "%+ d", -42);;
 	TEST_STDOUT_FUNC(printf, ft_printf, "%+s", "ABC"); // undefined behaviour;
 
 	printf("\ntest '0' flag:\n");
