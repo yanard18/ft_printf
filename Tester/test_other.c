@@ -129,11 +129,13 @@ void test_other()
 
 	{
 		printf("\ntest . precision:\n");
-		TEST_STDOUT_FUNC(printf, ft_printf, "%.d", 42);;
-		TEST_STDOUT_FUNC(printf, ft_printf, "%.0d", 42);;
-		TEST_STDOUT_FUNC(printf, ft_printf, "%.1d", 42);;
-		TEST_STDOUT_FUNC(printf, ft_printf, "%.2d", 42);;
-		TEST_STDOUT_FUNC(printf, ft_printf, "%.3d", 42);;
+		TEST_STDOUT_FUNC(printf, ft_printf, "%.d", 42);
+		TEST_STDOUT_FUNC(printf, ft_printf, "%.0d", 42);
+		TEST_STDOUT_FUNC(printf, ft_printf, "%.1d", 42);
+		TEST_STDOUT_FUNC(printf, ft_printf, "%.2d", 42);
+		TEST_STDOUT_FUNC(printf, ft_printf, "%.3d", 42);
+		TEST_STDOUT_FUNC(printf, ft_printf, "%.3s", "foobar");
+		TEST_STDOUT_FUNC(printf, ft_printf, "%.1s", "foo");
 	}
 
 	{

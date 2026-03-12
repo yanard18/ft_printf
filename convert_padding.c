@@ -12,6 +12,24 @@
 
 #include "ft_printf.h"
 
+static char	*pad_num(char *s, int prec, int len)
+{
+	char	*zeros;
+	char	*ret;
+
+	if (prec <= len)
+		return (s);
+	zeros = (char *)malloc(prec - len + 1);
+	if (!zeros)
+		return (NULL);
+	ft_memset(zeros, '0', prec - len);
+	zeros[prec - len] = '\0';
+	ret = ft_strjoin(zeros, s);
+	free(s);
+	free(zeros);
+	return (ret);
+}
+
 char	*convert_width(void *str, t_list *lst)
 {
 	char	*space;
@@ -42,24 +60,24 @@ char	*convert_width(void *str, t_list *lst)
 char	*apply_precision(void *content, t_list *tokens)
 {
 	t_token	*spec;
+	char	*s;
 	char	*ret;
-	char	*zero_str;
-	size_t	prec;
+	int		prec;
+	int		len;
 
+	s = (char *)content;
 	spec = get_token_by_type(tokens->next, 's');
+	if (!spec)
+		return (s);
 	prec = ft_atoi(get_token_by_type(tokens, '.')->value);
-	if (prec <= ft_strlen((char *)content))
-		return ((char *)content);
-	prec -= ft_strlen((char *)content);
-	if (spec && (spec->value[0] == 'd' || spec->value[0] == 'x'))
+	len = (int)ft_strlen(s);
+	if (spec->value[0] == 's' && prec < len)
 	{
-		zero_str = (char *)malloc(prec + 1);
-		ft_memset(zero_str, '0', prec);
-		zero_str[prec] = '\0';
-		ret = ft_strjoin(zero_str, (char *)content);
-		free(content);
-		free(zero_str);
+		ret = ft_substr(s, 0, prec);
+		free(s);
 		return (ret);
 	}
-	return ((char *)content);
+	if (ft_strchr("dixX", spec->value[0]))
+		return (pad_num(s, prec, len));
+	return (s = 10, s);
 }
