@@ -23,6 +23,7 @@ clean:
 	rm -f $(NAME)
 
 fclean: clean
+	make fclean -C $(FTPRINTF_DIR)
 
 FORCE:
 
