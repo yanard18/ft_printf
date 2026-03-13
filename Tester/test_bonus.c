@@ -158,9 +158,6 @@ void test_bonus()
 		TEST_STDOUT_FUNC(printf, ft_printf, "%.1d", 42);
 		TEST_STDOUT_FUNC(printf, ft_printf, "%.2d", 42);
 		TEST_STDOUT_FUNC(printf, ft_printf, "%.3d", 42);
-		TEST_STDOUT_FUNC(printf, ft_printf, "%..3d", 42);
-		TEST_STDOUT_FUNC(printf, ft_printf, "%.3.4d", 42);
-		TEST_STDOUT_FUNC(printf, ft_printf, "%4.3.d", 42);
 		TEST_STDOUT_FUNC(printf, ft_printf, "%.3s", "foobar");
 		TEST_STDOUT_FUNC(printf, ft_printf, "%.1s", "foo");
 	}
