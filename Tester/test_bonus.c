@@ -47,6 +47,7 @@ void test_bonus()
 	TEST_STDOUT_FUNC(printf, ft_printf, "%d", INT_MAX);;
 	TEST_STDOUT_FUNC(printf, ft_printf, "%d", INT_MIN);;
 	TEST_STDOUT_FUNC(printf, ft_printf, "ABC: %d", -1);;
+	TEST_STDOUT_FUNC(printf, ft_printf, "%d%d", 1, 2);;
 	TEST_STDOUT_FUNC(printf, ft_printf, "X:%d Y:%d", -1, 42);;
 
 	printf("\ntest %%i:\n");

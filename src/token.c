@@ -29,7 +29,7 @@ static void	free_token(void *content)
 	}
 }
 
-static t_list	*tokenize(const char **format, t_token *g_token_buf)
+static t_list	*tokenize(const char **format, t_token *token_table)
 {
 	t_list	*lst;
 	t_token	*out_token;
@@ -37,7 +37,7 @@ static t_list	*tokenize(const char **format, t_token *g_token_buf)
 	lst = NULL;
 	while (*++(*format))
 	{
-		is_token(**format, g_token_buf, &out_token);
+		is_token(**format, token_table, &out_token);
 		if (out_token)
 		{
 			push_token(&lst, out_token);
@@ -78,7 +78,7 @@ char	*eval_next_token(t_list **lst, t_list *start_lst, char *s)
 	return (s);
 }
 
-char	*read_token(const char **format, va_list args, t_token *g_token_buf)
+char	*read_token(const char **format, va_list args, t_token *token_table)
 {
 	t_list		*lst;
 	t_list		*start_lst;
@@ -87,14 +87,14 @@ char	*read_token(const char **format, va_list args, t_token *g_token_buf)
 	const char	*rewind_str_addr;
 
 	rewind_str_addr = *format;
-	lst = tokenize(format, g_token_buf);
+	lst = tokenize(format, token_table);
 	start_lst = lst;
 	valid = validate_tokens(lst);
 	if (!valid)
 	{
 		ft_lstclear(&lst, free_token);
 		*format = rewind_str_addr + 1;
-		g_token_buf[16].type = DOWNGRADE;
+		token_table[16].type = DOWNGRADE;
 		if (**format == '\0')
 			return (NULL);
 		return (ft_strdup("%"));
