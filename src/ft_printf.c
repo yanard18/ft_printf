@@ -40,60 +40,60 @@ static	t_token	*init_token_buf(void)
 	return (buf);
 }
 
-static int  print_and_free_chunk(char *s)
+static int	print_and_free_chunk(char *s)
 {
-    int len;
-    int i;
+	int	len;
+	int	i;
 
-    if (!s)
-        return (0);
-    len = ft_strlen(s);
-    i = 0;
-    while (i < len)
-    {
-        if (s[i] == '\1')
-            write(1, "\0", 1);
-        else
-            write(1, &s[i], 1);
-        i++;
-    }
-    free(s);
-    return (len);
+	if (!s)
+		return (0);
+	len = ft_strlen(s);
+	i = 0;
+	while (i < len)
+	{
+		if (s[i] == '\1')
+			write(1, "\0", 1);
+		else
+			write(1, &s[i], 1);
+		i++;
+	}
+	free(s);
+	return (len);
 }
 
-static int  process_format(const char **format, va_list args, t_token *buf)
+static int	process_format(const char **format, va_list args, t_token *buf)
 {
-    int len;
+	int	len;
 
-    len = 0;
-    if (**format == '%')
-        len += print_and_free_chunk(read_token(format, args, buf));
-    else
-    {
-        len += write(1, *format, 1);
-        (*format)++;
-    }
-    return (len);
+	len = 0;
+	if (**format == '%')
+		len += print_and_free_chunk(read_token(format, args, buf));
+	else
+	{
+		len += write(1, *format, 1);
+		(*format)++;
+	}
+	return (len);
 }
 
-int ft_printf(const char *format, ...)
+int	ft_printf(const char *format, ...)
 {
-    va_list args;
-    t_token *buf;
-    int     len;
+	va_list	args;
+	t_token	*buf;
+	int		len;
 
-    if (!format)
-        return (-1);
-    buf = init_token_buf();
-    if (!buf)
-        return (-1);
-    va_start(args, format);
-    len = 0;
-    while (*format)
-        len += process_format(&format, args, buf);
-    va_end(args);
-    if (buf[16].type == DOWNGRADE)
-        len = -1;
-    free(buf);
-    return (len);
+	if (!format)
+		return (-1);
+	buf = init_token_buf();
+	if (!buf)
+		return (-1);
+	va_start(args, format);
+	len = 0;
+	while (*format)
+		len += process_format(&format, args, buf);
+	va_end(args);
+	if (buf[16].type == DOWNGRADE)
+		len = -1;
+	free(buf);
+	return (len);
 }

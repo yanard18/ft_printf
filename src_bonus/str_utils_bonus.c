@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strutils.c                                         :+:      :+:    :+:   */
+/*   str_utils_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dyanar <dyanar@student.42istanbul.com.tr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 18:29:06 by dyanar            #+#    #+#             */
-/*   Updated: 2026/03/11 20:34:29 by dyanar           ###   ########.fr       */
+/*   Updated: 2026/03/13 23:01:56 by dyanar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "ft_printf_bonus.h"
 
 char	*move_str_to_chr(const char **format, char c)
 {
