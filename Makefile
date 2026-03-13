@@ -2,11 +2,11 @@ NAME		= libftprintf.a
 CC			= cc
 CFLAGS		= -Wextra -Wall -Werror -I./inc -I./libft
 
-SRC_DIR		= src/
-SRCS        = $(addprefix $(SRC_DIR), ft_printf.c token.c token_helper.c \
+DIR = src/
+SRCS  = $(addprefix $(DIR), ft_printf.c token.c token_helper.c \
               token_utils.c token_validate.c token_sort.c str_utils.c \
               convert_base.c convert_flags.c convert_padding.c)
-OBJS        = $(SRCS:.c=.o)
+OBJS  = $(SRCS:.c=.o)
 
 BONUS_DIR	= src_bonus/
 BONUS_SRCS  = $(addprefix $(BONUS_DIR), ft_printf_bonus.c token_bonus.c token_helper_bonus.c \
@@ -56,6 +56,7 @@ $(OBJS): %.o: %.c
 
 clean:
 	rm -f $(OBJS)
+	rm -f $(BONUS_OBJS)
 
 fclean: clean
 	rm -f $(NAME)

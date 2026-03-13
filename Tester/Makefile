@@ -6,7 +6,7 @@ MAKE         = make
 NAME         = ft_printf_test
 FTPRINTF_DIR = ../
 LIBFTPRINTF  = $(FTPRINTF_DIR)libftprintf.a
-FILES        = ft_printf_test test_basic test_other test_c test_guryel
+FILES        = ft_printf_test test_bonus test_guryel
 SRCS         = $(addsuffix .c, $(FILES))
 HEADERS      = ft_printf_test.h
 
