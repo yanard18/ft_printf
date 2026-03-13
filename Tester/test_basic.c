@@ -1,5 +1,5 @@
 #include "ft_printf_test.h"
-#include "../ft_printf.h"
+#include "ft_printf.h"
 
 void test_basic()
 {

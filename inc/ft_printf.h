@@ -6,7 +6,7 @@
 /*   By: dyanar <dyanar@student.42istanbul.com.tr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 19:55:27 by dyanar            #+#    #+#             */
-/*   Updated: 2026/03/11 20:19:23 by dyanar           ###   ########.fr       */
+/*   Updated: 2026/03/13 01:28:57 by dyanar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define FT_PRINTF_H
 
 # include <stdarg.h>
-# include "libft/libft.h"
+# include "../libft/libft.h"
 
 typedef enum e_token_type
 {

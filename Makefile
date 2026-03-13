@@ -1,15 +1,21 @@
-CC			= cc
-CFLAGS		= -Wextra -Wall -Werror
 NAME		= libftprintf.a
-FILES		= 	ft_printf \
-				token token_helper token_utils token_validate token_sort \
-				str_utils convert_base convert_padding convert_flags
-MAKE		= make
-LIBFT		= libft/libft.a
+CC			= cc
+CFLAGS		= -Wextra -Wall -Werror -I./inc -I./libft
+
+SRC_DIR		= src/
+SRCS        = $(addprefix $(SRC_DIR), ft_printf.c token.c token_helper.c \
+              token_utils.c token_validate.c token_sort.c str_utils.c \
+              convert_base.c convert_flags.c convert_padding.c)
+OBJS        = $(SRCS:.c=.o)
+
 LIBFT_DIR	= libft/
-SRCS		= $(addsuffix .c, $(FILES))
-OBJS		= $(addsuffix .o, $(FILES))
+LIBFT		= $(LIBFT_DIR)libft.a
+
 USE_GDB		= 0
+
+ifeq ($(USE_GDB),1)
+	CFLAGS += -g
+endif
 
 all: $(NAME) 
 
@@ -25,15 +31,11 @@ $(NAME): $(LIBFT) $(OBJS)
 libft:
 	make -C ./libft
 $(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
+	make -C $(LIBFT_DIR)
 	echo $(FILES)
 
 $(OBJS): %.o: %.c
-ifeq ($(USE_GDB),1)
-	$(CC) $(CFLAGS) -g $^ -c -o $@
-else
 	$(CC) $(CFLAGS) $^ -c -o $@
-endif
 
 clean:
 	rm -f $(OBJS)

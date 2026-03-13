@@ -35,7 +35,6 @@ void register_test(const char *name, void (*func)(void));
 			char	buf2[BUFFER_SIZE];									\
 			int		fd[2];												\
 			int		saved_stdout;										\
-			int		ret = 0;											\
 			fflush(stdout);												\
 			saved_stdout = dup(1);										\
 			pipe(fd);													\
