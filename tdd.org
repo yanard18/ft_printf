@@ -1,6 +1,0 @@
-* Tester
-
-** TODO only display failed tests and the whole test branch
-** TODO display count of passed/failed tests
-** TODO separate folders for tests
-** TODO makefile wildcard for tests
