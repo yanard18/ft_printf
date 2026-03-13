@@ -142,7 +142,7 @@ void test_bonus()
 	TEST_STDOUT_FUNC(printf, ft_printf, "<%5s>", "abc");;
 
 	{
-		printf("\ntest # flag:\n");
+		printf("\ntest '#' flag:\n");
 		TEST_STDOUT_FUNC(printf, ft_printf, "%#x", 0);;
 		TEST_STDOUT_FUNC(printf, ft_printf, "%#x", 1);;
 		TEST_STDOUT_FUNC(printf, ft_printf, "%#x", 42);;
