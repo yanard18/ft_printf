@@ -17,7 +17,7 @@ $(NAME): $(SRCS) $(HEADERS) $(LIBFTPRINTF)
 	$(CC) $(CFLAGS) $(INCLUDES) $(SRCS) $(LIBFTPRINTF) -Wno-format -o $(NAME)
 
 $(LIBFTPRINTF): FORCE
-	$(MAKE) -C $(FTPRINTF_DIR) USE_GDB=1
+	$(MAKE) bonus -C $(FTPRINTF_DIR) USE_GDB=1
 
 clean:
 	rm -f $(NAME)
