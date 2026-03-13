@@ -1,16 +1,102 @@
-* Coredumping
+/This project has been created as part of the 42 curriculum by dyanar./
 
-How to create core dump file:
+* Description
+This project is a custom implementation of the standard C library function =printf=. The primary goal is to learn how to efficiently manage variadic arguments in C, handle complex string parsing, and deepen understanding of standard output writing without relying on the internal buffering of the original =printf=.
 
+It handles standard conversion specifiers (such as =%c=, =%s=, =%p=, =%d=, =%i=, =%u=, =%x=, =%X=, and =%%=) and generates a static library (=libftprintf.a=) that will serve as a core utility function for future projects in the 42 curriculum.
+
+* Instructions
+** Compilation
+To compile the library, run the provided Makefile at the root of the repository. It will automatically compile the required =libft= dependencies and build the main project.
 #+begin_src bash
+make
+#+end_src
+This will generate the =libftprintf.a= static library.
+
+** Usage
+To use the function in your code, include the header in your C files:
+#+begin_src c
+#include "ft_printf.h"
+#+end_src
+
+Then, compile your project by linking the compiled static library:
+#+begin_src bash
+cc your_main.c -L. -lftprintf -o your_program
+#+end_src
+
+* Algorithm and Data Structure
+** Data Structure
+The project utilizes a Linked List data structure (represented by =t_token= nodes) to manage parsed segments of the format string. Each node in the list represents either a standard string literal or a specific conversion specifier that needs to be formatted and printed.
+- *Justification:* A linked list allows for dynamic and flexible parsing of the format string without needing to know the total number of arguments or the final string length in advance. It avoids the rigidity of static arrays and allows the program to scale with complex format strings.
+
+** Algorithm
+The core algorithm relies on a *Tokenizer*. The format string is read sequentially. When a =%= character is encountered, the tokenizer isolates the subsequent characters to identify the conversion specifier, while standard text is grouped as separate tokens.
+- *Justification:* As noted in the design decisions, tokenization provides a modular approach to parsing. Instead of managing complex state machines within a single monolithic loop, breaking the string down into discrete tokens allows each conversion type to be handled by isolated, specialized helper functions (e.g., =convert_s=). While the current implementation allocates memory sequentially, this tokenized structure paves the way for future optimizations (like assembling the entire string sequence before issuing a single =write= call).
+
+** Design Decisions
+
+  Decided to only tokenize the conversion specifiers and print the strings without allocating memory. However I realized that original printf, prints an empty string if contains any invalid conversion specifier.
+
+  To fix this, decided to allocate strings with strjoin and allocate the conversion specifiers with tokenization. However better approach would be tokenize the whole text then print the whole token chain at once. This can be a future development task.
+
+  This would also fix the issue that, current system initialize a token_buf each time for read_token(). Here, bad design implemented because I was not aware that static globals are forbiden for this project. To be honest I still believe that making token_buf global is best approach for both memory and extendibility.
+
+* Variadic Arguments (=va_list=)
+The =va_list= type is used to retrieve additional arguments in a function. On many systems (like x86_64), it is implemented as a structure:
+
+#+BEGIN_SRC gdb
+$1 = {{gp_offset = 2, fp_offset = 0, overflow_arg_area = 0xbfebfbff,
+        reg_save_area = 0x7fffffffe6b9}}
+#+END_SRC
+
+- *gp_offset*: Offset to the next available general-purpose register in the =reg_save_area=.
+- *fp_offset*: Offset to the next available floating-point register in the =reg_save_area=.
+- *reg_save_area*: Pointer to the memory area where registers are saved.
+- *overflow_arg_area*: Pointer to the area where arguments passed on the stack are stored.
+
+/Note: The implementation of va_list is platform-dependent and may not be a struct on all systems./
+
+** Helper Macros
+- =va_start=: Initializes the =va_list= object to retrieve the additional arguments.
+- =va_arg=: Retrieves the value of the next argument in the list and advances the pointer.
+- =va_end=: Cleans up the =va_list= object.
+
+* Printf Specification
+
+Each conversion specification begins with the =%= character and ends with a conversion specifier.
+
+*Full Format Pattern*:
+=% [flags] [field_width] [.precision] [length] [conversion_specifier]=
+
+** Buffer Implementation
+The standard =printf= is buffered, meaning it stores data in an internal buffer and displays it on the screen in a single call via =fflush(stdout)= or when the buffer is full.
+
+*Constraint*: This implementation will not include a buffer.
+
+** Project Structure and Rules
+
+*Requirements*
+- All =libft= associated files must be located within the =libft/= folder.
+- A *Recursive Makefile* should be used to manage dependencies between the main project and =libft=.
+
+** Implementation Notes
+- *Tokenization*: For logic regarding parsing the format string, refer to the principles of tokenization (e.g., /Programming Principles and Practice using C++/, Chapter 5).
+- *Security*: Be aware of *Format String Attacks*, where a user-controlled string is passed as the format argument.
+
+* GDB Tips
+** Coredumping
+
+  How to create core dump file:
+
+  #+begin_src bash
   ulimit -c unlimited
   ./a.out 
   gdb ./a.out core
-#+end_src
+  #+end_src
 
-Then to debug
-1. Use backtrace (=br=) command. It will map how the program crahsed.
-#+begin_src gdb
+  Then to debug
+  1. Use backtrace (=br=) command. It will map how the program crahsed.
+  #+begin_src gdb
   (gdb) bt
 #0  0x00005585075b77de in ft_strlen ()
 #1  0x00005585075b7488 in ft_strdup ()
@@ -19,41 +105,41 @@ Then to debug
 #4  0x00005585075b6678 in read_token (format=0x7ffdcc9a6688, args=0x7ffdcc9a6698) at token.c:236
 #5  0x00005585075b5ef4 in ft_printf (format=0x5585075b851b "") at ft_printf.c:17
 #6  0x00005585075b39aa in main ()
-#+end_src
+  #+end_src
 
-2. Use frame (=frame 2=) command. It will map how the program crahsed.
-#+begin_src gdb
+  2. Use frame (=frame 2=) command. It will map how the program crahsed.
+  #+begin_src gdb
 (gdb) frame 2
 #2  0x00005585075b6a21 in convert_s (content=0x7ffdcc9a6610, tokens=0x55853467c2d0) at token_helper.c:101
 101		return (ft_strdup(*str));
-#+end_src
+  #+end_src
 
-3. Use (=list=) to display surrounding code in the frame.
-4. displayer args (=infor args=).
-5. displayer local variables (=info locals=).
+  3. Use (=list=) to display surrounding code in the frame.
+  4. displayer args (=infor args=).
+  5. displayer local variables (=info locals=).
 
-Then revert core dump creation back to normal (0).
-#+begin_src bash
+  Then revert core dump creation back to normal (0).
+  #+begin_src bash
 ulimit -c 0
-#+end_src
+  #+end_src
 
-* GDB Printing List
+** GDB Printing List
 
-Manual while iteration in gdb
+Manual while iteration in gdb:
 
-#+begin_src gdb
+  #+begin_src gdb
 set $node = lst
 while $node != 0
   print $node->content
   set $node = $node->next
 end
-#+end_src
+  #+end_src
 
-lst represent the HEAD node of the list.
+  lst represent the HEAD node of the list.
 
-Same idea also possible with user-defined function writing inside the =~/.gdbinit= file (or type in the session).
+  Same idea also possible with user-defined function writing inside the =~/.gdbinit= file (or type in the session).
 
-#+begin_src .gdbinit
+  #+begin_src .gdbinit
 define plist
   set $curr = $arg0
   while $curr != 0
@@ -67,23 +153,28 @@ end
 document plist
   Print a linked list. Syntax: plist <head_pointer>
 end
-#+end_src
-
-* Format String Attacks
-
-* Design Decisions
-
-Decided to only tokenize the conversion specifiers and print the strings without allocating memory. However I realized that original printf, prints an empty string if contains any invalid conversion specifier.
-
-To fix this, decided to allocate strings with strjoin and allocate the conversion specifiers with tokenization. However better approach would be tokenize the whole text then print the whole token chain at once. This can be a future development task.
-
-This would also fix the issue that, current system initialize a token_buf each time for read_token(). Here, bad design implemented because I was not aware that static globals are forbiden for this project. To be honest I still believe that making token_buf global is best approach for both memory and extendibility.
+  #+end_src
 
 * Tester
-Main design idea of this tester to have minimum amount of duplication while testing variadic functions and comapring two identical functions.
+  Main design idea of this tester to have minimum amount of duplication while testing variadic functions and comapring two identical functions.
 
-1. Only have TEST_STDOUT_FUNC func (macro func)
-2. Directly compare two functions
-3. No duplication while passing arguments
-4. Supports multiple files and registering more tests
-5. TEST_STDOUT_FUNC test both stdout and return values
+  1. Only have TEST_STDOUT_FUNC func (macro func)
+  2. Directly compare two functions
+  3. No duplication while passing arguments
+  4. Supports multiple files and registering more tests
+  5. TEST_STDOUT_FUNC test both stdout and return values
+* Resources
+** Classic References
+- [[https://www.lix.polytechnique.fr/~liberti/public/computing/prog/c/C/FUNCTIONS/format.html][C Functions - Format]]
+  - Makefile
+    - [[https://www.gnu.org/software/make/manual/html_node/Recursion.html][Make file recursion]]
+    - [[https://sourceware.org/binutils/docs-2.29/binutils/ar-scripts.html][ar script]]
+    - [[https://www.gnu.org/software/make/manual/make.html#One-Shell][.ONESHELL]]
+    - [[https://github.com/Tripouille/libftTester/blob/master/Makefile][Makefile for tester]]
+  - Tokenization
+    - /Programming Principles and Practice with C++/, Chapter 5
+
+** AI Usage
+- *Task:* README structuring and requirement validation.
+- *Tool:* Google Gemini.
+- *Usage:* AI was used to draft the mandatory 42 curriculum sections (Description, Instructions, Algorithm/Data Structure) and ensure formatting compliance with project requirements. No AI was used to generate the core logic or C code of =ft_printf=.
