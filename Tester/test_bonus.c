@@ -28,6 +28,7 @@ void test_bonus()
 	TEST_STDOUT_FUNC(printf, ft_printf, "%++d", 42);
 	TEST_STDOUT_FUNC(printf, ft_printf, "%+++d", 42);
 	TEST_STDOUT_FUNC(printf, ft_printf, "%%%  d", 42);
+	TEST_STDOUT_FUNC(printf, ft_printf, "%.4.5d", 42);
 
 	printf("\ntest wihtout %%:\n");
 	TEST_STDOUT_FUNC(printf, ft_printf, "ABC");
@@ -144,11 +145,28 @@ void test_bonus()
 
 	{
 		printf("\ntest '#' flag:\n");
-		TEST_STDOUT_FUNC(printf, ft_printf, "%#x", 0);;
-		TEST_STDOUT_FUNC(printf, ft_printf, "%#x", 1);;
-		TEST_STDOUT_FUNC(printf, ft_printf, "%#x", 42);;
-		TEST_STDOUT_FUNC(printf, ft_printf, "%#X", 42);;
-		TEST_STDOUT_FUNC(printf, ft_printf, "%#012x", 1);;
+		int x = 0;
+		TEST_STDOUT_FUNC(printf, ft_printf, "%#x", 0);
+		TEST_STDOUT_FUNC(printf, ft_printf, "%#x", 1);
+		TEST_STDOUT_FUNC(printf, ft_printf, "%#x", 42);
+		TEST_STDOUT_FUNC(printf, ft_printf, "%#X", 42);
+		TEST_STDOUT_FUNC(printf, ft_printf, "%#012x", 1);
+		TEST_STDOUT_FUNC(printf, ft_printf, "%#d", 1);
+		TEST_STDOUT_FUNC(printf, ft_printf, "%#i", 1);
+		TEST_STDOUT_FUNC(printf, ft_printf, "%#u", 1);
+		TEST_STDOUT_FUNC(printf, ft_printf, "%#c", 'a');
+		TEST_STDOUT_FUNC(printf, ft_printf, "%#s", "abc");
+		TEST_STDOUT_FUNC(printf, ft_printf, "%#p", &x);
+	}
+
+	{
+		printf("\ntest '-' flag:\n");
+		TEST_STDOUT_FUNC(printf, ft_printf, "%-d", 0);
+		TEST_STDOUT_FUNC(printf, ft_printf, "%-1d", 0);
+		TEST_STDOUT_FUNC(printf, ft_printf, "%-2d", 0);
+		TEST_STDOUT_FUNC(printf, ft_printf, "%-d", 42);
+		TEST_STDOUT_FUNC(printf, ft_printf, "%-12d", 42);
+		TEST_STDOUT_FUNC(printf, ft_printf, "%-12d", INT_MIN);
 	}
 
 	{
@@ -158,7 +176,6 @@ void test_bonus()
 		TEST_STDOUT_FUNC(printf, ft_printf, "%.1d", 42);
 		TEST_STDOUT_FUNC(printf, ft_printf, "%.2d", 42);
 		TEST_STDOUT_FUNC(printf, ft_printf, "%.3d", 42);
-		TEST_STDOUT_FUNC(printf, ft_printf, "%..3d", 42);
 		TEST_STDOUT_FUNC(printf, ft_printf, "%.3.4d", 42);
 		TEST_STDOUT_FUNC(printf, ft_printf, "%4.3.2d", 42);
 		TEST_STDOUT_FUNC(printf, ft_printf, "%1.6.5d", 42);
