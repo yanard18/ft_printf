@@ -79,31 +79,29 @@ char	*eval_next_token(t_list **lst, t_list *start_lst, char *s)
 	return (s);
 }
 
-char	*read_token(const char **format, va_list args, t_token *token_table)
+char	*read_token(const char **format, va_list args, t_token *table)
 {
 	t_list		*lst;
-	t_list		*start_lst;
-	int			valid;
+	t_list		*start;
 	char		*s;
-	const char	*rewind_str_addr;
+	const char	*rewind;
 
-	rewind_str_addr = *format;
-	lst = tokenize(format, token_table);
-	start_lst = lst;
-	valid = validate_tokens(lst);
-	if (!valid)
+	rewind = *format;
+	lst = tokenize(format, table);
+	start = lst;
+	if (!validate_tokens(lst))
 	{
 		ft_lstclear(&lst, free_token);
-		*format = rewind_str_addr + 1;
-		token_table[16].type = DOWNGRADE;
-		if (**format == '\0')
-			return (NULL);
-		return (ft_strdup("%"));
+		*format = rewind + 1;
+		if (**format != '\0')
+			return (ft_strdup("%"));
+		table[16].type = DOWNGRADE;
+		return (NULL);
 	}
 	s = apply_specifier(lst, args);
 	sort_tokens(&lst);
 	while (lst)
-		s = eval_next_token(&lst, start_lst, s);
-	ft_lstclear(&start_lst, free_token);
+		s = eval_next_token(&lst, start, s);
+	ft_lstclear(&start, free_token);
 	return (s);
 }
