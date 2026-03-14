@@ -32,28 +32,29 @@ static void	free_token(void *content)
 static t_list	*tokenize(const char **format, t_token *token_table)
 {
 	t_list	*lst;
-	t_token	*out_token;
+	t_token	*out;
+	int		prec;
 
 	lst = NULL;
+	out = NULL;
+	prec = 0;
 	while (*++(*format))
 	{
-		is_token(**format, token_table, &out_token);
-		if (out_token)
-		{
-			push_token(&lst, out_token);
-			if (out_token->type == PRECISION)
-				(*format)++;
-			if (out_token->type == PRECISION || out_token->type == WIDTH)
-				int_to_token(format, out_token);
-			else if (out_token->type == SPECIFIER)
-			{
-				(*format)++;
-				break ;
-			}
-		}
-		else
-			return (lst);
+		is_token(**format, token_table, &out);
+		if (!out || (out->type == PRECISION && prec))
+			break ;
+		if (out->type == PRECISION)
+			prec = 1;
+		if (out->type == PRECISION)
+			(*format)++;
+		push_token(&lst, out);
+		if (out->type == SPECIFIER)
+			break ;
+		if (out->type == PRECISION || out->type == WIDTH)
+			int_to_token(format, out);
 	}
+	if (out && out->type == SPECIFIER)
+		(*format)++;
 	return (lst);
 }
 
