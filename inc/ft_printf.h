@@ -6,7 +6,7 @@
 /*   By: dyanar <dyanar@student.42istanbul.com.tr>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 19:55:27 by dyanar            #+#    #+#             */
-/*   Updated: 2026/03/13 01:28:57 by dyanar           ###   ########.fr       */
+/*   Updated: 2026/03/14 04:21:28 by dyanar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*strjoin_safe(char *s1, char *s2);
 char	*move_str_to_chr(const char **format, char c);
 
 int		ft_printf(const char *format, ...);
-char	*read_token(const char **format, va_list args, t_token *token_table);
+char	*read_token(const char **format, va_list args, t_token *table);
 
 t_token	*get_token_by_type(t_list *lst, const char type);
 t_token	*get_token_by_val(t_list *lst, const char *s);
