@@ -32,28 +32,29 @@ static void	free_token(void *content)
 static t_list	*tokenize(const char **format, t_token *token_table)
 {
 	t_list	*lst;
-	t_token	*out_token;
+	t_token	*out;
+	int		prec;
 
 	lst = NULL;
+	out = NULL;
+	prec = 0;
 	while (*++(*format))
 	{
-		is_token(**format, token_table, &out_token);
-		if (out_token)
-		{
-			push_token(&lst, out_token);
-			if (out_token->type == PRECISION)
-				(*format)++;
-			if (out_token->type == PRECISION || out_token->type == WIDTH)
-				int_to_token(format, out_token);
-			else if (out_token->type == SPECIFIER)
-			{
-				(*format)++;
-				break ;
-			}
-		}
-		else
-			return (lst);
+		is_token(**format, token_table, &out);
+		if (!out || (out->type == PRECISION && prec))
+			break ;
+		if (out->type == PRECISION)
+			prec = 1;
+		if (out->type == PRECISION)
+			(*format)++;
+		push_token(&lst, out);
+		if (out->type == SPECIFIER)
+			break ;
+		if (out->type == PRECISION || out->type == WIDTH)
+			int_to_token(format, out);
 	}
+	if (out && out->type == SPECIFIER)
+		(*format)++;
 	return (lst);
 }
 
@@ -78,31 +79,29 @@ char	*eval_next_token(t_list **lst, t_list *start_lst, char *s)
 	return (s);
 }
 
-char	*read_token(const char **format, va_list args, t_token *token_table)
+char	*read_token(const char **format, va_list args, t_token *table)
 {
 	t_list		*lst;
-	t_list		*start_lst;
-	int			valid;
+	t_list		*start;
 	char		*s;
-	const char	*rewind_str_addr;
+	const char	*rewind;
 
-	rewind_str_addr = *format;
-	lst = tokenize(format, token_table);
-	start_lst = lst;
-	valid = validate_tokens(lst);
-	if (!valid)
+	rewind = *format;
+	lst = tokenize(format, table);
+	start = lst;
+	if (!validate_tokens(lst))
 	{
 		ft_lstclear(&lst, free_token);
-		*format = rewind_str_addr + 1;
-		token_table[16].type = DOWNGRADE;
-		if (**format == '\0')
-			return (NULL);
-		return (ft_strdup("%"));
+		*format = rewind + 1;
+		if (**format != '\0')
+			return (ft_strdup("%"));
+		table[16].type = DOWNGRADE;
+		return (NULL);
 	}
 	s = apply_specifier(lst, args);
 	sort_tokens(&lst);
 	while (lst)
-		s = eval_next_token(&lst, start_lst, s);
-	ft_lstclear(&start_lst, free_token);
+		s = eval_next_token(&lst, start, s);
+	ft_lstclear(&start, free_token);
 	return (s);
 }
